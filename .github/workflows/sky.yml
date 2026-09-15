@@ -2,8 +2,8 @@ name: SKY
 
 on:
   schedule:
-    - cron: '*/15 * * * *'        # ogni 15 minuti
-  workflow_dispatch:              # bottone "Run" manuale
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
     inputs:
       force_morning:
         description: 'Forza il riassunto mattutino'
@@ -25,23 +25,32 @@ jobs:
 
       - name: Installa dipendenze
         run: pip install requests numpy
-        # quando vorrai l'astronomia: pip install requests numpy pyswisseph
+
+      - name: Riassunto già inviato oggi?
+        id: morning
+        run: |
+          D=$(date -u +%F)
+          if [ "$(cat .morning_sent 2>/dev/null)" = "$D" ]; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: SKY check
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-          FORCE_MORNING: ${{ github.event.inputs.force_morning }}
+          MORNING_ALREADY: ${{ steps.morning.outputs.already }}
+          FORCE_MORNING: ${{ inputs.force_morning }}
         run: python sky_stateless.py
 
-      - name: Heartbeat (mantiene lo schedule attivo)
-        if: github.event_name == 'schedule'
+      - name: Segna riassunto inviato (commit giornaliero, mantiene attivo il cron)
         run: |
-          D=$(date -u +%F)
-          if [ "$(cat heartbeat.txt 2>/dev/null)" != "$D" ]; then
-            echo "$D" > heartbeat.txt
+          if [ -f .morning_flag ]; then
+            date -u +%F > .morning_sent
+            rm -f .morning_flag
             git config user.name  "sky-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add heartbeat.txt
-            git commit -m "heartbeat $D"
+            git add .morning_sent
+            git commit -m "riassunto inviato $(date -u +%F)"
             git push
           fi
