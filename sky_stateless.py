@@ -2,9 +2,12 @@
 """
 SKY — Monitor geomagnetico corridoio San Daniele (GitHub Actions)
 Stazioni: WIC (AT), LON (HR), THY (HU), CLF (FR)
+Modello dati: INTERMAGNET NRT ≈ istantaneo — si chiede SEMPRE fino ad adesso.
+Una stazione il cui ultimo dato è più vecchio di FREEZE_AFTER_MIN è in FREEZE:
+viene esclusa dal check live e non conta per MIN_STATIONS.
 Indicatori: Bollinger Bands + Z-score rolling + Rate of Change
-Filtro: alert solo se ≥ MIN_STATIONS stazioni FRESCHI simultanee, con transizione
-        gestita tramite stato persistito su repo (.sky_event) — robusto a lag variabili
+Filtro: alert solo se ≥ MIN_STATIONS stazioni vive simultanee, transizioni gestite
+        con stato persistito su repo (.sky_event)
 Intensità: 🔴🟠🟡🟢⚪ da z_max equivalente
 Effemeridi: pyswisseph (opzionale) nel riassunto mattutino 09:00 UT
 Notifiche ntfy SOLO su eventi: ⚡ anomalia, ✅ rientro, 🌅 riassunto, 🔴 errore workflow
@@ -44,10 +47,10 @@ OBS_ID = {
     'clf': 'clf/best-avail/PT1M/xyzf',
 }
 
-CHECK_STEP_MIN    = 15               # frequenza del cron
-MAX_DATA_AGE_MIN  = 45               # dati più vecchi → esclusi dal check live
-LAG_FALLBACKS     = (3, 6, 12, 24)   # lag pubblicazione INTERMAGNET (ore)
-EVENT_FILE        = '.sky_event'     # stato evento (committato su repo)
+CHECK_STEP_MIN    = 15     # frequenza del cron
+FREEZE_AFTER_MIN  = 30     # ultimo dato più vecchio di questo → stazione in FREEZE
+WIDEN_FALLBACKS_H = (3, 6, 12, 24)  # allargamento finestra (solo per stazioni ferme)
+EVENT_FILE        = '.sky_event'
 
 MIN_STATIONS  = 2
 BB_WINDOW     = 120
@@ -250,26 +253,30 @@ def durata_str(start_iso):
 
 # ─── FETCH INTERMAGNET ────────────────────────────────────────────────────────
 
-def fetch_range(obs_code, start_dt, end_dt, lag_list=LAG_FALLBACKS):
+def fetch_range(obs_code, start_dt, end_dt, widen=WIDEN_FALLBACKS_H):
+    """Scarica dati tra start ed end. time.max è SEMPRE end_dt (≈ adesso):
+    nessun limite preventivo — se la stazione pubblica, arrivano i dati freschi.
+    'widen' allarga solo il passato (per stazioni ferme da ore) — mai il futuro."""
     last_err = ""
-    for lag_h in lag_list:
-        s = start_dt - datetime.timedelta(hours=lag_h)
-        e = end_dt   - datetime.timedelta(hours=lag_h)
+    for extra_h in (0,) + tuple(widen):
+        s = start_dt - datetime.timedelta(hours=extra_h)
         url = (f"{BASE}/data?id={OBS_ID[obs_code]}"
                f"&time.min={s.strftime('%Y-%m-%dT%H:%M:%SZ')}"
-               f"&time.max={e.strftime('%Y-%m-%dT%H:%M:%SZ')}&format=json")
+               f"&time.max={end_dt.strftime('%Y-%m-%dT%H:%M:%SZ')}&format=json")
         try:
             r = requests.get(url, headers=HEADERS, timeout=30)
         except Exception as ex:
             last_err = str(ex)
             continue
         if r.status_code != 200:
-            last_err = f"HTTP {r.status_code} (lag {lag_h}h)"
+            last_err = f"HTTP {r.status_code} (finestra +{extra_h}h)"
+            if "1405" in r.text:      # 'time outside valid range' → allarga al passato
+                continue
             continue
         records = r.json().get('data', [])
         if records:
             return parse_records(records)
-        last_err = f"0 record (lag {lag_h}h)"
+        last_err = f"0 record (finestra +{extra_h}h)"
     print(last_err, end=' ')
     return None
 
@@ -375,7 +382,7 @@ def run_check():
     now   = now_utc()
     start = now - datetime.timedelta(minutes=ZSCORE_WINDOW + 120)
 
-    stations_alert, lastz, fresh = {}, {}, []
+    stations_alert, lastz, fresh, frozen = {}, {}, [], []
     for obs in OBSERVATORIES:
         print(f"  {obs.upper()}...", end=' ')
         res = fetch_range(obs, start, now)
@@ -384,8 +391,9 @@ def run_check():
             continue
         times, data = res
         age_min = (now - times[-1]).total_seconds() / 60
-        if age_min > MAX_DATA_AGE_MIN:
-            print(f"{len(times)} rec ma vecchi ({age_min:.0f}') → escluso dal check live")
+        if age_min > FREEZE_AFTER_MIN:
+            frozen.append(obs.upper())
+            print(f"{len(times)} rec ma FREEZE — ultimo dato {age_min/60:.1f}h fa → escluso")
             continue
         fresh.append(obs.upper())
         z = data['Z'][~np.isnan(data['Z'])]
@@ -400,7 +408,7 @@ def run_check():
 
     alert_now = len(stations_alert) >= MIN_STATIONS
     state = load_event_state()
-    print(f"  fresh={fresh} | anomalia ora={sorted(stations_alert)} | "
+    print(f"  vive={fresh} frozen={frozen} | anomalia ora={sorted(stations_alert)} | "
           f"stato evento: {'ATTIVO' if state['active'] else 'no'}")
 
     if alert_now and not state['active']:
@@ -413,7 +421,7 @@ def run_check():
         print("  evento già attivo — nessun invio")
     elif not alert_now and state['active']:
         if not fresh:
-            print("  nessuna stazione fresca — rientro non dichiarabile, stato invariato")
+            print("  nessuna stazione viva — rientro non dichiarabile, stato invariato")
         else:
             ntfy_send(f"Anomalia rientrata dopo {durata_str(state.get('started'))} "
                       f"— situazione normale.",
@@ -435,7 +443,8 @@ def run_morning():
     zvals = {o: [] for o in OBSERVATORIES}
     for obs in OBSERVATORIES:
         print(f"  {obs.upper()}...", end=' ')
-        res = fetch_range(obs, fetch_start, day_end, lag_list=(0,))
+        # dati STORICI (ieri): finestra esatta, nessun allargamento
+        res = fetch_range(obs, fetch_start, day_end, widen=(0,))
         if not res:
             print("→ nessun dato")
             continue
