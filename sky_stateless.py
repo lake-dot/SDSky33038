@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
-SKY — Monitor geomagnetico corridoio San Daniele (stateless, GitHub Actions)
+SKY — Monitor geomagnetico corridoio San Daniele (GitHub Actions)
 Stazioni: WIC (AT), LON (HR), THY (HU), CLF (FR)
 Indicatori: Bollinger Bands + Z-score rolling + Rate of Change
-Filtro: alert solo se ≥ MIN_STATIONS stazioni simultanee E il check precedente era pulito
+Filtro: alert solo se ≥ MIN_STATIONS stazioni FRESCHI simultanee, con transizione
+        gestita tramite stato persistito su repo (.sky_event) — robusto a lag variabili
 Intensità: 🔴🟠🟡🟢⚪ da z_max equivalente
 Effemeridi: pyswisseph (opzionale) nel riassunto mattutino 09:00 UT
 Notifiche ntfy SOLO su eventi: ⚡ anomalia, ✅ rientro, 🌅 riassunto, 🔴 errore workflow
-Nessuno stato su disco: ogni run scarica i dati freschi e ricalcola tutto.
 """
 
 import requests
 import numpy as np
 import datetime
 import bisect
+import json
 import os
 
 try:
@@ -43,10 +44,12 @@ OBS_ID = {
     'clf': 'clf/best-avail/PT1M/xyzf',
 }
 
-CHECK_STEP_MIN = 15               # = frequenza del cron
-LAG_FALLBACKS  = (3, 6, 12, 24)   # lag pubblicazione INTERMAGNET (ore)
+CHECK_STEP_MIN    = 15               # frequenza del cron
+MAX_DATA_AGE_MIN  = 45               # dati più vecchi → esclusi dal check live
+LAG_FALLBACKS     = (3, 6, 12, 24)   # lag pubblicazione INTERMAGNET (ore)
+EVENT_FILE        = '.sky_event'     # stato evento (committato su repo)
 
-MIN_STATIONS  = 2                 # 2 su 4 — WIC fermo non blocca più
+MIN_STATIONS  = 2
 BB_WINDOW     = 120
 BB_SIGMA      = 2.0
 ZSCORE_WINDOW = 360
@@ -135,7 +138,7 @@ def active_showers_probable(sun_lon, planets):
 
 def astro_lines(dt):
     if not SWE_OK:
-        return ["(effemeridi non disponibili — pyswisseph non installato)"]
+        return ["(effemeridi non disponibili)"]
     planets, sun_lon = get_planets(dt)
     lines = [f"☉ Sole: {sun_lon:.2f}° {SIGN_NAMES[int(sun_lon/30) % 12]}", ""]
     retro = [n for n, p in planets.items()
@@ -204,13 +207,12 @@ def data_italiana(dt):
     return f"{GIORNI_ITA[dt.weekday()]} {dt.day} {MESI_ITA[dt.month]} {dt.year}"
 
 def intensita_evento(alerts_by_station):
-    """Intensità massima dell'evento (come script originale)."""
     max_z = 0.0
     for obs, alerts in alerts_by_station.items():
         for a in alerts:
             z = abs(a.get('z', 0.0))
             if a.get('type') == 'ROC':
-                z = abs(a.get('change_nT', 0.0)) / 8.0 * 2.0   # 8nT ≈ 2σ equiv.
+                z = abs(a.get('change_nT', 0.0)) / 8.0 * 2.0
             max_z = max(max_z, z)
     if max_z >= 7.0:   return '🔴 ECCEZIONALE', max_z
     elif max_z >= 5.0: return '🟠 ESTREMA',     max_z
@@ -218,11 +220,37 @@ def intensita_evento(alerts_by_station):
     elif max_z >= 2.5: return '🟢 MEDIA',        max_z
     else:              return '⚪ BASSA',         max_z
 
+# ─── STATO EVENTO (persistito su repo) ────────────────────────────────────────
+
+def load_event_state():
+    try:
+        with open(EVENT_FILE) as f:
+            s = json.load(f)
+        if isinstance(s, dict) and isinstance(s.get('active'), bool):
+            return s
+    except Exception:
+        pass
+    return {'active': False, 'started': None}
+
+def save_event_state(state):
+    try:
+        with open(EVENT_FILE, 'w') as f:
+            json.dump(state, f)
+    except Exception as e:
+        print(f"  [stato] errore salvataggio: {e}")
+
+def durata_str(start_iso):
+    try:
+        t0 = datetime.datetime.fromisoformat(start_iso)
+        mins = int((now_utc() - t0).total_seconds() // 60)
+        h, m = divmod(mins, 60)
+        return f"{h}h {m:02d}m" if h else f"{m}m"
+    except Exception:
+        return "?"
+
 # ─── FETCH INTERMAGNET ────────────────────────────────────────────────────────
 
 def fetch_range(obs_code, start_dt, end_dt, lag_list=LAG_FALLBACKS):
-    """Scarica [start, end] spostando la finestra indietro se la stazione
-    pubblica con lag maggiore (o è ferma)."""
     last_err = ""
     for lag_h in lag_list:
         s = start_dt - datetime.timedelta(hours=lag_h)
@@ -297,7 +325,6 @@ def roc_signal(arr):
     return round(float(change), 2) if abs(change) > ROC_THRESH else None
 
 def evaluate_station(times, data, cut_dt=None):
-    """Indicatori sui dati fino a cut_dt (escluso). cut_dt=None → tutta la serie."""
     alerts = []
     if times is None or len(times) < 30:
         return alerts
@@ -326,7 +353,7 @@ def evaluate_station(times, data, cut_dt=None):
 # ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
 
 def format_alert(stations):
-    t = (now_utc() - datetime.timedelta(minutes=CHECK_STEP_MIN)).strftime('%H:%M UT')
+    t = now_utc().strftime('%H:%M UT')
     intensita, max_z = intensita_evento(stations)
     lines = [f"⚡ SKY {t} — {', '.join(stations)}",
              f"{intensita} (z_max={max_z:.1f}σ)", ""]
@@ -348,7 +375,7 @@ def run_check():
     now   = now_utc()
     start = now - datetime.timedelta(minutes=ZSCORE_WINDOW + 120)
 
-    stations_now, stations_prev, lastz = {}, {}, {}
+    stations_alert, lastz, fresh = {}, {}, []
     for obs in OBSERVATORIES:
         print(f"  {obs.upper()}...", end=' ')
         res = fetch_range(obs, start, now)
@@ -356,29 +383,43 @@ def run_check():
             print("→ nessun dato")
             continue
         times, data = res
-        lag_min = (now - times[-1]).total_seconds() / 60
-        print(f"{len(times)} rec, ultimo {times[-1]:%H:%M} UT (lag {lag_min:.0f}')")
+        age_min = (now - times[-1]).total_seconds() / 60
+        if age_min > MAX_DATA_AGE_MIN:
+            print(f"{len(times)} rec ma vecchi ({age_min:.0f}') → escluso dal check live")
+            continue
+        fresh.append(obs.upper())
         z = data['Z'][~np.isnan(data['Z'])]
         if len(z):
             lastz[obs.upper()] = float(z[-1])
-        a_now  = evaluate_station(times, data)
-        a_prev = evaluate_station(times, data,
-                                  cut_dt=times[-1] - datetime.timedelta(minutes=CHECK_STEP_MIN))
-        if a_now:  stations_now[obs.upper()]  = a_now
-        if a_prev: stations_prev[obs.upper()] = a_prev
+        alerts = evaluate_station(times, data)
+        if alerts:
+            stations_alert[obs.upper()] = alerts
+            print(f"{len(times)} rec (lag {age_min:.0f}') → {len(alerts)} segnali")
+        else:
+            print(f"{len(times)} rec (lag {age_min:.0f}') → ok")
 
-    alert_now  = len(stations_now)  >= MIN_STATIONS
-    alert_prev = len(stations_prev) >= MIN_STATIONS
-    print(f"  in anomalia: ora={sorted(stations_now)} | {CHECK_STEP_MIN}' fa={sorted(stations_prev)}")
+    alert_now = len(stations_alert) >= MIN_STATIONS
+    state = load_event_state()
+    print(f"  fresh={fresh} | anomalia ora={sorted(stations_alert)} | "
+          f"stato evento: {'ATTIVO' if state['active'] else 'no'}")
 
-    if alert_now and not alert_prev:
-        ntfy_send(format_alert(stations_now),
+    if alert_now and not state['active']:
+        ntfy_send(format_alert(stations_alert),
                   title="SKY ALERT anomalia in corso", priority="high")
-    elif alert_now and alert_prev:
-        print("  anomalia in corso (già notificata)")
-    elif alert_prev and not alert_now:
-        ntfy_send("Anomalia rientrata — situazione tornata normale.",
-                  title="SKY rientro", priority="low")
+        state = {'active': True, 'started': now.isoformat(),
+                 'stations': sorted(stations_alert)}
+        save_event_state(state)
+    elif alert_now and state['active']:
+        print("  evento già attivo — nessun invio")
+    elif not alert_now and state['active']:
+        if not fresh:
+            print("  nessuna stazione fresca — rientro non dichiarabile, stato invariato")
+        else:
+            ntfy_send(f"Anomalia rientrata dopo {durata_str(state.get('started'))} "
+                      f"— situazione normale.",
+                      title="SKY rientro", priority="low")
+            state = {'active': False, 'started': None}
+            save_event_state(state)
     else:
         print("  OK — " + "  ".join(f"{o} Z={v:.1f}" for o, v in lastz.items()))
 
@@ -405,7 +446,6 @@ def run_morning():
             if day_start <= tt < day_end and not np.isnan(v):
                 zvals[obs].append(float(v))
 
-    # scansione ogni 5' con la STESSA logica del check live
     events = []
     cut = day_start
     while cut < day_end:
@@ -426,9 +466,9 @@ def run_morning():
 
 def format_morning(now, day_start, events, zvals):
     lines = [f"🌅 SKY — {data_italiana(now)}", ""]
-    lines.extend(astro_lines(now))          # effemeridi SEMPRE
+    lines.extend(astro_lines(now))
 
-    if events:                              # anomalie SOLO se non vuote
+    if events:
         lines.append("─" * 24)
         counts = {'BB': 0, 'ZSCORE': 0, 'ROC': 0}
         for _, _, a in events:
@@ -482,14 +522,14 @@ def main():
 
     if (FORCE_MORNING or now.hour == 9) and not MORNING_ALREADY:
         print("→ Riassunto mattutino")
-        run_morning()                       # errore qui = run rosso = push
+        run_morning()
         with open('.morning_flag', 'w') as f:
             f.write(now.isoformat())
 
     print("→ Check anomalia")
-    run_check()                             # errore qui = run rosso = push
+    run_check()
 
-    # raise RuntimeError("test rosso")      # ← decommenta per testare la notifica di errore
+    # raise RuntimeError("test rosso")   # ← decommenta per testare la notifica di errore
 
 if __name__ == "__main__":
     main()
