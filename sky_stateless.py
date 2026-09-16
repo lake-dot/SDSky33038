@@ -1,16 +1,27 @@
 #!/usr/bin/env python3
 """
 SKY — Monitor geomagnetico corridoio San Daniele (stateless, GitHub Actions)
+Stazioni: WIC (AT), LON (HR), THY (HU), CLF (FR)
 Indicatori: Bollinger Bands + Z-score rolling + Rate of Change
 Filtro: alert solo se ≥ MIN_STATIONS stazioni simultanee E il check precedente era pulito
-Notifiche ntfy SOLO su eventi: ⚡ inizio anomalia, ✅ rientro, 🌅 riassunto 09:00 UT
+Intensità: 🔴🟠🟡🟢⚪ da z_max equivalente
+Effemeridi: pyswisseph (opzionale) nel riassunto mattutino 09:00 UT
+Notifiche ntfy SOLO su eventi: ⚡ anomalia, ✅ rientro, 🌅 riassunto, 🔴 errore workflow
 Nessuno stato su disco: ogni run scarica i dati freschi e ricalcola tutto.
 """
 
 import requests
 import numpy as np
 import datetime
+import bisect
 import os
+
+try:
+    import swisseph as swe
+    SWE_OK = True
+except ImportError:
+    SWE_OK = False
+    print("ATTENZIONE: pyswisseph non installato — effemeridi disattivate")
 
 # ─── CONFIGURAZIONE ───────────────────────────────────────────────────────────
 
@@ -20,20 +31,22 @@ FORCE_MORNING   = os.environ.get("FORCE_MORNING", "").lower() == "true"
 
 BASE = "https://imag-data.bgs.ac.uk/GIN_V1/hapi"
 OBSERVATORIES = {
-    'wic': 'Conrad, Austria',
-    'lon': 'Lonjsko Polje, Croatia',
-    'thy': 'Tihany, Hungary',
+    'wic': 'Conrad, Austria (220km)',
+    'lon': 'Lonjsko Polje, Croatia (290km)',
+    'thy': 'Tihany, Hungary (370km)',
+    'clf': 'Chambon-la-Forêt, France (~950km)',
 }
 OBS_ID = {
     'wic': 'wic/best-avail/PT1M/xyzf',
     'lon': 'lon/best-avail/PT1M/xyzf',
     'thy': 'thy/best-avail/PT1M/xyzf',
+    'clf': 'clf/best-avail/PT1M/xyzf',
 }
 
-CHECK_STEP_MIN = 15            # = frequenza del cron
+CHECK_STEP_MIN = 15               # = frequenza del cron
 LAG_FALLBACKS  = (3, 6, 12, 24)   # lag pubblicazione INTERMAGNET (ore)
 
-MIN_STATIONS  = 2              # con WIC fermo: serve anomalia su LON E THY insieme
+MIN_STATIONS  = 2                 # 2 su 4 — WIC fermo non blocca più
 BB_WINDOW     = 120
 BB_SIGMA      = 2.0
 ZSCORE_WINDOW = 360
@@ -42,12 +55,124 @@ ROC_WINDOW    = 30
 ROC_THRESH    = 8.0
 COMPONENTS    = ['X', 'Y', 'Z', 'F']
 
+SD_LON            = 13.0
+ASPECT_TIGHT      = 2.0
+SHOWER_PEAK_THRESH   = 20.0
+SHOWER_PLANET_THRESH = 8.0
+
 GIORNI_ITA = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica']
 MESI_ITA   = ['','gennaio','febbraio','marzo','aprile','maggio','giugno',
               'luglio','agosto','settembre','ottobre','novembre','dicembre']
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'}
+
+# ─── ASTRONOMIA ───────────────────────────────────────────────────────────────
+
+PLANET_NAMES = {
+    swe.SUN: '☉ Sole', swe.MOON: '☽ Luna', swe.MERCURY: '☿ Mercurio',
+    swe.VENUS: '♀ Venere', swe.MARS: '♂ Marte', swe.JUPITER: '♃ Giove',
+    swe.SATURN: '♄ Saturno', swe.URANUS: '♅ Urano', swe.NEPTUNE: '♆ Nettuno',
+    swe.TRUE_NODE: '☊ Nodo Nord',
+} if SWE_OK else {}
+
+SIGN_NAMES = ['Ariete','Toro','Gemelli','Cancro','Leone','Vergine',
+              'Bilancia','Scorpione','Sagittario','Capricorno','Acquario','Pesci']
+
+METEOR_SHOWERS = {
+    'Perseidi':       {'lambda': 46.0,  'peak_sun': 140.0, 'active': (100, 160), 'peak_date': '12 ago'},
+    'Kappa Cignidi':  {'lambda': 321.4, 'peak_sun': 145.0, 'active': (135, 155), 'peak_date': '17 ago'},
+    'Tauridi Sud':    {'lambda': 50.0,  'peak_sun': 220.0, 'active': (170, 270), 'peak_date': '5 nov'},
+    'Tauridi Nord':   {'lambda': 58.0,  'peak_sun': 230.0, 'active': (185, 285), 'peak_date': '12 nov'},
+    'June Tauridi S': {'lambda': 271.0, 'peak_sun':  80.0, 'active': (60,  120), 'peak_date': '27 giu'},
+    'June Tauridi N': {'lambda': 279.0, 'peak_sun':  85.0, 'active': (60,  120), 'peak_date': '1 lug'},
+    'Delta Aquaridi': {'lambda': 333.0, 'peak_sun': 125.0, 'active': (95,  155), 'peak_date': '30 lug'},
+    'Alpha Capric.':  {'lambda': 307.0, 'peak_sun': 127.0, 'active': (95,  165), 'peak_date': '2 ago'},
+    'Leonidi inv.':   {'lambda': 152.0, 'peak_sun': 235.0, 'active': (100, 160), 'peak_date': '17 nov'},
+    'Encke nodo':     {'lambda': 334.0, 'peak_sun':   0.0, 'active': (0,   360), 'peak_date': '—'},
+}
+
+def lon_delta(a, b):
+    d = abs(a - b) % 360
+    return d if d <= 180 else 360 - d
+
+def get_planets(dt):
+    if not SWE_OK:
+        return {}, 0.0
+    jd = swe.julday(dt.year, dt.month, dt.day,
+                    dt.hour + dt.minute/60.0 + dt.second/3600.0)
+    planets = {}
+    for pid, name in PLANET_NAMES.items():
+        lon, retro = None, False
+        for flags in (swe.FLG_SWIEPH | swe.FLG_SPEED, swe.FLG_MOSEPH | swe.FLG_SPEED):
+            try:
+                result, _ = swe.calc_ut(jd, pid, flags)
+                lon, retro = result[0], result[3] < 0
+                break
+            except Exception:
+                continue
+        if lon is not None:
+            planets[name] = {'lon': round(lon, 2),
+                             'sign': SIGN_NAMES[int(lon/30) % 12],
+                             'deg': round(lon % 30, 2), 'retro': retro}
+    sun_lon = planets.get('☉ Sole', {}).get('lon', 0.0)
+    return planets, sun_lon
+
+def active_showers_probable(sun_lon, planets):
+    result = []
+    for sname, shower in METEOR_SHOWERS.items():
+        a_min, a_max = shower['active']
+        is_active = (a_min <= sun_lon <= a_max) if a_max > a_min else \
+                    (sun_lon >= a_min or sun_lon <= a_max)
+        if not is_active:
+            continue
+        dist_peak = lon_delta(sun_lon, shower['peak_sun'])
+        planet_hit = any(lon_delta(p['lon'], shower['lambda']) <= SHOWER_PLANET_THRESH
+                         for p in planets.values())
+        if dist_peak <= SHOWER_PEAK_THRESH or planet_hit:
+            result.append((sname, shower, dist_peak))
+    return result
+
+def astro_lines(dt):
+    if not SWE_OK:
+        return ["(effemeridi non disponibili — pyswisseph non installato)"]
+    planets, sun_lon = get_planets(dt)
+    lines = [f"☉ Sole: {sun_lon:.2f}° {SIGN_NAMES[int(sun_lon/30) % 12]}", ""]
+    retro = [n for n, p in planets.items()
+             if p['retro'] and '☉' not in n and '☽' not in n]
+    if retro:
+        lines.append("℞ RETROGRADI: " + ", ".join(retro)); lines.append("")
+    sd_hits = [f"  {n} Δ={lon_delta(p['lon'], SD_LON):.2f}°"
+               for n, p in planets.items()
+               if lon_delta(p['lon'], SD_LON) <= ASPECT_TIGHT]
+    if sd_hits:
+        lines.append(f"📍 NODO SD 13°E (Δ≤{ASPECT_TIGHT}°):")
+        lines.extend(sd_hits); lines.append("")
+    pl = [(n, p) for n, p in planets.items() if '☽' not in n]
+    conj = []
+    for i in range(len(pl)):
+        for j in range(i + 1, len(pl)):
+            d = lon_delta(pl[i][1]['lon'], pl[j][1]['lon'])
+            if d <= ASPECT_TIGHT:
+                conj.append(f"  {pl[i][0]} ☌ {pl[j][0]}  Δ={d:.2f}°")
+            elif abs(d - 180) <= ASPECT_TIGHT:
+                conj.append(f"  {pl[i][0]} ☍ {pl[j][0]}  Δ={abs(d-180):.2f}°")
+    if conj:
+        lines.append(f"⚡ ASPETTI (Δ≤{ASPECT_TIGHT}°):")
+        lines.extend(conj); lines.append("")
+    showers = active_showers_probable(sun_lon, planets)
+    if showers:
+        lines.append(f"☄️ SCIAMI PROBABILI (Sole {sun_lon:.1f}°):")
+        for sname, shower, dist_peak in showers:
+            lines.append(f"  {sname}  λ={shower['lambda']:.0f}°  "
+                         f"Δpicco={dist_peak:.1f}°  picco={shower['peak_date']}")
+            for pname, p in planets.items():
+                d = lon_delta(p['lon'], shower['lambda'])
+                if d <= SHOWER_PLANET_THRESH:
+                    stars = ' ★★' if d <= 2 else ' ★' if d <= 5 else ''
+                    lines.append(f"    → {pname}  Δ={d:.2f}°{stars}")
+        lines.append("")
+    return lines
 
 # ─── NTFY ─────────────────────────────────────────────────────────────────────
 
@@ -78,11 +203,26 @@ def now_utc():
 def data_italiana(dt):
     return f"{GIORNI_ITA[dt.weekday()]} {dt.day} {MESI_ITA[dt.month]} {dt.year}"
 
+def intensita_evento(alerts_by_station):
+    """Intensità massima dell'evento (come script originale)."""
+    max_z = 0.0
+    for obs, alerts in alerts_by_station.items():
+        for a in alerts:
+            z = abs(a.get('z', 0.0))
+            if a.get('type') == 'ROC':
+                z = abs(a.get('change_nT', 0.0)) / 8.0 * 2.0   # 8nT ≈ 2σ equiv.
+            max_z = max(max_z, z)
+    if max_z >= 7.0:   return '🔴 ECCEZIONALE', max_z
+    elif max_z >= 5.0: return '🟠 ESTREMA',     max_z
+    elif max_z >= 3.5: return '🟡 FORTE',        max_z
+    elif max_z >= 2.5: return '🟢 MEDIA',        max_z
+    else:              return '⚪ BASSA',         max_z
+
 # ─── FETCH INTERMAGNET ────────────────────────────────────────────────────────
 
 def fetch_range(obs_code, start_dt, end_dt, lag_list=LAG_FALLBACKS):
-    """Scarica [start, end] provando a spostare la finestra indietro se il server
-    rifiuta ('time outside valid range' = stazione con lag maggiore o ferma)."""
+    """Scarica [start, end] spostando la finestra indietro se la stazione
+    pubblica con lag maggiore (o è ferma)."""
     last_err = ""
     for lag_h in lag_list:
         s = start_dt - datetime.timedelta(hours=lag_h)
@@ -97,8 +237,6 @@ def fetch_range(obs_code, start_dt, end_dt, lag_list=LAG_FALLBACKS):
             continue
         if r.status_code != 200:
             last_err = f"HTTP {r.status_code} (lag {lag_h}h)"
-            if "1405" in r.text:      # fuori range → riprova più indietro
-                continue
             continue
         records = r.json().get('data', [])
         if records:
@@ -124,7 +262,7 @@ def parse_records(records):
     return times, {'X': np.array(X), 'Y': np.array(Y),
                    'Z': np.array(Z), 'F': np.array(F)}
 
-# ─── INDICATORI (logica identica al tuo script originale) ─────────────────────
+# ─── INDICATORI (logica identica allo script originale) ───────────────────────
 
 def bollinger_signal(arr):
     if len(arr) < BB_WINDOW // 2:
@@ -163,14 +301,11 @@ def evaluate_station(times, data, cut_dt=None):
     alerts = []
     if times is None or len(times) < 30:
         return alerts
-    if cut_dt is not None:
-        idx = [i for i, t in enumerate(times) if t < cut_dt]
-    else:
-        idx = list(range(len(times)))
-    if len(idx) < 30:
+    n = bisect.bisect_left(times, cut_dt) if cut_dt is not None else len(times)
+    if n < 30:
         return alerts
     for comp in COMPONENTS:
-        arr = data[comp][idx]
+        arr = data[comp][:n]
         arr = arr[~np.isnan(arr)]
         if len(arr) < 30:
             continue
@@ -191,7 +326,10 @@ def evaluate_station(times, data, cut_dt=None):
 # ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
 
 def format_alert(stations):
-    lines = ["⚡ Anomalia geomagnetica rilevata", ""]
+    t = (now_utc() - datetime.timedelta(minutes=CHECK_STEP_MIN)).strftime('%H:%M UT')
+    intensita, max_z = intensita_evento(stations)
+    lines = [f"⚡ SKY {t} — {', '.join(stations)}",
+             f"{intensita} (z_max={max_z:.1f}σ)", ""]
     for obs, alerts in stations.items():
         lines.append(f"{obs}:")
         for a in alerts:
@@ -234,15 +372,17 @@ def run_check():
     print(f"  in anomalia: ora={sorted(stations_now)} | {CHECK_STEP_MIN}' fa={sorted(stations_prev)}")
 
     if alert_now and not alert_prev:
-        ntfy_send(format_alert(stations_now), title="SKY ALERT anomalia in corso", priority="high")
+        ntfy_send(format_alert(stations_now),
+                  title="SKY ALERT anomalia in corso", priority="high")
     elif alert_now and alert_prev:
         print("  anomalia in corso (già notificata)")
     elif alert_prev and not alert_now:
-        ntfy_send("Anomalia rientrata — situazione tornata normale.", title="SKY rientro", priority="low")
+        ntfy_send("Anomalia rientrata — situazione tornata normale.",
+                  title="SKY rientro", priority="low")
     else:
         print("  OK — " + "  ".join(f"{o} Z={v:.1f}" for o, v in lastz.items()))
 
-# ─── RIASSUNTO MATTUTINO (ricalcolato dai dati grezzi delle 24h) ──────────────
+# ─── RIASSUNTO MATTUTINO ──────────────────────────────────────────────────────
 
 def run_morning():
     now = now_utc()
@@ -280,21 +420,22 @@ def run_morning():
                     events.append((cut, obs, a))
         cut += datetime.timedelta(minutes=5)
 
-    msg = format_morning(day_start, events, zvals)
+    msg = format_morning(now, day_start, events, zvals)
     print(msg)
     ntfy_send(msg, title="SKY riassunto mattutino")
 
-def format_morning(day_start, events, zvals):
-    lines = [f"🌅 SKY — {data_italiana(day_start)}",
-             "Anomalie mezzanotte → mezzanotte UTC", ""]
-    if not events:
-        lines.append("Nessuna anomalia nelle ultime 24h.")
-    else:
+def format_morning(now, day_start, events, zvals):
+    lines = [f"🌅 SKY — {data_italiana(now)}", ""]
+    lines.extend(astro_lines(now))          # effemeridi SEMPRE
+
+    if events:                              # anomalie SOLO se non vuote
+        lines.append("─" * 24)
         counts = {'BB': 0, 'ZSCORE': 0, 'ROC': 0}
         for _, _, a in events:
             t = a['type']
             counts['BB' if t.startswith('BB') else t] += 1
-        lines.append(f"Totale: {len(events)}  BB:{counts['BB']} Z:{counts['ZSCORE']} ROC:{counts['ROC']}")
+        lines.append(f"ANOMALIE ({data_italiana(day_start)}) — "
+                     f"Totale: {len(events)}  BB:{counts['BB']} Z:{counts['ZSCORE']} ROC:{counts['ROC']}")
         lines.append("")
         by_cut = {}
         for cut, obs, a in events:
@@ -318,12 +459,17 @@ def format_morning(day_start, events, zvals):
                     s = '+' if a['change_nT'] > 0 else ''
                     lines.append(f"  {obs} ROC {c} {s}{a['change_nT']:.1f}nT/30'")
                 shown += 1
-    lines.append("")
+        lines.append("")
+
+    stat_lines = []
     for obs in OBSERVATORIES:
         v = zvals[obs]
         if v:
-            lines.append(f"📡 {obs.upper()} Z: mean={np.mean(v):.2f} "
-                         f"min={np.min(v):.2f} max={np.max(v):.2f} nT (n={len(v)})")
+            stat_lines.append(f"📡 {obs.upper()} Z: mean={np.mean(v):.2f} "
+                              f"min={np.min(v):.2f} max={np.max(v):.2f} nT (n={len(v)})")
+    if stat_lines:
+        lines.append("─" * 24)
+        lines.extend(stat_lines)
     return '\n'.join(lines)
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
@@ -334,21 +480,16 @@ def main():
     print(f"  SKY — {now:%Y-%m-%d %H:%M} UT")
     print("=" * 50)
 
-    # riassunto: alle 09:00 UT, oppure forzato; UNA volta al giorno (flag su repo)
     if (FORCE_MORNING or now.hour == 9) and not MORNING_ALREADY:
         print("→ Riassunto mattutino")
-        try:
-            run_morning()
-            with open('.morning_flag', 'w') as f:
-                f.write(now.isoformat())
-        except Exception as e:
-            print(f"  errore riassunto: {e}")
+        run_morning()                       # errore qui = run rosso = push
+        with open('.morning_flag', 'w') as f:
+            f.write(now.isoformat())
 
     print("→ Check anomalia")
-    try:
-        run_check()
-    except Exception as e:
-        print(f"  errore check: {e}")
+    run_check()                             # errore qui = run rosso = push
+
+    # raise RuntimeError("test rosso")      # ← decommenta per testare la notifica di errore
 
 if __name__ == "__main__":
     main()
