@@ -8,15 +8,20 @@ tipicamente con ~3h di ritardo. Strategia:
   - fetch: si prova SEMPRE prima la finestra fino ad 'adesso'; se il server
     rifiuta ('time outside valid range'), la finestra retrocede a passi.
   - freeze: una stazione è STALE se il suo ultimo dato è >= STALE_GAP_MIN più
-    vecchio di quello della stazione più aggiornata della rete (auto-calibrato,
-    niente soglie assolute). Le stale sono escluse dal check live.
+    vecchio di quello della stazione più aggiornata della rete (auto-calibrato).
+    Le stale sono escluse dal check live.
 
 Indicatori: Bollinger Bands + Z-score rolling + Rate of Change
-Filtro: alert solo se >= MIN_STATIONS stazioni VIVE simultanee; le transizioni
-        (inizio/fine evento) sono gestite con stato persistito su repo (.sky_event)
-Intensità: 🔴🟠🟡🟢⚪ da z_max equivalente
-Effemeridi: pyswisseph (opzionale) nel riassunto mattutino 09:00 UT
-Notifiche ntfy SOLO su eventi: ⚡ anomalia, ✅ rientro, 🌅 riassunto, 🔴 errore workflow
+Filtro: alert solo se >= MIN_STATIONS stazioni VIVE simultanee; transizioni
+        gestite con stato persistito su repo (.sky_event)
+
+Notifiche ntfy:
+  ⚡ inizio anomalia            → subito, alta priorità
+  🔄 evento in corso            → a cambio classe di intensità, o heartbeat ogni UPDATE_EVERY_MIN
+                                 (durata, intensità attuale vs precedente, trend, picco)
+  ✅ rientro in ciclo normale   → con durata totale e picco dell'evento
+  🌅 riassunto mattutino 09:00 UT (con effemeridi se pyswisseph presente)
+  🔴 errore workflow            → push (gestito nel workflow, step if: failure())
 """
 
 import requests
@@ -58,6 +63,9 @@ STALE_GAP_MIN  = 90                  # stazione STALE se >=90' indietro rispetto
                                      # alla stazione più aggiornata della rete
 BACK_STEPS_H   = (0, 3, 6, 12, 24)   # retrocessione finestra fetch (mai il futuro)
 EVENT_FILE     = '.sky_event'
+
+UPDATE_EVERY_MIN = 60                # heartbeat durante evento attivo
+TREND_DZ         = 0.3               # Δσ per dichiarare l'intensità in aumento/diminuzione
 
 MIN_STATIONS  = 2
 BB_WINDOW     = 120
@@ -217,7 +225,6 @@ def data_italiana(dt):
     return f"{GIORNI_ITA[dt.weekday()]} {dt.day} {MESI_ITA[dt.month]} {dt.year}"
 
 def age_str(ts, now):
-    """Età leggibile: '3h 07m' oppure '12m'."""
     mins = max(0, int((now - ts).total_seconds() // 60))
     h, m = divmod(mins, 60)
     return f"{h}h {m:02d}m" if h else f"{m}m"
@@ -251,14 +258,14 @@ def load_event_state():
 def save_event_state(state):
     try:
         with open(EVENT_FILE, 'w') as f:
-            json.dump(state, f)
+            json.dump(state, f, ensure_ascii=False)
     except Exception as e:
         print(f"  [stato] errore salvataggio: {e}")
 
 def durata_str(start_iso):
     try:
         t0 = datetime.datetime.fromisoformat(start_iso)
-        mins = int((now_utc() - t0).total_seconds() // 60)
+        mins = max(0, int((now_utc() - t0).total_seconds() // 60))
         h, m = divmod(mins, 60)
         return f"{h}h {m:02d}m" if h else f"{m}m"
     except Exception:
@@ -267,10 +274,8 @@ def durata_str(start_iso):
 # ─── FETCH INTERMAGNET ────────────────────────────────────────────────────────
 
 def fetch_range(obs_code, start_dt, end_dt, back_steps=BACK_STEPS_H):
-    """Scarica dati tra start ed end. Prova PRIMA la finestra ideale fino ad
-    'adesso' (se il feed accelerasse un giorno, dati freschi gratis); se il
-    server rifiuta ('time outside valid range' = ultimo dato più indietro),
-    retrocede TUTTA la finestra a passi. Mai oltre il passato noto."""
+    """Prova PRIMA la finestra ideale fino ad 'adesso'; se il server rifiuta
+    ('time outside valid range'), retrocede TUTTA la finestra a passi."""
     last_err = ""
     for off_h in back_steps:
         off = datetime.timedelta(hours=off_h)
@@ -286,7 +291,7 @@ def fetch_range(obs_code, start_dt, end_dt, back_steps=BACK_STEPS_H):
             continue
         if r.status_code != 200:
             last_err = f"HTTP {r.status_code} (end −{off_h}h)"
-            if "1405" in r.text:      # ultimo dato più indietro → prova a retrocedere
+            if "1405" in r.text:
                 continue
             continue
         records = r.json().get('data', [])
@@ -373,14 +378,10 @@ def evaluate_station(times, data, cut_dt=None):
                            'current': round(float(arr[-1]), 2), 'component': comp})
     return alerts
 
-# ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
+# ─── FORMATTEZZA ALERT / UPDATE ───────────────────────────────────────────────
 
-def format_alert(stations, epoch_str):
-    t = now_utc().strftime('%H:%M UT')
-    intensita, max_z = intensita_evento(stations)
-    lines = [f"⚡ SKY {t} — {', '.join(stations)}",
-             f"{intensita} (z_max={max_z:.1f}σ)",
-             f"dati fino alle {epoch_str}", ""]
+def _station_lines(stations):
+    lines = []
     for obs, alerts in stations.items():
         lines.append(f"{obs}:")
         for a in alerts:
@@ -393,7 +394,35 @@ def format_alert(stations, epoch_str):
             else:
                 s = '+' if a['change_nT'] > 0 else ''
                 lines.append(f"  ROC {c} {s}{a['change_nT']:.1f}nT/30'")
+    return lines
+
+def format_alert(stations, epoch_str):
+    t = now_utc().strftime('%H:%M UT')
+    intensita, max_z = intensita_evento(stations)
+    lines = [f"⚡ SKY {t} — {', '.join(stations)}",
+             f"{intensita} (z_max={max_z:.1f}σ)",
+             f"dati fino alle {epoch_str}", ""]
+    lines.extend(_station_lines(stations))
     return '\n'.join(lines)
+
+def format_update(stations, state, epoch_str):
+    """Update evento in corso: durata, intensità attuale vs notifica precedente,
+    trend, picco finora."""
+    classe, max_z = intensita_evento(stations)
+    prev_class = state.get('last_class') or classe
+    prev_z     = float(state.get('last_zmax', max_z))
+    if max_z > prev_z + TREND_DZ:    trend = '↗ in aumento'
+    elif max_z < prev_z - TREND_DZ:  trend = '↘ in diminuzione'
+    else:                            trend = '→ stabile'
+    lines = [f"⚡ SKY — evento in corso da {durata_str(state.get('started'))}",
+             f"{', '.join(stations)}",
+             f"{classe} (z_max={max_z:.1f}σ) {trend}  [era {prev_class} {prev_z:.1f}σ]",
+             f"picco finora: {state.get('peak_class','—')} ({float(state.get('peak_zmax',0)):.1f}σ)",
+             f"dati fino alle {epoch_str}", ""]
+    lines.extend(_station_lines(stations))
+    return '\n'.join(lines)
+
+# ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
 
 def run_check():
     now   = now_utc()
@@ -412,7 +441,7 @@ def run_check():
         print(f"{len(times)} rec | ultimo dato {times[-1]:%H:%M} UT "
               f"({age_str(times[-1], now)} fa)")
 
-    # ── disponibilità dati: la stazione più aggiornata definisce il 'presente' rete
+    # ── il presente della rete = la stazione più aggiornata
     last_ts = {obs: times[-1] for obs, (times, data) in results.items()}
     if not last_ts:
         print("  NESSUNA stazione risponde — rete muta, stato evento invariato")
@@ -421,9 +450,10 @@ def run_check():
     epoch_str = net_fresh.strftime('%H:%M UT')
     live  = sorted(o for o, t in last_ts.items()
                    if (net_fresh - t).total_seconds() / 60 <= STALE_GAP_MIN)
-    stale = sorted(o for o, t in last_ts.items() if o not in live)
+    stale = sorted(o for o in last_ts if o not in live)
     print(f"  📡 dati disponibili fino alle {epoch_str} | "
-          f"vive={live} stale={stale + frozen}")
+          f"vive={sorted(o.upper() for o in live)} "
+          f"stale={sorted(o.upper() for o in stale) + frozen}")
 
     # ── indicatori SOLO sulle stazioni vive
     stations_alert, lastz = {}, {}
@@ -438,26 +468,59 @@ def run_check():
 
     alert_now = len(stations_alert) >= MIN_STATIONS
     state = load_event_state()
-    print(f"  in anomalia (su vive)={sorted(stations_alert)} | "
-          f"stato evento: {'ATTIVO' if state['active'] else 'no'}")
+    now_iso = now.isoformat()
+
+    if alert_now:
+        classe, max_z = intensita_evento(stations_alert)
 
     if alert_now and not state['active']:
+        # ── INIZIO evento
         ntfy_send(format_alert(stations_alert, epoch_str),
                   title="SKY ALERT anomalia in corso", priority="high")
-        state = {'active': True, 'started': now.isoformat(),
+        state = {'active': True, 'started': now_iso,
+                 'last_notify': now_iso,
+                 'last_class': classe, 'last_zmax': max_z,
+                 'peak_class': classe, 'peak_zmax': max_z,
                  'stations': sorted(stations_alert), 'epoch': epoch_str}
         save_event_state(state)
+
     elif alert_now and state['active']:
-        print("  evento già attivo — nessun invio")
+        # ── evento continua: aggiorna il picco, decidi se mandare update
+        if max_z > float(state.get('peak_zmax', 0)):
+            state['peak_class'], state['peak_zmax'] = classe, max_z
+        last_notify = state.get('last_notify')
+        try:
+            elapsed = (now - datetime.datetime.fromisoformat(last_notify)).total_seconds() / 60
+        except Exception:
+            elapsed = float('inf')
+        class_changed = classe != state.get('last_class')
+        if class_changed or elapsed >= UPDATE_EVERY_MIN:
+            ntfy_send(format_update(stations_alert, state, epoch_str),
+                      title="SKY evento in corso", priority="high")
+            state['last_notify'] = now_iso
+            state['last_class'], state['last_zmax'] = classe, max_z
+            state['stations'] = sorted(stations_alert)
+            state['epoch'] = epoch_str
+            save_event_state(state)
+        else:
+            next_in = max(0, UPDATE_EVERY_MIN - elapsed)
+            print(f"  evento in corso ({classe} z_max={max_z:.1f}σ) — "
+                  f"update tra {next_in:.0f}' o a cambio intensità")
+
     elif not alert_now and state['active']:
+        # ── RIENTRO in ciclo normale
         if not live:
             print("  nessuna stazione viva — rientro non dichiarabile, stato invariato")
         else:
-            ntfy_send(f"Anomalia rientrata dopo {durata_str(state.get('started'))} "
-                      f"— situazione normale (dati {epoch_str}).",
+            ntfy_send("✅ Rientro in ciclo normale "
+                      f"dopo {durata_str(state.get('started'))}\n"
+                      f"picco evento: {state.get('peak_class','—')} "
+                      f"(z_max={float(state.get('peak_zmax',0)):.1f}σ)\n"
+                      f"dati fino alle {epoch_str}",
                       title="SKY rientro", priority="low")
             state = {'active': False, 'started': None}
             save_event_state(state)
+
     else:
         print("  OK — " + "  ".join(f"{o} Z={v:.1f} ({t:%H:%M} UT)"
                                     for o, (v, t) in lastz.items()))
@@ -474,7 +537,6 @@ def run_morning():
     zvals = {o: [] for o in OBSERVATORIES}
     for obs in OBSERVATORIES:
         print(f"  {obs.upper()}...", end=' ')
-        # dati STORICI (ieri): finestra esatta, niente retrocessione
         res = fetch_range(obs, fetch_start, day_end, back_steps=(0,))
         if not res or not res[0]:
             print("→ nessun dato")
