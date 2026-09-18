@@ -1,1 +1,1 @@
-{"active": true, "started": "2026-09-18T20:48:38.209134+00:00", "last_notify": "2026-09-18T20:48:38.209134+00:00", "last_class": "⚪ BASSA", "last_zmax": 2.18, "peak_class": "⚪ BASSA", "peak_zmax": 2.18, "clean_streak": 0, "stations": ["CLF", "LON"], "epoch": "17:48 UT"}
+{"active": true, "started": "2026-09-18T20:48:38.209134+00:00", "last_notify": "2026-09-18T20:48:38.209134+00:00", "last_class": "⚪ BASSA", "last_zmax": 2.18, "peak_class": "⚪ BASSA", "peak_zmax": 2.18, "clean_streak": 1, "stations": ["CLF", "LON"], "epoch": "17:48 UT"}
