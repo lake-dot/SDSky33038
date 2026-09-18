@@ -6,12 +6,16 @@ on:
   workflow_dispatch:
     inputs:
       force_morning:
-        description: 'Forza il riassunto mattutino'
+        description: 'Forza effemeridi mattutine'
         type: boolean
         default: false
 
 permissions:
   contents: write
+
+concurrency:
+  group: sky-check
+  cancel-in-progress: false
 
 jobs:
   sky:
@@ -23,10 +27,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Installa dipendenze
+      - name: Dipendenze
         run: pip install requests numpy
 
-      - name: Riassunto già inviato oggi?
+      - name: Effemeridi già inviate oggi?
         id: morning
         run: |
           D=$(date -u +%F)
@@ -43,14 +47,33 @@ jobs:
           FORCE_MORNING: ${{ inputs.force_morning }}
         run: python sky_stateless.py
 
-      - name: Segna riassunto inviato (commit giornaliero, mantiene attivo il cron)
+      - name: Marca effemeridi inviate
         run: |
           if [ -f .morning_flag ]; then
             date -u +%F > .morning_sent
             rm -f .morning_flag
+          fi
+
+      - name: Commit stato (memoria evento + heartbeat)
+        run: |
+          for f in .morning_sent .sky_event; do
+            [ -f "$f" ] && git add "$f"
+          done
+          git diff --cached --quiet || {
             git config user.name  "sky-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add .morning_sent
-            git commit -m "riassunto inviato $(date -u +%F)"
-            git push
-          fi
+            git commit -m "stato SKY $(date -u +%FT%TZ)"
+            git push || { git pull --rebase --autostash origin main; git push; }
+          }
+
+      - name: SKY in rosso — notifica push
+        if: failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          curl -sS \
+            -H "Title: SKY ERRORE" \
+            -H "Priority: high" \
+            -H "Tags: red_circle" \
+            -d "Workflow in rosso — verifica: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            "https://ntfy.sh/$NTFY_TOPIC" || true
