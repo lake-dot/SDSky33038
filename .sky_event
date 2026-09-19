@@ -1,1 +1,1 @@
-{"active": true, "started": "2026-09-19T11:03:59.221725+00:00", "last_notify": "2026-09-19T14:21:54.862970+00:00", "last_class": "🟡 FORTE", "last_zmax": 3.54, "peak_class": "🟡 FORTE", "peak_zmax": 3.54, "clean_streak": 0, "stations": ["CLF", "LON", "THY"], "epoch": "11:21 UT"}
+{"active": true, "started": "2026-09-19T11:03:59.221725+00:00", "last_notify": "2026-09-19T14:21:54.862970+00:00", "last_class": "🟡 FORTE", "last_zmax": 3.54, "peak_class": "🟡 FORTE", "peak_zmax": 3.54, "clean_streak": 1, "stations": ["CLF", "LON", "THY"], "epoch": "11:21 UT"}
