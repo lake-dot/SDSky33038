@@ -19,7 +19,8 @@ Notifiche ntfy (macchina a stati su repo, .sky_event):
                                           notificata, e al massimo uno ogni UPDATE_MIN_GAP_MIN
   ✅ rientro in ciclo normale            → dopo CLEAN_CHECKS_RIENTRO check puliti consecutivi
                                           (durata evento + picco raggiunto)
-  🌅 effemeridi mattutine 09:00 UT       → astro a matematica pura (nessuna dipendenza)
+  🌅 effemeridi mattutine 09:00 UT       → astro a matematica pura (nessuna dipendenza),
+                                          con POSIZIONI PLANETARIE complete
   🔴 errore workflow                     → push (gestito nel workflow, step if: failure())
 """
 
@@ -584,6 +585,7 @@ def run_check():
 
     if alert_now and not state['active']:
         # ── INIZIO evento
+        print("  → ⚡ invio: inizio evento")
         ntfy_send(format_alert(stations_alert, epoch_str),
                   title="SKY ALERT anomalia in corso", priority="high")
         state = {'active': True, 'started': now_iso,
@@ -607,6 +609,7 @@ def run_check():
         except Exception:
             gap_min = float('inf')
         if escalated and gap_min >= UPDATE_MIN_GAP_MIN:
+            print("  → 🔄 invio: escalation")
             ntfy_send(format_update(stations_alert, state, epoch_str),
                       title="SKY intensita in aumento", priority="high")
             state['last_notify'] = now_iso
@@ -623,12 +626,13 @@ def run_check():
                       f"nessun invio (solo escalation notificano)")
 
     elif not alert_now and state['active']:
-        # ── RIENTRO: serve quiete CONFERMATA su CHECK puliti consecutivi
+        # ── RIENTRO: serve quiete CONFERMATA su CLEAN_CHECKS_RIENTRO check consecutivi
         if not live:
             print("  nessuna stazione viva — rientro non dichiarabile, stato invariato")
         else:
             state['clean_streak'] = int(state.get('clean_streak', 0)) + 1
             if state['clean_streak'] >= CLEAN_CHECKS_RIENTRO:
+                print("  → ✅ invio: rientro")
                 ntfy_send("✅ Rientro in ciclo normale "
                           f"dopo {durata_str(state.get('started'))}\n"
                           f"picco evento: {state.get('peak_class', '—')} "
@@ -655,6 +659,20 @@ def build_morning(dt):
     lines = [f"🌅 SKY — {date_ita}",
              f"☉ Sole: {sun_val:.2f}° {SIGN_NAMES[int(sun_val / 30) % 12]}",
              ""]
+
+    # ── POSIZIONI PLANETARIE COMPLETE ──
+    lines.append("🪐 POSIZIONI:")
+    for name, p in planets.items():
+        r = ''
+        if p['speed'] is not None:
+            if p['retro']:
+                r = ' ℞'
+            elif p['stationary']:
+                r = ' ℞?'
+        b = ' !' if p['border'] else ''
+        lines.append(f"  {name:14s} {p['lon']:7.2f}°  {p['sign']:12s} "
+                     f"{p['deg']:5.2f}°{r}{b}")
+    lines.append("")
 
     retro = [name for name, p in planets.items()
              if p['retro'] and 'Sole' not in name and 'Luna' not in name]
@@ -703,8 +721,9 @@ def build_morning(dt):
         lines.extend(shower_lines)
         lines.append("")
 
-    if any('(≈)' in l or '(+-)' in l for l in lines):
-        lines.append("ℹ️ (≈) aspetto al bordo soglia · (+-) corpo vicino a confine segno o stazionario")
+    if any('(≈)' in l or '(+-)' in l or ' !' in l for l in lines):
+        lines.append("ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · "
+                     "(≈) al bordo soglia · (+-) incertezza elevata")
     return '\n'.join(lines)
 
 def run_morning():
