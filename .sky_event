@@ -1,1 +1,1 @@
-{"active": true, "started": "2026-09-23T04:50:26.534056+00:00", "last_notify": "2026-09-23T04:50:26.534056+00:00", "last_class": "⚪ BASSA", "last_zmax": 2.14, "peak_class": "⚪ BASSA", "peak_zmax": 2.14, "clean_streak": 1, "stations": ["LON", "THY"], "epoch": "01:49 UT"}
+{"active": false, "started": null, "clean_streak": 0}
