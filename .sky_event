@@ -1,1 +1,1 @@
-{"active": false, "started": null, "clean_streak": 0}
+{"active": true, "started": "2026-09-24T08:04:29.861432+00:00", "last_notify": "2026-09-24T08:04:29.861432+00:00", "last_class": "🟢 MEDIA", "last_zmax": 2.85, "peak_class": "🟢 MEDIA", "peak_zmax": 2.85, "clean_streak": 0, "stations": ["LON", "THY"], "epoch": "05:03 UT"}
