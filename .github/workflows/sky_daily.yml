@@ -1,0 +1,99 @@
+name: SKY giornaliero
+
+on:
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+    inputs:
+      day:
+        description: 'Giornata AAAA-MM-GG (vuoto = ieri)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sky-daily
+  cancel-in-progress: false
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests numpy pandas
+
+      - name: Giornata
+        id: d
+        run: |
+          D="${{ inputs.day }}"; [ -z "$D" ] && D=$(date -u -d yesterday +%F)
+          echo "day=$D" >> "$GITHUB_OUTPUT"
+
+      - name: Scarica stazioni (sky_d)
+        env:
+          SKY_OUT: data/days
+          SKY_STATION_FILES: '0'
+        run: mkdir -p data/days && python sky_d.py ${{ steps.d.outputs.day }}
+
+      - name: Aggiungi vento solare dall'archivio
+        run: |
+          D=${{ steps.d.outputs.day }}; F=data/days/SKY_$D
+          N=$(date -u -d "$D +1 day" +%Y%m%d)
+          cp data/noaa/NOAA_*_${D//-/}T*.json data/noaa/NOAA_*_${N}T*.json "$F"/ 2>/dev/null || true
+          ls "$F"
+
+      - name: Analisi (sky_scan)
+        run: python sky_scan.py data/days/SKY_${{ steps.d.outputs.day }}
+
+      - name: Comprimi il file unico
+        run: gzip -f data/days/SKY_${{ steps.d.outputs.day }}/TUTTE_*.csv
+
+      - name: Email
+        env:
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
+          MAIL_TO:   ${{ secrets.MAIL_TO }}
+        run: python send_mail.py data/days/SKY_${{ steps.d.outputs.day }}
+
+      - name: File sull'iPhone via ntfy (allegati)
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          D=${{ steps.d.outputs.day }}; F=data/days/SKY_$D
+          for f in "$F/SCAN_$D.txt" "$F/RIEPILOGO.txt" "$F"/TUTTE_*.csv.gz; do
+            [ -f "$f" ] || continue
+            curl -sS -T "$f" -H "Filename: $(basename "$f")" -H "Title: SKY $D" "https://ntfy.sh/$NTFY_TOPIC" || true
+            sleep 2
+          done
+
+      - name: Conserva tutti i file 90 giorni (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: SKY_${{ steps.d.outputs.day }}
+          path: data/days/SKY_${{ steps.d.outputs.day }}
+          retention-days: 90
+
+      - name: Commit solo report e registri
+        run: |
+          D=${{ steps.d.outputs.day }}
+          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt; do
+            [ -e "$f" ] && git add "$f"
+          done
+          git diff --cached --quiet || {
+            git config user.name  "sky-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "SKY giornaliero $D"
+            git push || { git pull --rebase --autostash origin main; git push; }
+          }
+
+      - name: Push di conferma
+        if: always()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          S=$([ "${{ job.status }}" = "success" ] && echo "pronto" || echo "ERRORE")
+          curl -sS -H "Title: SKY giornaliero" -d "Giornata ${{ steps.d.outputs.day }}: $S" "https://ntfy.sh/$NTFY_TOPIC" || true
