@@ -13,15 +13,16 @@ tipicamente con ~3h di ritardo. Strategia:
 Indicatori: Bollinger Bands + Z-score rolling + Rate of Change
 Filtro: alert solo se >= MIN_STATIONS stazioni VIVE simultanee
 
-Notifiche ntfy (macchina a stati su repo, .sky_event):
-  ⚡ inizio anomalia                     → subito, alta priorità
-  🔄 escalation                          → SOLO se classe intensità SUPERIORE all'ultima
-                                          notificata, e al massimo uno ogni UPDATE_MIN_GAP_MIN
-  ✅ rientro in ciclo normale            → dopo CLEAN_CHECKS_RIENTRO check puliti consecutivi
-                                          (durata evento + picco raggiunto)
-  🌅 effemeridi mattutine 09:00 UT       → astro a matematica pura (nessuna dipendenza),
-                                          con POSIZIONI PLANETARIE complete
-  🔴 errore workflow                     → push (gestito nel workflow, step if: failure())
+Notifiche ntfy (macchina a stati su repo, .sky_event) — versione essenziale:
+  ⚡ inizio anomalia   → intensità + ORA ITALIANA REALE dell'inizio (orario dei dati,
+                         non della notifica) + "dati fino alle" + riepilogo dell'evento
+                         precedente (durata, orari, picco): niente più notifica di fine
+  ⬆️ escalation        → SOLO se classe superiore all'ultima notificata, max 1 ogni
+                         UPDATE_MIN_GAP_MIN; ricorda l'ora d'inizio
+  (fine evento)        → NESSUNA notifica: il riepilogo viene salvato e allegato
+                         al prossimo ⚡ inizio
+  🌅 effemeridi 09:00 UT, 🔴 errore workflow: invariati
+I dettagli tecnici (stazioni, nT, componenti) restano nei log e nello SCAN giornaliero.
 """
 
 import math
@@ -31,12 +32,15 @@ import datetime
 import bisect
 import json
 import os
+from zoneinfo import ZoneInfo
 
 # ─── CONFIGURAZIONE ───────────────────────────────────────────────────────────
 
 NTFY_TOPIC      = os.environ.get("NTFY_TOPIC")
 MORNING_ALREADY = os.environ.get("MORNING_ALREADY", "") == "true"
 FORCE_MORNING   = os.environ.get("FORCE_MORNING", "").lower() == "true"
+
+LOCAL_TZ = ZoneInfo("Europe/Rome")   # ora italiana, legale/solare automatica
 
 BASE = "https://imag-data.bgs.ac.uk/GIN_V1/hapi"
 OBSERVATORIES = {
@@ -59,7 +63,9 @@ BACK_STEPS_H   = (0, 3, 6, 12, 24)   # retrocessione finestra fetch (mai il futu
 EVENT_FILE     = '.sky_event'
 
 UPDATE_MIN_GAP_MIN    = 180          # max un aggiornamento ogni 3h (e solo escalation)
-CLEAN_CHECKS_RIENTRO  = 2            # check puliti consecutivi prima del rientro (2×15')
+CLEAN_CHECKS_RIENTRO  = 2            # check puliti consecutivi prima di chiudere l'evento
+ONSET_LOOKBACK_MIN    = 180          # quanto indietro nei dati cercare l'inizio vero
+ONSET_STEP_MIN        = 5            # passo della ricerca dell'inizio
 
 MIN_STATIONS  = 2
 BB_WINDOW     = 120
@@ -343,12 +349,28 @@ def age_str(ts, now):
     h, m = divmod(mins, 60)
     return f"{h}h {m:02d}m" if h else f"{m}m"
 
+def loc(ts):
+    """datetime (aware) o stringa ISO → datetime in ora italiana"""
+    if isinstance(ts, str):
+        ts = datetime.datetime.fromisoformat(ts)
+    return ts.astimezone(LOCAL_TZ)
+
+def hl(ts, with_day=False):
+    """ora italiana leggibile: '17:05' oppure 'gio 24/9 17:05'"""
+    t = loc(ts)
+    if with_day:
+        return f"{GIORNI_ITA[t.weekday()][:3]} {t.day}/{t.month} {t:%H:%M}"
+    return t.strftime('%H:%M')
+
+def dur(a, b):
+    """durata leggibile fra due istanti"""
+    mins = max(0, int((loc(b) - loc(a)).total_seconds() // 60))
+    h, m = divmod(mins, 60)
+    return f"{h} h {m:02d} min" if h else f"{m} min"
+
 def durata_str(start_iso):
     try:
-        t0 = datetime.datetime.fromisoformat(start_iso)
-        mins = max(0, int((now_utc() - t0).total_seconds() // 60))
-        h, m = divmod(mins, 60)
-        return f"{h}h {m:02d}m" if h else f"{m}m"
+        return dur(start_iso, now_utc())
     except Exception:
         return "?"
 
@@ -495,43 +517,51 @@ def evaluate_station(times, data, cut_dt=None):
                            'current': round(float(arr[-1]), 2), 'component': comp})
     return alerts
 
-# ─── FORMATTEZZA ALERT / UPDATE ───────────────────────────────────────────────
+def network_alerting(results, live, cut_dt):
+    """True se almeno MIN_STATIONS stazioni vive sono in anomalia considerando i dati fino a cut_dt"""
+    n = 0
+    for obs in live:
+        times, data = results[obs]
+        if evaluate_station(times, data, cut_dt + datetime.timedelta(seconds=1)):
+            n += 1
+    return n >= MIN_STATIONS
 
-def _station_lines(stations):
-    lines = []
-    for obs, alerts in stations.items():
-        lines.append(f"{obs}:")
-        for a in alerts:
-            c = a['component']
-            if a['type'].startswith('BB'):
-                d = '↑' if 'SOPRA' in a['type'] else '↓'
-                lines.append(f"  BB{d} {c} {a['current']:.1f}nT z={a['z']:.1f}σ")
-            elif a['type'] == 'ZSCORE':
-                lines.append(f"  Z {c} z={a['z']:.1f}σ")
-            else:
-                s = '+' if a['change_nT'] > 0 else ''
-                lines.append(f"  ROC {c} {s}{a['change_nT']:.1f}nT/30'")
-    return lines
+def find_onset(results, live, net_fresh):
+    """Risale nei dati a passi di ONSET_STEP_MIN finché la rete resta in anomalia:
+    restituisce il primo istante (orario dei DATI) della sequenza anomala in corso."""
+    onset = net_fresh
+    t = net_fresh
+    limit = net_fresh - datetime.timedelta(minutes=ONSET_LOOKBACK_MIN)
+    while t - datetime.timedelta(minutes=ONSET_STEP_MIN) >= limit:
+        t = t - datetime.timedelta(minutes=ONSET_STEP_MIN)
+        if network_alerting(results, live, t):
+            onset = t
+        else:
+            break
+    return onset
 
-def format_alert(stations, epoch_str):
-    t = now_utc().strftime('%H:%M UT')
-    intensita, max_z = intensita_evento(stations)
-    lines = [f"⚡ SKY {t} — {', '.join(stations)}",
-             f"{intensita} (z_max={max_z:.1f}σ)",
-             f"dati fino alle {epoch_str}", ""]
-    lines.extend(_station_lines(stations))
+# ─── TESTI DELLE NOTIFICHE (essenziali) ───────────────────────────────────────
+
+def ultimo_evento_riga(state):
+    e = state.get('last_event')
+    if not e:
+        return None
+    return (f"evento precedente: {hl(e['start'], True)}–{hl(e['end'])} "
+            f"({dur(e['start'], e['end'])}), picco {e['peak_class']} alle {hl(e['peak_time'])}")
+
+def format_alert(classe, onset, net_fresh, state):
+    lines = [f"⚡ anomalia in corso — intensità {classe}",
+             f"dalle {hl(onset)} ora italiana",
+             f"(dati fino alle {hl(net_fresh)})"]
+    prev = ultimo_evento_riga(state)
+    if prev:
+        lines += ["", prev]
     return '\n'.join(lines)
 
-def format_update(stations, state, epoch_str):
-    """Aggiornamento SOLO in escalation: intensità superiore all'ultima notificata."""
-    classe, max_z = intensita_evento(stations)
-    lines = [f"⚡ SKY — evento in corso da {durata_str(state.get('started'))}",
-             f"{', '.join(stations)} — {classe} (z_max={max_z:.1f}σ) ↗ in aumento",
-             f"era: {state.get('last_class')} {float(state.get('last_zmax', 0)):.1f}σ · "
-             f"picco finora: {state.get('peak_class')} ({float(state.get('peak_zmax', 0)):.1f}σ)",
-             f"dati fino alle {epoch_str}", ""]
-    lines.extend(_station_lines(stations))
-    return '\n'.join(lines)
+def format_update(classe, state, net_fresh):
+    return '\n'.join([f"⬆️ intensità {classe}",
+                      f"evento iniziato alle {hl(state['start_data'])} ora italiana",
+                      f"(dati fino alle {hl(net_fresh)})"])
 
 # ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
 
@@ -557,11 +587,10 @@ def run_check():
         print("  NESSUNA stazione risponde — rete muta, stato evento invariato")
         return
     net_fresh = max(last_ts.values())
-    epoch_str = net_fresh.strftime('%H:%M UT')
     live  = sorted(o for o, t in last_ts.items()
                    if (net_fresh - t).total_seconds() / 60 <= STALE_GAP_MIN)
     stale = sorted(o for o in last_ts if o not in live)
-    print(f"  📡 dati disponibili fino alle {epoch_str} | "
+    print(f"  📡 dati disponibili fino alle {net_fresh:%H:%M} UT ({hl(net_fresh)} italiane) | "
           f"vive={sorted(o.upper() for o in live)} "
           f"stale={sorted(o.upper() for o in stale) + frozen}")
 
@@ -578,28 +607,39 @@ def run_check():
     alert_now = len(stations_alert) >= MIN_STATIONS
     state = load_event_state()
     now_iso = now.isoformat()
+    fresh_iso = net_fresh.isoformat()
 
     if alert_now:
         classe, max_z = intensita_evento(stations_alert)
         state['clean_streak'] = 0
+        # dettagli tecnici solo nei log
+        print(f"  in anomalia: {', '.join(stations_alert)} — {classe} z_max={max_z:.1f}σ")
 
     if alert_now and not state['active']:
-        # ── INIZIO evento
-        print("  → ⚡ invio: inizio evento")
-        ntfy_send(format_alert(stations_alert, epoch_str),
-                  title="SKY ALERT anomalia in corso", priority="high")
+        # ── INIZIO evento: ora vera d'inizio ricavata dai dati
+        onset = find_onset(results, live, net_fresh)
+        print(f"  → ⚡ invio: inizio evento (inizio nei dati {onset:%H:%M} UT)")
+        ntfy_send(format_alert(classe, onset, net_fresh, state),
+                  title="SKY anomalia in corso", priority="high")
         state = {'active': True, 'started': now_iso,
+                 'start_data': onset.isoformat(),
+                 'last_alert_data': fresh_iso,
                  'last_notify': now_iso,
                  'last_class': classe, 'last_zmax': max_z,
-                 'peak_class': classe, 'peak_zmax': max_z,
+                 'peak_class': classe, 'peak_zmax': max_z, 'peak_time': fresh_iso,
                  'clean_streak': 0,
-                 'stations': sorted(stations_alert), 'epoch': epoch_str}
+                 'stations': sorted(stations_alert),
+                 'last_event': state.get('last_event')}
         save_event_state(state)
 
     elif alert_now and state['active']:
-        # ── evento continua: aggiorna picco, valuta SOLO escalation
+        # ── evento continua: aggiorna fine provvisoria e picco, notifica SOLO escalation
+        changed = False
+        if fresh_iso != state.get('last_alert_data'):
+            state['last_alert_data'] = fresh_iso; changed = True
         if max_z > float(state.get('peak_zmax', 0)):
-            state['peak_class'], state['peak_zmax'] = classe, max_z
+            state['peak_class'], state['peak_zmax'], state['peak_time'] = classe, max_z, fresh_iso
+            changed = True
         cur_order  = INTENSITY_ORDER.get(classe, 0)
         prev_order = INTENSITY_ORDER.get(state.get('last_class', '⚪ BASSA'), 0)
         escalated  = cur_order > prev_order
@@ -609,42 +649,39 @@ def run_check():
         except Exception:
             gap_min = float('inf')
         if escalated and gap_min >= UPDATE_MIN_GAP_MIN:
-            print("  → 🔄 invio: escalation")
-            ntfy_send(format_update(stations_alert, state, epoch_str),
+            print("  → ⬆️ invio: escalation")
+            ntfy_send(format_update(classe, state, net_fresh),
                       title="SKY intensita in aumento", priority="high")
             state['last_notify'] = now_iso
             state['last_class'], state['last_zmax'] = classe, max_z
             state['stations'] = sorted(stations_alert)
-            state['epoch'] = epoch_str
-            save_event_state(state)
+            changed = True
         else:
-            if escalated:
-                print(f"  escalation {classe} rilevata ma attendsi "
-                      f"(min {UPDATE_MIN_GAP_MIN}' tra notifiche)")
-            else:
-                print(f"  evento in corso ({classe} z_max={max_z:.1f}σ) — "
-                      f"nessun invio (solo escalation notificano)")
+            print(f"  evento in corso ({classe}) — nessun invio (solo le escalation notificano)")
+        if changed:
+            save_event_state(state)
 
     elif not alert_now and state['active']:
-        # ── RIENTRO: serve quiete CONFERMATA su CLEAN_CHECKS_RIENTRO check consecutivi
+        # ── FINE evento: nessuna notifica, il riepilogo va nel prossimo ⚡
         if not live:
-            print("  nessuna stazione viva — rientro non dichiarabile, stato invariato")
+            print("  nessuna stazione viva — fine non dichiarabile, stato invariato")
         else:
             state['clean_streak'] = int(state.get('clean_streak', 0)) + 1
             if state['clean_streak'] >= CLEAN_CHECKS_RIENTRO:
-                print("  → ✅ invio: rientro")
-                ntfy_send("✅ Rientro in ciclo normale "
-                          f"dopo {durata_str(state.get('started'))}\n"
-                          f"picco evento: {state.get('peak_class', '—')} "
-                          f"(z_max={float(state.get('peak_zmax', 0)):.1f}σ)\n"
-                          f"dati fino alle {epoch_str}",
-                          title="SKY rientro", priority="low")
-                state = {'active': False, 'started': None, 'clean_streak': 0}
+                start_d = state.get('start_data') or state.get('started')
+                end_d = state.get('last_alert_data') or fresh_iso
+                summary = {'start': start_d, 'end': end_d,
+                           'peak_class': state.get('peak_class', '—'),
+                           'peak_time': state.get('peak_time') or end_d}
+                print(f"  → evento concluso (nessun invio): {hl(start_d, True)}–{hl(end_d)} "
+                      f"({dur(start_d, end_d)}), picco {summary['peak_class']}")
+                state = {'active': False, 'started': None, 'clean_streak': 0,
+                         'last_event': summary}
                 save_event_state(state)
             else:
                 save_event_state(state)
                 print(f"  quiete {state['clean_streak']}/{CLEAN_CHECKS_RIENTRO} — "
-                      f"attendo conferma prima del rientro")
+                      f"attendo conferma prima di chiudere l'evento")
 
     else:
         print("  OK — " + "  ".join(f"{o} Z={v:.1f} ({t:%H:%M} UT)"
@@ -709,15 +746,30 @@ def build_morning(dt):
         lines.append("")
 
     shower_lines = []
-    for sname, shower, dist_peak in active_showers_probable(sun_val, planets):
-        shower_lines.append(f"☄️ {sname}  λ={shower['lambda']:.0f}°  "
-                            f"Δpicco={dist_peak:.1f}°  picco={shower['peak_date']}")
-        for name, p in planets.items():
-            d = lon_delta(p['lon'], shower['lambda'])
-            if d <= ASPECT_TIGHT:
-                shower_lines.append(f"    → {name} Δ={d:.2f}° **{flag_mark(planets, name)}")
+    try:
+        import sky_catalog as CAT      # catalogo IMO 2026 (se presente nel repo)
+        yfrac = dt.year + (dt.timetuple().tm_yday - 1) / 365.25
+        for sh in CAT.active_showers(sun_val, yfrac):
+            if sh['dist_peak'] is None:
+                shower_lines.append(f"☄️ {sh['name']}  (radiante mobile, attivo fino al 20 set)")
+            else:
+                shower_lines.append(f"☄️ {sh['name']}  Δpicco={sh['dist_peak']:.1f}°  V={sh['v']} km/s")
+            for name, p in planets.items():
+                d = lon_delta(p['lon'], sh['rad_lon_date'])
+                if d <= ASPECT_TIGHT:
+                    shower_lines.append(f"    → {name} Δ={d:.2f}°{flag_mark(planets, name)}")
+        title = "☄️ SCIAMI ATTIVI:"
+    except ImportError:
+        for sname, shower, dist_peak in active_showers_probable(sun_val, planets):
+            shower_lines.append(f"☄️ {sname}  λ={shower['lambda']:.0f}°  "
+                                f"Δpicco={dist_peak:.1f}°  picco={shower['peak_date']}")
+            for name, p in planets.items():
+                d = lon_delta(p['lon'], shower['lambda'])
+                if d <= ASPECT_TIGHT:
+                    shower_lines.append(f"    → {name} Δ={d:.2f}° **{flag_mark(planets, name)}")
+        title = "☄️ SCIAMI PROBABILI:"
     if shower_lines:
-        lines.append("☄️ SCIAMI PROBABILI:")
+        lines.append(title)
         lines.extend(shower_lines)
         lines.append("")
 
