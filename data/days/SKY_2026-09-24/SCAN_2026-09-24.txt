@@ -1,0 +1,101 @@
+SKY SCAN — 2026-09-24 — stazioni: LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD, OTT, BRD
+Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
+
+══ 1. INTEGRITÀ DEI DATI ══
+  LON: 1440/1440 minuti | risoluzione ~0.1 nT
+  THY: 1440/1440 minuti | risoluzione ~0.01 nT
+  CLF: 1440/1440 minuti | F−|B| -1.41±0.09 | risoluzione ~0.1 nT
+  BFO: 1440/1440 minuti | F−|B| +0.27±0.13 | risoluzione ~0.01 nT
+  NGK: 1440/1440 minuti | F−|B| +0.09±0.04 | risoluzione ~0.01 nT
+  BEL: 1440/1440 minuti | F−|B| +0.04±0.15 | risoluzione ~0.01 nT
+  IZN: 1440/1440 minuti | Z piatto 11 min fino alle 03:23 | F−|B| -0.00±0.04 ← F probabilmente CALCOLATO (scarto troppo perfetto) | risoluzione ~0.01 nT
+  DUR: 1080/1440 minuti | buchi 18:00–23:59 | F−|B| +43.05±0.24 | risoluzione ~0.01 nT
+  ABK: 1440/1440 minuti | F−|B| -0.38±0.36 | risoluzione ~0.1 nT
+  KAK: 1440/1440 minuti | F−|B| -1.32±0.05 | risoluzione ~0.01 nT
+  FRD: 1440/1440 minuti | F−|B| -1.76±0.78 | risoluzione ~0.01 nT
+  OTT: 360/1440 minuti | buchi 06:00–23:59 | F−|B| -0.84±0.19 | risoluzione ~0.01 nT
+  BRD: 360/1440 minuti | buchi 06:00–23:59 | F−|B| +12.74±0.11 | risoluzione ~0.01 nT
+
+══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══
+  (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)
+
+══ 3. EVENTI SINCRONI (≥5 stazioni EU: LON, THY, CLF, BFO, NGK, BEL, IZN, DUR) ══
+  X al minuto: 00:32–00:33(8) max THY+4.0 |fuori EU: ABK-19.0 KAK+1.4 FRD+3.4 OTT+4.2 BRD+7.6 (vento solare: fuori copertura) ; 00:42(5) max BEL+3.5 |fuori EU: ABK+14.9 KAK+1.4 FRD+2.0 OTT+3.6 BRD+3.8 (vento solare: fuori copertura) ; 01:44–01:47(8) max BEL+4.0 |fuori EU: ABK+6.0 KAK-1.7 FRD-3.7 OTT+5.4 BRD+7.2 (vento solare: fuori copertura) ; 01:55–01:56(7) max NGK-4.2 |fuori EU: ABK-8.6 KAK-1.6 FRD-4.1 OTT-6.2 BRD-7.2 (vento solare: fuori copertura) ; 05:38(5) max NGK-4.8 |fuori EU: ABK-13.7 KAK-1.1 FRD-2.2 OTT-2.5 BRD-3.1 (vento solare: fuori copertura) ; 09:38(7) max NGK-4.4 |fuori EU: ABK-8.8 KAK-1.2 FRD+1.9 ⟵ L1 P+104% (arrivo 09:24) ; 09:53(5) max NGK+4.9 |fuori EU: ABK+11.8 KAK+0.7 FRD+1.8 ; 10:02(5) max BEL+5.1 |fuori EU: ABK+9.6 KAK+0.6 FRD+1.5 ; 15:48(5) max NGK+4.2 |fuori EU: ABK+19.5 KAK+2.2 FRD-3.1 ⟵ L1 P-28% (arrivo 15:48)
+  Y al minuto: 01:45(5) max BEL+3.1 |fuori EU: ABK-8.7 KAK-1.8 FRD-1.3 OTT-2.6 BRD+5.2 (vento solare: fuori copertura) ; 01:48(8) max BEL-4.0 |fuori EU: ABK-8.7 KAK+1.2 FRD-1.3 OTT-2.6 BRD+5.2 (vento solare: fuori copertura) ; 01:56(8) max BEL+3.6 |fuori EU: ABK+6.3 KAK-2.2 FRD-1.5 OTT-2.4 BRD-5.6 (vento solare: fuori copertura) ; 05:38(6) max BEL+4.9 |fuori EU: ABK+17.6 KAK-1.1 FRD-1.6 OTT-2.5 BRD-2.6 (vento solare: fuori copertura) ; 09:35(6) max NGK-3.3 |fuori EU: ABK+11.1 KAK+1.1 FRD-3.0 ⟵ L1 P+104% (arrivo 09:24) ; 09:53(7) max NGK-3.2 |fuori EU: ABK+18.8 KAK+0.8 FRD-2.1 ; 10:34(6) max NGK-2.7 |fuori EU: ABK-6.7 KAK+0.4 FRD+1.7 ⟵ L1 Bt+4.6 (arrivo 10:44) ; 15:42(5) max BEL+3.2 |fuori EU: ABK+9.5 KAK-0.7 FRD+1.2 ⟵ L1 P-28% (arrivo 15:48) ; 15:45–15:46(6) max BEL+3.8 |fuori EU: ABK+9.5 KAK-0.8 FRD+2.5 ⟵ L1 P-28% (arrivo 15:48)
+  X su 30 min (|Δ|>8.0): 00:32–00:48+ 01:12–01:17− 01:58–02:02− 06:04–06:06− 07:11–07:31− 07:34–07:39− 07:42–07:55− 08:09–08:11− 09:38–09:56− 10:00–10:01− 10:05–10:06− 10:24–10:26+ 10:29–11:01+ 11:22–11:23+ 11:26–11:37+ 11:40–11:43+ 12:02–12:08+ 12:25–12:27− 12:32–12:34− 12:50–12:50− 12:57–13:23− 15:07–15:18− 16:31–16:34+ 16:38–16:39+ 18:36–18:45+ 19:22–19:27− 20:23–20:23+ 20:34–20:37+ 21:48–21:50+ 21:53–21:53+ 21:57–21:58+ 23:13–23:25+ 23:52–23:59+
+  Y su 30 min (|Δ|>8.0): 08:55–08:57− 09:36–09:38− 09:41–09:46− 09:49–09:49− 09:52–09:54− 09:56–10:05− 10:09–10:11− 10:13–10:17− 10:19–11:01− 11:19–11:21+ 11:23–11:25+ 12:10–12:23− 13:08–13:26+ 15:24–16:20+ 16:37–16:49− 18:01–18:02+ 18:04–18:21+ 22:10–22:12+ 22:20–22:37+ 22:57–23:15−
+
+══ 4. CURVA DIURNA ══
+  Ampiezza Y: LON63 THY68 CLF73 BFO72 NGK80 BEL78 IZN60 DUR65
+  Min Y: IZN10:47 THY12:42 CLF12:42 BFO12:42 DUR12:42 LON12:45 NGK12:45 BEL12:45
+  Max Y: IZN06:55 DUR08:18 BEL19:46 LON22:34 THY22:34 NGK22:34 CLF23:55 BFO23:59
+  ⚠ massimo di Y fuori dal mattino: LON, THY, CLF, BFO, NGK, BEL
+  Gruppi (≥3 stazioni entro 2 min): 12:42 THY,CLF,BFO,DUR; 12:45 LON,NGK,BEL
+  Min Z: IZN09:58 BEL10:41 THY11:29 NGK11:29 LON11:36 CLF11:59 BFO12:04 DUR13:16
+  IZN minimo Z rispetto alla mediana: -1.6 h
+
+══ 5. NOTTE, OSCILLAZIONI, FASCIA 22 UT ══
+  Agitazione notte (std Y 00–03): LON2.1 THY2.4 CLF3.3 BFO3.1 NGK3.2 BEL2.5 IZN1.4 DUR2.3
+  Potenza oscillazioni NGK per ora: 2.44 2.88 1.88 0.30 0.32 1.23 0.51 0.99 0.76 0.81 1.40 1.30 4.38 1.86 1.14 1.93 1.08 0.69 1.17 1.00 0.80 1.22 2.96 6.53
+  Ora più "vibrante": 23 UT (6.53)
+  Fascia 22 UT, picco X (criterio fisso): mediana EU -3.7 → segno −
+    per stazione: LON-2.8 THY-3.7 CLF-4.8 BFO-4.8 NGK-5.7 BEL+6.6 IZN+5.3 ABK+106.5 KAK-7.5 FRD-11.4
+    ⚠ stazioni EU con segno discorde (rete divisa)
+
+══ 6. MEDIE GIORNALIERE ══
+  Z medio: LON42832.2 THY43857.7 CLF43316.7 BFO43842.4 NGK46146.5 BEL47146.4 IZN40883.4 DUR39909.2 ABK52501.1 KAK36022.0 FRD45064.1 OTT49977.1 BRD53755.7
+
+══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
+  sorgente SOLAR1, distanza 1.51 Mkm, velocità 393 km/s, ritardo tipico 64 min
+  Bz < −5 nT per ≥20 min (ora L1): 24/09 07:31–08:23 24/09 08:31–08:51 24/09 10:25–10:45
+  copertura L1 → Terra: 08:34 del 24/09 in poi
+  Discontinuità a L1 (arrivo stimato a Terra): 09:13[P+50%] 09:17[P+92%] 09:24[P+104%] 10:31[P+26%] 10:39[P+26%] 10:44[Bt+4.6] 11:22[P+21%] 12:17[Bt-2.9] 15:48[P-28%] 17:51[P+28%] 19:27[P+21%]
+  (pressione su → X su atteso; pressione giù → X giù)
+
+══ 9. MOVIMENTI REGIONALI (2–4 stazioni insieme, contro il resto della rete) ══
+  X: 09:38 THY,NGK− ; 09:55 LON,IZN+
+  Y: 08:45 CLF,BFO,NGK− ; 09:34 CLF,BFO,NGK+ ; 09:46 CLF,BFO,NGK− ; 13:19 CLF,BFO− ; 23:43 CLF,BFO+ ; 23:45 CLF,BFO+ ; 23:46 THY,IZN−
+
+══ 10. DIREZIONE APPARENTE DEGLI EVENTI SINCRONI (ritardi fra stazioni) ══
+  ritardo fisso per stazione rispetto a THY (mediana sugli eventi, s): LON-0 THY+0 CLF+2 BFO+3 NGK+3 BEL+3 IZN-40 DUR-4
+  (un ritardo fisso non è propagazione: orologio o convenzione del minuto — viene sottratto qui sotto)
+  00:32X: verso 184°, velocità apparente 70 km/s (escursione ritardi 28 s)
+  00:42X: verso 197°, velocità apparente 75 km/s (escursione ritardi 22 s)
+  01:44X: verso 206°, velocità apparente 75 km/s (escursione ritardi 21 s)
+  01:55X: verso 209°, velocità apparente 75 km/s (escursione ritardi 20 s)
+  05:38X: verso 239°, velocità apparente 33 km/s (escursione ritardi 47 s)
+  09:38X: simultaneo entro ±4 s (dopo correzione)
+  09:53X: simultaneo entro ±4 s (dopo correzione)
+  10:02X: simultaneo entro ±4 s (dopo correzione)
+  15:48X: simultaneo entro ±7 s (dopo correzione)
+  01:45Y: verso 39°, velocità apparente 110 km/s (escursione ritardi 21 s)
+  01:48Y: verso 41°, velocità apparente 117 km/s (escursione ritardi 20 s)
+  01:56Y: verso 34°, velocità apparente 117 km/s (escursione ritardi 19 s)
+  05:38Y: verso 275°, velocità apparente 27 km/s (escursione ritardi 96 s)
+  09:35Y: verso 293°, velocità apparente 79 km/s (escursione ritardi 30 s)
+  09:53Y: simultaneo entro ±5 s (dopo correzione)
+  10:34Y: verso 142°, velocità apparente 114 km/s (escursione ritardi 20 s)
+  15:42Y: simultaneo entro ±8 s (dopo correzione)
+  15:45Y: simultaneo entro ±3 s (dopo correzione)
+
+══ 11. GEOMETRIA DEGLI SCIAMI ATTIVI (altezza del radiante) ══
+  Sextantidi diurne (AR 156.0°, Dec -2°) su SD: sorge 03:29, culmina 09:19 (42°), tramonta 15:10 UT
+    altezza del radiante su SD agli eventi sincroni: 00:32:-29° 00:42:-28° 01:44:-18° 01:55:-16° 05:38:+22° 09:38:+42° 09:53:+41° 10:02:+41° 15:48:-7° 01:45:-18° 01:48:-17° 01:56:-16° 05:38:+22° 09:35:+42° 09:53:+41° 10:34:+39° 15:42:-6° 15:45:-6°
+    eventi con radiante sopra l'orizzonte: 8/18 (atteso per caso: 8.8)
+  Lincidi di settembre (AR 112.5°, Dec +56°) su SD: sorge —, culmina 06:26 (80°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 00:32:+37° 00:42:+39° 01:44:+47° 01:55:+48° 05:38:+78° 09:38:+59° 09:53:+57° 10:02:+56° 15:48:+17° 01:45:+47° 01:48:+47° 01:56:+48° 05:38:+78° 09:35:+59° 09:53:+57° 10:34:+51° 15:42:+18° 15:45:+17°
+    eventi con radiante sopra l'orizzonte: 18/18 (atteso per caso: 18.0)
+  Tauridi Sud (AR 52.5°, Dec +15°) su SD: sorge 19:19, culmina 02:26 (59°), tramonta 09:30 UT
+    altezza del radiante su SD agli eventi sincroni: 00:32:+51° 00:42:+52° 01:44:+58° 01:55:+58° 05:38:+39° 09:38:-1° 09:53:-4° 10:02:-5° 15:48:-26° 01:45:+58° 01:48:+58° 01:56:+58° 05:38:+39° 09:35:-1° 09:53:-4° 10:34:-10° 15:42:-26° 15:45:-26°
+    eventi con radiante sopra l'orizzonte: 9/18 (atteso per caso: 10.6)
+
+══ 12. EVENTI "ORFANI" (sincroni, senza discontinuità a L1 entro 15 min) ══
+  fuori copertura NOAA (non valutabili): 9 eventi
+  09:53X(5) NGK+4.9 10:02X(5) BEL+5.1 09:53Y(7) NGK-3.2
+  (se i file NOAA mancano o non coprono l'orario, tutti risultano orfani: controllare la sezione 7)
+
+══ 13. RICORRENZE CON I GIORNI PRECEDENTI (SKY_EVENTI.csv, tolleranza ±3 min) ══
+  storico insufficiente
+
+══ 8. CONFRONTO CON I GIORNI PRECEDENTI (SKY_REGISTRO.csv) ══
+  registro vuoto: primo giorno
