@@ -26,6 +26,7 @@ L1_DEFAULT_KM = 1.5e6
 DERIVED_F = set()
 NOAA_COVER = None
 DRIFT_EST = set()
+ACTIVE_SH = {}
 CULM = {}
 REG_LAGS = {}
 SYNC_LOG = []          # eventi sincroni della giornata (per registro eventi e analisi aggiuntive)
@@ -472,7 +473,7 @@ def sec_radiants(folder, D, day, L, reg):
                 if CAT and rd and not name.startswith('Antielio'):
                     for sh in CAT.SHOWERS:
                         if sh['name'] == name and not sh['drift_known']: DRIFT_EST.add(name)
-                if rd: RADIANTS[name] = rd; active.append(name)
+                if rd: RADIANTS[name] = rd; active.append(name); ACTIVE_SH[name] = rd
     if not active: L.append('  nessuno sciame con radiante noto nel RIEPILOGO'); return
     times = pd.date_range(day, periods=24 * 60, freq='1min')
     for name in active:
@@ -495,6 +496,61 @@ def sec_radiants(folder, D, day, L, reg):
             frac_up = len(up) / len(alt)
             L.append(f'    eventi con radiante sopra l\'orizzonte: {ups}/{len(SYNC_LOG)} (atteso per caso: {frac_up*len(SYNC_LOG):.1f})')
             reg[f'rad_up_{name.replace(" ", "")}'] = f'{ups}/{len(SYNC_LOG)}'
+
+def _sun_alt(lat, lon, t):
+    jd = t.to_julian_date(); n = jd - 2451545.0
+    Ls = (280.460 + 0.9856474 * n) % 360; g = math.radians(357.528 + 0.9856003 * n)
+    lam = math.radians(Ls + 1.915 * math.sin(g) + 0.020 * math.sin(2 * g)); e = math.radians(23.44)
+    ra = math.degrees(math.atan2(math.cos(e) * math.sin(lam), math.cos(lam))) % 360
+    dec = math.degrees(math.asin(math.sin(e) * math.sin(lam)))
+    return _alt(ra, dec, lat, lon, t)
+
+def _spearman(a, b):
+    a, b = pd.Series(a).rank(), pd.Series(b).rank()
+    return float(np.corrcoef(a, b)[0, 1]) if a.std() > 0 and b.std() > 0 else np.nan
+
+def sec_radiant_station(D, day, L, reg):
+    """ESPLORATIVO: la stazione che si discosta dal resto della rete è quella con il radiante più alto?
+    Confronto con due 'geometrie di controllo': altezza del Sole e longitudine (geografia fissa)."""
+    eu = [s for s in EU if s in D and s in COORD]
+    L.append('\n══ 15. RADIANTE SOPRA OGNI STAZIONE vs SCARTO DALLA RETE (esplorativo) ══')
+    L.append('  (valori esplorativi, non verifiche: correlazione fra stazioni ora per ora; + = scarta di più dove il radiante è più alto)')
+    if not ACTIVE_SH or len(eu) < 5:
+        L.append('  non calcolabile'); return
+    # scarto dalla rete: oscillazioni 2–30 min di ogni stazione meno la mediana della rete, ora per ora
+    res = {}
+    for s in eu:
+        acc = 0
+        for c in 'XYZ':
+            v = D[s][c].interpolate(limit=5)
+            hp = v - v.rolling(31, center=True, min_periods=10).mean()
+            acc = acc + hp
+        res[s] = acc
+    R = pd.DataFrame(res)
+    R = R.sub(R.median(axis=1), axis=0).abs().resample('1h').mean()
+    hours = R.index
+    geos = {'Sole (controllo)': lambda lat, lon, t: _sun_alt(lat, lon, t),
+            'Longitudine (controllo)': lambda lat, lon, t: lon,
+            'Latitudine (controllo)': lambda lat, lon, t: lat}
+    for name, (ra, dec) in ACTIVE_SH.items():
+        geos[name] = (lambda ra_, dec_: (lambda lat, lon, t: _alt(ra_, dec_, lat, lon, t)))(ra, dec)
+    for gname, f in geos.items():
+        cors, up = [], 0
+        for h in hours:
+            t = h + pd.Timedelta(minutes=30)
+            g = [f(*COORD[s], t) for s in eu]
+            if '(controllo)' not in gname:
+                if max(g) <= 0: continue
+                up += 1
+            r = [R.at[h, s] for s in eu]
+            if np.any(np.isnan(r)): continue
+            c = _spearman(g, r)
+            if not np.isnan(c): cors.append(c)
+        if cors:
+            m = np.mean(cors); pos = sum(c > 0.5 for c in cors)
+            L.append(f'  {gname}: correlazione media {m:+.2f} su {len(cors)} ore' +
+                     (f' (radiante sopra l\'orizzonte in {up} ore)' if up else '') + f'; ore con correlazione > 0.5: {pos}')
+            reg[f'geo_{gname.split(" ")[0]}'] = round(float(m), 2)
 
 def sec_orphans(L, reg):
     L.append('\n══ 12. EVENTI "ORFANI" (sincroni, senza discontinuità a L1 entro 15 min) ══')
@@ -570,6 +626,7 @@ def main():
     sec_direction(D, L)
     sec_radiants(folder, D, day, L, reg)
     reg.update({f'lag_{k}': v for k, v in REG_LAGS.items()})
+    sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
     sec_registry(folder, day, reg, L)
