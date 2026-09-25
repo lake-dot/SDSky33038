@@ -12,6 +12,10 @@ NOTA DI METODO (da non dimenticare)
   Così RIEPILOGO, SCAN e registro usano un unico sistema.
 • Fonte: lista di lavoro IMO 2026 (via elenco Wikipedia "List of meteor showers", 2026).
 • Rami di Encke separati (Tauridi Sud / Nord): niente più voce generica "Encke nodo".
+• Deriva dei radianti: AR e Dec si spostano ogni giorno (gradi per grado di λ☉ ≈ per giorno).
+  Valori IMO/letteratura dove noti; per gli sciami senza dato si usa +1.0°/0.0° (tipico) e il
+  report lo segnala con "(deriva stimata)". Con la deriva, il passaggio del radiante può restare
+  quasi alla stessa ora solare ogni giorno: per questo l'orologio "radiante" va testato a parte.
 • Sorgente dell'Antielio (ANT, include le ex Piscidi del sud, picco storico ~20 set):
   radiante mobile, calcolato come punto antisolare sull'eclittica (approssimazione).
 """
@@ -80,12 +84,20 @@ _RAW = [
     ('Ursidi',               '17 Dec', '26 Dec', 270.7,  14.5, +76, 33, '10', '8P/Tuttle'),
 ]
 
+DRIFT = {  # ΔAR, ΔDec in gradi per grado di λ☉
+    'Quadrantidi': (0.8, -0.2), 'Liridi': (1.1, 0.0), 'Eta Aquaridi': (0.9, 0.4),
+    'Delta Aquaridi Sud': (0.8, 0.18), 'Alpha Capricornidi': (0.9, -0.3), 'Perseidi': (1.4, 0.26),
+    'Kappa Cignidi': (0.8, 0.2), 'Alpha Aurigidi': (1.1, 0.0), 'Eps Perseidi': (1.0, 0.1),
+    'Draconidi': (0.0, 0.0), 'Orionidi': (0.7, 0.1), 'Tauridi Sud': (0.8, 0.3),
+    'Tauridi Nord': (0.9, 0.2), 'Leonidi': (0.7, -0.4), 'Geminidi': (1.0, -0.1), 'Ursidi': (0.0, 0.0)}
+
 SHOWERS = []
 for name, a, b, lp, ra_h, dec, v, zhr, parent in _RAW:
     ra = ra_h * 15.0
     SHOWERS.append({'name': name, 'start': _date_to_lam_j2000(a), 'end': _date_to_lam_j2000(b),
                     'peak': lp, 'ra': ra, 'dec': dec, 'v': v, 'zhr': zhr, 'parent': parent,
-                    'rad_lon': _ecl_lon(ra, dec)})
+                    'rad_lon': _ecl_lon(ra, dec), 'drift': DRIFT.get(name, (1.0, 0.0)),
+                    'drift_known': name in DRIFT})
 # Antielio: attivo 10 dic → 20 set, radiante mobile (punto antisolare)
 ANTIHELION = {'name': 'Antielio (ANT, ex Piscidi)', 'start': _date_to_lam_j2000('10 Dec'),
               'end': _date_to_lam_j2000('20 Sep'), 'v': 30, 'zhr': '4', 'parent': 'vari'}
@@ -113,11 +125,16 @@ def active_showers(sun_lon_of_date, year_frac):
     out.sort(key=lambda x: 999 if x['dist_peak'] is None else x['dist_peak'])
     return out
 
-def radiant_radec(name, sun_lon_of_date=None):
-    """AR/Dec (gradi, J2000) del radiante; per l'Antielio: punto antisolare sull'eclittica."""
+def radiant_radec(name, sun_lon_of_date=None, year_frac=2026.7):
+    """AR/Dec (gradi) del radiante ALLA DATA, con la deriva giornaliera; Antielio: punto antisolare."""
     for s in SHOWERS:
         if s['name'] == name:
-            return s['ra'], s['dec']
+            if sun_lon_of_date is None:
+                return s['ra'], s['dec']
+            lam = (sun_lon_of_date - precession_to_date(year_frac)) % 360
+            dl = (lam - s['peak'] + 180) % 360 - 180
+            dra, ddec = s['drift']
+            return (s['ra'] + dra * dl) % 360, s['dec'] + ddec * dl
     if name.startswith('Antielio') and sun_lon_of_date is not None:
         lon = math.radians((sun_lon_of_date + 180) % 360); e = math.radians(OBLIQ_J2000)
         ra = math.degrees(math.atan2(math.sin(lon) * math.cos(e), math.cos(lon))) % 360

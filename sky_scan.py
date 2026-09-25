@@ -17,12 +17,16 @@ EU      = ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL', 'IZN', 'DUR']
 AURORAL = ['ABK', 'TRO']
 GLOBAL  = ['KAK', 'FRD', 'OTT', 'BRD']
 DUR_ROT_DEG = 4.27
+# stazioni che pubblicano in un sistema ruotato (verificato con IGRF 2026): angolo da applicare
+ROT = {'DUR': 4.27, 'FRD': -10.49}
 SYNC_MIN_ST = 5          # stazioni EU per un evento "sincrono"
 ROC_THR     = 8.0        # nT/30min (come sky.py)
 WIN22 = ('21:45', '21:55', '22:05', '22:30')   # baseline / finestra fascia 22 UT
 L1_DEFAULT_KM = 1.5e6
 DERIVED_F = set()
 NOAA_COVER = None
+DRIFT_EST = set()
+CULM = {}
 REG_LAGS = {}
 SYNC_LOG = []          # eventi sincroni della giornata (per registro eventi e analisi aggiuntive)
 
@@ -56,8 +60,10 @@ def load_all(folder):
         if st == 'DURg':
             continue
         D.setdefault(st, pd.DataFrame(index=df.index))[comp] = df[col]
-    if 'DUR' in D and 'DURg_X' in df:           # DUR nel sistema geografico
-        D['DUR']['X'] = df['DURg_X']; D['DUR']['Y'] = df['DURg_Y']
+    for st, ang in ROT.items():                 # riporto nel sistema geografico
+        if st in D:
+            th = math.radians(ang); x, y = D[st].X.copy(), D[st].Y.copy()
+            D[st]['X'] = x * math.cos(th) - y * math.sin(th); D[st]['Y'] = x * math.sin(th) + y * math.cos(th)
     D = {k: v for k, v in D.items() if v[['X', 'Y', 'Z']].notna().sum().sum() > 0}
     return day, D
 
@@ -337,7 +343,7 @@ def sec_registry(folder, day, reg, L):
     row = pd.DataFrame([{'day': day, **reg}])
     new = pd.concat([old, row], ignore_index=True).sort_values('day')
     new.to_csv(rp, index=False)
-    L.append('\n══ 8. CONFRONTO CON I GIORNI PRECEDENTI (SKY_REGISTRO.csv) ══')
+    L.append('\n══ 14. CONFRONTO CON I GIORNI PRECEDENTI (SKY_REGISTRO.csv) ══')
     prev = new[new.day < day].tail(10)
     if prev.empty:
         L.append('  registro vuoto: primo giorno'); return
@@ -463,6 +469,9 @@ def sec_radiants(folder, D, day, L, reg):
             if line.startswith('☄️') and 'SCIAMI' not in line:
                 name = line.replace('☄️', '').strip().split('  ')[0].strip()
                 rd = CAT.radiant_radec(name, sunl) if CAT else RADIANTS.get(name)
+                if CAT and rd and not name.startswith('Antielio'):
+                    for sh in CAT.SHOWERS:
+                        if sh['name'] == name and not sh['drift_known']: DRIFT_EST.add(name)
                 if rd: RADIANTS[name] = rd; active.append(name)
     if not active: L.append('  nessuno sciame con radiante noto nel RIEPILOGO'); return
     times = pd.date_range(day, periods=24 * 60, freq='1min')
@@ -473,7 +482,11 @@ def sec_radiants(folder, D, day, L, reg):
         cul = alt.idxmax()
         rise = [t for t in alt.index[1:] if alt[t] > 0 >= alt[t - pd.Timedelta(minutes=1)]]
         sett = [t for t in alt.index[1:] if alt[t] <= 0 < alt[t - pd.Timedelta(minutes=1)]]
-        L.append(f'  {name} (AR {ra}°, Dec {dec:+}°) su SD: sorge {",".join(hm(t) for t in rise) or "—"}, '
+        CULM[name] = cul
+        for e in SYNC_LOG:
+            off = ((e['t'] - cul).total_seconds() / 60 + 720) % 1440 - 720
+            e[f'culm_{name}'] = round(off, 1)
+        L.append(f'  {name}{" (deriva stimata)" if name in DRIFT_EST else ""} (AR {ra:.1f}°, Dec {dec:+.1f}°) su SD: sorge {",".join(hm(t) for t in rise) or "—"}, '
                  f'culmina {hm(cul)} ({alt.max():.0f}°), tramonta {",".join(hm(t) for t in sett) or "—"} UT')
         if SYNC_LOG:
             evs = [f'{hm(e["t"])}:{alt[e["t"].floor("min")]:+.0f}°' for e in SYNC_LOG if e['t'].floor('min') in alt.index]
@@ -516,6 +529,18 @@ def sec_recurrence(folder, day, L):
                     hits.append(f'{hm(e.t)}{e.comp}↔{o.day[5:]} {hm(o.t)}')
         exp = tested * 7 / 1440 / 3     # prob. di cadere entro ±3 min, stessa componente (≈1/3)
         L.append(f'  {label}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:12]) if hits else ''))
+    # terzo orologio: stessa distanza dalla culminazione del radiante (radiante che si sposta)
+    for col in [c for c in today.columns if c.startswith('culm_') and c in old.columns]:
+        hits = []; tested = 0
+        for _, e in today.iterrows():
+            for _, o in old.iterrows():
+                dd = (d0 - pd.Timestamp(o.day)).days
+                if dd <= 0 or dd > 10 or pd.isna(o[col]) or pd.isna(e[col]): continue
+                tested += 1
+                if abs(e[col] - o[col]) <= 3 and o.comp == e.comp:
+                    hits.append(f'{hm(e.t)}{e.comp}↔{o.day[5:]} {hm(o.t)} ({e[col]:+.0f} min)')
+        exp = tested * 7 / 1440 / 3
+        L.append(f'  culminazione {col[5:]}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:10]) if hits else ''))
 
 # ─────────────────────────────────────────────────────────────────────────────
 def main():
