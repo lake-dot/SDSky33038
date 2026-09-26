@@ -45,6 +45,7 @@ jobs:
           N=$(date -u -d "$D +1 day" +%Y%m%d)
           cp data/noaa/NOAA_*_${D//-/}T*.json data/noaa/NOAA_*_${N}T*.json "$F"/ 2>/dev/null || true
           ls "$F"
+          cp data/sun/SUN_*_${N}T*.* "$F"/ 2>/dev/null || cp data/sun/SUN_*_${D//-/}T*.* "$F"/ 2>/dev/null || true
 
       - name: Analisi (sky_scan)
         run: python sky_scan.py data/days/SKY_${{ steps.d.outputs.day }}
@@ -80,8 +81,7 @@ jobs:
       - name: Commit solo report e registri
         run: |
           D=${{ steps.d.outputs.day }}
-          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt; do
-            [ -e "$f" ] && git add "$f"
+          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt; do            [ -e "$f" ] && git add "$f"
           done
           git diff --cached --quiet || {
             git config user.name  "sky-bot"
