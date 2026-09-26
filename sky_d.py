@@ -445,7 +445,7 @@ def build_ephemeridi(dt):
                 d = lon_delta(p['lon'], sh['rad_lon_date'])
                 if d <= ASPECT_TIGHT:
                     shower_lines.append(f"    → {name} Δ={d:.2f}°{flag_mark(planets, name)}")
-        title = "☄️ SCIAMI ATTIVI (catalogo IMO 2026, λ☉ alla data):"
+        title = "☄️ SCIAMI ATTIVI (catalogo IAU 2026, λ☉ alla data):"
     except ImportError:
         for sname, shower, dist_peak in active_showers_probable(sun_val, planets):
             shower_lines.append(f"☄️ {sname}  λ={shower['lambda']:.0f}°  "
