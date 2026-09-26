@@ -322,6 +322,15 @@ def sec_noaa(folder, L, reg, day):
             if not any(abs((ta - x).total_seconds()) < 300 for x, _ in arrivals):
                 arrivals.append((ta, f'Bt{d3[t]:+.1f}'))
         bz = mm.bz_gsm.resample('1min').mean()
+        bzs = bz.rolling(10, min_periods=5).mean()
+        turn = bzs.shift(-15) - bzs
+        for a_, b_, k_ in runs(turn.abs() > 3.0):
+            t = turn.loc[a_:b_].abs().idxmax()
+            pre = bzs.loc[t - pd.Timedelta(minutes=10):t]; post = bzs.loc[t:t + pd.Timedelta(minutes=20)]
+            if len(pre) and len(post) and ((pre.min() < 0 < post.max()) if turn[t] > 0 else (pre.max() > 0 > post.min())):
+                ta = t + pd.Timedelta(seconds=float(lag.get(t, lag.median())))
+                if not any(abs((ta - x).total_seconds()) < 600 for x, _ in arrivals):
+                    arrivals.append((ta, f'svolta Bz {"→nord" if turn[t] > 0 else "→sud"}'))
         south = [r for r in runs(bz < -5) if r[2] >= 20]
         if south:
             L.append('  Bz < −5 nT per ≥20 min (ora L1): ' + ' '.join(f'{a:%d/%m} {hm(a)}–{hm(b)}' for a, b, _ in south))
@@ -598,6 +607,104 @@ def sec_recurrence(folder, day, L):
         exp = tested * 7 / 1440 / 3
         L.append(f'  culminazione {col[5:]}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:10]) if hits else ''))
 
+# ─── SOLE, NODI, PERCORSI (D2 + D7 nella stessa tabella) ──────────────────────
+
+def _latest(folder, key):
+    f = sorted(glob.glob(str(folder / f'SUN_{key}_*')))
+    if not f: return None
+    txt = open(f[-1], encoding='utf-8', errors='ignore').read()
+    if f[-1].endswith('.json'):
+        try: return json.loads(txt)
+        except Exception: return None
+    return txt
+
+def _cls_rank(c):
+    try: return {'A': 0, 'B': 1, 'C': 2, 'M': 3, 'X': 4}[c[0].upper()] + float(c[1:] or 0) / 10
+    except Exception: return -1
+
+def planets_on_nodes(day, tol=2.0):
+    """pianeti (e Luna) entro tol° dal radiante eclittico di uno sciame attivo"""
+    try:
+        import sky_d, sky_catalog as CAT, datetime as _dt
+        dt = _dt.datetime.fromisoformat(day) + _dt.timedelta(hours=12)
+        planets, sun = sky_d.get_planets(dt)
+        yf = dt.year + (dt.timetuple().tm_yday - 1) / 365.25
+        out = []
+        for sh in CAT.active_showers(sun, yf):
+            for n, p in planets.items():
+                if 'Sole' in n: continue
+                d = abs((p['lon'] - sh['rad_lon_date'] + 180) % 360 - 180)
+                if d <= tol: out.append(f"{n.split(' ', 1)[1]}@{sh['name']} {d:.1f}°")
+        return out
+    except Exception as e:
+        return [f'(calcolo non riuscito: {e})']
+
+def sec_sun(folder, day, L, reg):
+    L.append('\n══ 16. SOLE, NODI E PERCORSI (D2 + D7) ══')
+    nodes = planets_on_nodes(day)
+    L.append('  Pianeti/Luna sul nodo di uno sciame attivo (≤2°): ' + ('; '.join(nodes) if nodes else 'nessuno'))
+    fl = []
+    for x in (_latest(folder, 'flares') or []):
+        c = x.get('max_class') or x.get('current_class') or ''
+        t = x.get('max_time') or x.get('begin_time')
+        if c and t: fl.append((pd.Timestamp(t).tz_localize(None) if pd.Timestamp(t).tzinfo else pd.Timestamp(t), c))
+    for x in (_latest(folder, 'dflr') or []):
+        c, t = x.get('classType') or '', x.get('peakTime') or x.get('beginTime')
+        if c and t:
+            tt = pd.Timestamp(t.replace('Z', '')); 
+            if not any(abs((tt - a).total_seconds()) < 900 and b[0] == c[0] for a, b in fl): fl.append((tt, c))
+    cmes = []
+    for c in (_latest(folder, 'dcme') or []):
+        sp = [a.get('speed') for a in c.get('analyses', []) if a.get('speed')]
+        if c.get('startTime'): cmes.append((pd.Timestamp(c['startTime'].replace('Z', '')), max(sp) if sp else None))
+    hss = [pd.Timestamp(h['eventTime'].replace('Z', '')) for h in (_latest(folder, 'dhss') or []) if h.get('eventTime')]
+    d0 = pd.Timestamp(day); d1 = d0 + pd.Timedelta(days=1)
+    fday = [(t, c) for t, c in fl if d0 <= t < d1]
+    mx = [(t, c) for t, c in fday if c[:1].upper() in 'MX']
+    cday = [(t, v) for t, v in cmes if d0 <= t < d1]
+    hday = [t for t in hss if d0 <= t < d1]
+    newest = max([t for t, _ in fl] + [t for t, _ in cmes] + hss) if (fl or cmes or hss) else None
+    if newest is None:
+        L.append('  dati solari assenti (file SUN_* non presenti)')
+    else:
+        if newest < d0 - pd.Timedelta(days=2): L.append(f'  ⚠ dati solari non aggiornati (ultimo evento {newest:%d/%m})')
+        L.append(f'  Brillamenti del giorno: {len(fday)} (M/X: {len(mx)})' +
+                 (' — ' + ' '.join(f'{c}@{t:%H:%M}' for t, c in sorted(mx)) if mx else ''))
+        if fday: L.append(f'  Classe massima: {max((c for _, c in fday), key=_cls_rank)}')
+        L.append(f'  CME del giorno: {len(cday)}' + (' — ' + ' '.join(f'{t:%H:%M}' + (f'({v:.0f} km/s)' if v else '') for t, v in cday) if cday else ''))
+        L.append(f'  Arrivo di flusso veloce (buco coronale) a Terra: ' + (' '.join(f'{t:%H:%M}' for t in hday) if hday else 'no'))
+    idx = _latest(folder, 'indices') or ''
+    ssn = f107 = None
+    for line in idx.splitlines():
+        parts = line.split()
+        if len(parts) > 4 and parts[:3] == [f'{d0.year}', f'{d0.month:02d}', f'{d0.day:02d}']:
+            try: f107, ssn = float(parts[3]), float(parts[4])
+            except Exception: pass
+    if f107 is not None: L.append(f'  Flusso radio F10.7: {f107:.0f} — macchie solari: {ssn:.0f}')
+    # archivio giornaliero del Sole (per guardare indietro 1–4 giorni)
+    sp = folder.parent / 'SKY_SOLE.csv'
+    old = pd.read_csv(sp) if sp.exists() else pd.DataFrame(columns=['day'])
+    old = old[old.day != day]
+    rowd = {'day': day, 'MX': len(mx), 'cme': len(cday), 'hss': len(hday), 'nodi': len(nodes), 'nodi_elenco': ' | '.join(nodes)}
+    allrows = pd.concat([old, pd.DataFrame([rowd])], ignore_index=True).sort_values('day')
+    allrows.to_csv(sp, index=False)
+    # percorsi
+    prev = allrows[(allrows.day < day) & (allrows.day >= (d0 - pd.Timedelta(days=4)).strftime('%Y-%m-%d'))]
+    chain = prev[((prev.MX > 0) | (prev.cme > 0)) & (prev.nodi > 0)]
+    cnt = {'diretto': 0, 'attraverso il Sole': 0, 'standard': 0, 'non valutabile': 0}
+    lines = []
+    for e in SYNC_LOG:
+        if e['orphan'] == -1: k = 'non valutabile'
+        elif e['orphan'] == 1: k = 'diretto'
+        else: k = 'attraverso il Sole' if len(chain) else 'standard'
+        cnt[k] += 1; lines.append(f"{hm(e['t'])}{e['comp']}:{k}")
+    L.append('  Percorsi degli eventi sincroni: ' + ', '.join(f'{k} {v}' for k, v in cnt.items()))
+    if len(chain): L.append('  (nei 4 giorni prima: eruzioni in giorni con pianeta sul nodo → ' + ', '.join(chain.day.str[5:]) + ')')
+    L.append('  "diretto" = senza causa a L1; "attraverso il Sole" = causa a L1 + eruzione 1–4 giorni prima in giorno con nodo; "standard" = causa a L1 senza quel legame')
+    reg.update({'sun_MX': len(mx), 'sun_cme': len(cday), 'sun_hss': len(hday), 'sun_f107': f107, 'sun_ssn': ssn,
+                'nodi': len(nodes), 'nodi_elenco': ' | '.join(nodes),
+                'p_diretto': cnt['diretto'], 'p_sole': cnt['attraverso il Sole'], 'p_standard': cnt['standard']})
+
 # ─────────────────────────────────────────────────────────────────────────────
 def main():
     if len(sys.argv) < 2:
@@ -629,6 +736,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
+    sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
     out.write_text('\n'.join(L) + '\n', encoding='utf-8')
