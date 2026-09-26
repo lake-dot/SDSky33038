@@ -81,8 +81,7 @@ jobs:
       - name: Commit solo report e registri
         run: |
           D=${{ steps.d.outputs.day }}
-          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt; do            [ -e "$f" ] && git add "$f"
-          done
+          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_SINCRONISMI.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt; do          done
           git diff --cached --quiet || {
             git config user.name  "sky-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
