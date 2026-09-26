@@ -684,6 +684,61 @@ def sec_sincronismi(folder, day, D, L, reg):
     if not found: L.append('  nessuna')
     reg['sincronismi'] = len(rows); reg['ricorrenze_sinc'] = found
 
+# ─── ANATOMIA DEGLI EVENTI (chi parte prima, dove si inverte Y, fin dove arriva) ──
+
+def _y_inversion_lon(dy):
+    """longitudine (°E) dove la variazione di Y cambia segno tra stazioni ordinate per longitudine"""
+    pts = sorted((COORD[s][1], v) for s, v in dy.items() if s in COORD and not np.isnan(v))
+    for (l1, v1), (l2, v2) in zip(pts, pts[1:]):
+        if v1 == 0 or np.sign(v1) != np.sign(v2):
+            return l1 + (l2 - l1) * abs(v1) / (abs(v1) + abs(v2) + 1e-9)
+    return None
+
+def sec_anatomia(folder, day, D, L, reg):
+    eu = [s for s in EU if s in D and s in COORD]
+    L.append('\n══ 0b. ANATOMIA DEGLI EVENTI — ordine di partenza est/ovest, inversione di Y, estensione ══')
+    # eventi: sincroni al minuto + escursioni lente (|ΔX| > 12 nT in 40 min sulla mediana EU)
+    medX = pd.concat([D[s].X - D[s].X.iloc[0] for s in eu], axis=1).median(axis=1)
+    slow = (medX - medX.rolling(181, center=True, min_periods=60).median()).diff(40)   # senza la curva diurna
+    evs = [(e['t'], f"{e['comp']}({e['n']})") for e in SYNC_LOG]
+    for a, b, k in runs(slow.abs() > 12):
+        t = slow.loc[a:b].abs().idxmax(); evs.append((t, f'lento ΔX {slow[t]:+.0f}/40min'))
+    evs = sorted({(t.floor('min'), lab) for t, lab in evs})
+    ded = []
+    for t, lab in evs:                       # un solo evento ogni 10 minuti
+        if ded and (t - ded[-1][0]).total_seconds() < 600: continue
+        ded.append((t, lab))
+    evs = ded
+    invs = []
+    for t, lab in evs:
+        t0 = t - pd.Timedelta(minutes=40)
+        dx = {s: D[s].X.loc[t0:t] - D[s].X.get(t0, np.nan) for s in eu}
+        onset = {}
+        for s, x in dx.items():
+            if x.notna().sum() < 10: continue
+            thr = max(2.0, 0.3 * x.abs().max())
+            hit = x[x.abs() > thr]
+            if len(hit): onset[s] = hit.index[0]
+        dy = {s: (D[s].Y.get(t, np.nan) - D[s].Y.get(t0, np.nan)) for s in eu}
+        inv = _y_inversion_lon(dy)
+        if inv is not None: invs.append(inv)
+        order = sorted(onset, key=lambda s: onset[s])
+        east = [s for s in eu if COORD[s][1] > 15]; west = [s for s in eu if COORD[s][1] < 13]
+        de = [onset[s] for s in east if s in onset]; dw = [onset[s] for s in west if s in onset]
+        lead = (pd.Series(dw).median() - pd.Series(de).median()).total_seconds() / 60 if de and dw else np.nan
+        ext = []
+        for e in AURORAL + GLOBAL:
+            if e in D:
+                v = D[e].X.loc[t0:t]
+                if v.notna().any(): ext.append(f'{e}{v.iloc[-1] - v.iloc[0]:+.0f}')
+        L.append(f"  {t:%H:%M} {lab}: parte prima {order[0] if order else '—'}"
+                 + (f"; est in anticipo di {lead:+.0f} min sull'ovest" if not np.isnan(lead) else '')
+                 + (f"; inversione di Y a {inv:.1f}°E" if inv is not None else '; Y senza inversione')
+                 + (f" | fuori EU (ΔX 40 min): {' '.join(ext)}" if ext else ''))
+    if invs:
+        L.append(f"  Inversioni di Y oggi: mediana {np.median(invs):.1f}°E (SD = 13.0°E) su {len(invs)} eventi")
+        reg['Yinv_lon_med'] = round(float(np.median(invs)), 1)
+
 # ─── SOLE, NODI, PERCORSI (D2 + D7 nella stessa tabella) ──────────────────────
 
 def _latest(folder, key):
@@ -813,7 +868,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
-    Ls = []; sec_sincronismi(folder, day, D, Ls, reg); L[2:2] = Ls   # i sincronismi in cima al report
+    Ls = []; sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
