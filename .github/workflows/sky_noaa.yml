@@ -22,9 +22,10 @@ jobs:
           python-version: '3.12'
       - run: pip install requests
       - run: python noaa_fetch.py
+      - run: python solar_fetch.py
       - name: Commit archivio NOAA
         run: |
-          git add -A data/noaa
+          git add -A data/noaa data/sun
           git diff --cached --quiet || {
             git config user.name  "sky-bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
