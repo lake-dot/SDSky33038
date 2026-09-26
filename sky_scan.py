@@ -607,6 +607,83 @@ def sec_recurrence(folder, day, L):
         exp = tested * 7 / 1440 / 3
         L.append(f'  culminazione {col[5:]}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:10]) if hits else ''))
 
+# ─── SINCRONISMI (primi controlli: il cielo) ──────────────────────────────────
+
+SYNC_TOL_MIN = 10       # evento ↔ momento geometrico
+REC_TOL_MIN  = 4        # stessa distanza dal momento geometrico in giorni diversi
+REC_DAYS     = 30       # quanti giorni indietro cercare le ricorrenze
+
+def _geo_moments(day):
+    """sorgere, culminazione, passaggio inferiore, tramonto (UT) visti da SD per Sole, Luna, pianeti, nodo
+    e radianti degli sciami attivi (con la loro deriva)"""
+    import sky_d, sky_catalog as CAT, datetime as _dt
+    d0 = _dt.datetime.fromisoformat(day)
+    planets, sun = sky_d.get_planets(d0 + _dt.timedelta(hours=12))
+    e = math.radians(23.44)
+    def radec(l):
+        l = math.radians(l)
+        return math.degrees(math.atan2(math.sin(l) * math.cos(e), math.cos(l))) % 360, math.degrees(math.asin(math.sin(l) * math.sin(e)))
+    bodies = {n.split(' ', 1)[1]: radec(p['lon']) for n, p in planets.items()}
+    yf = d0.year + (d0.timetuple().tm_yday - 1) / 365.25
+    for sh in CAT.active_showers(sun, yf):
+        rd = CAT.radiant_radec(sh['name'], sun, yf)
+        if rd: bodies['☄ ' + sh['name']] = rd
+    lat, lon = COORD['SD']
+    out = []
+    for name, (ra, dec) in bodies.items():
+        prev = None
+        for m in range(0, 1441):
+            t = pd.Timestamp(d0) + pd.Timedelta(minutes=m)
+            H = (_gmst_deg(t) + lon - ra) % 360
+            a = _alt(ra, dec, lat, lon, t)
+            if prev:
+                pH, pa = prev
+                if pa <= 0 < a: out.append((name, 'sorge', t))
+                if pa > 0 >= a: out.append((name, 'tramonta', t))
+                if pH > 300 and H < 60: out.append((name, 'culmina', t))
+                if pH < 180 <= H: out.append((name, 'passaggio inferiore', t))
+            prev = (H, a)
+    return out
+
+def sec_sincronismi(folder, day, D, L, reg):
+    L.append('\n══ 0. SINCRONISMI — eventi del giorno e momenti del cielo visti da SD (±%d min) ══' % SYNC_TOL_MIN)
+    try:
+        geo = _geo_moments(day)
+    except Exception as ex:
+        L.append(f'  calcolo non riuscito: {ex}'); return
+    # eventi: sincroni + minimo e massimo di Y (mediana rete EU)
+    eu = [s for s in EU if s in D]
+    ev = [(e['t'], f"{e['comp']}({e['n']}) {e['st']}{e['val']:+.1f}") for e in SYNC_LOG]
+    ymed = pd.concat([D[s].Y - D[s].Y.mean() for s in eu], axis=1).median(axis=1)
+    ev += [(ymed.idxmin(), 'minimo Y'), (ymed.idxmax(), 'massimo Y')]
+    rows = []
+    for t, lab in sorted(ev):
+        hits = [(n, k, g) for n, k, g in geo if abs((t - g).total_seconds()) <= SYNC_TOL_MIN * 60]
+        txt = '; '.join(f"{n} {k} {g:%H:%M} ({(t - g).total_seconds() / 60:+.0f})" for n, k, g in hits)
+        L.append(f'  {t:%H:%M} {lab}: ' + (txt if txt else '—'))
+        for n, k, g in hits:
+            rows.append({'day': day, 't': t.strftime('%H:%M'), 'evento': lab, 'corpo': n, 'momento': k,
+                         'g': g.strftime('%H:%M'), 'scarto': round((t - g).total_seconds() / 60, 1)})
+    L.append(f'  (per confronto: in media cadono {len(geo) * 2 * SYNC_TOL_MIN / 1440:.1f} momenti del cielo in una finestra di ±{SYNC_TOL_MIN} min)')
+    # archivio e ricorrenze: stesso corpo, stesso momento, stesso scarto (±REC_TOL) in giorni diversi
+    sp = folder.parent / 'SKY_SINCRONISMI.csv'
+    old = pd.read_csv(sp) if sp.exists() else pd.DataFrame(columns=['day', 't', 'evento', 'corpo', 'momento', 'g', 'scarto'])
+    old = old[old.day != day]
+    allr = pd.concat([old, pd.DataFrame(rows)], ignore_index=True).sort_values(['day', 't'])
+    allr.to_csv(sp, index=False)
+    lim = (pd.Timestamp(day) - pd.Timedelta(days=REC_DAYS)).strftime('%Y-%m-%d')
+    past = allr[(allr.day < day) & (allr.day >= lim)]
+    L.append(f'  RICORRENZE (ultimi {REC_DAYS} giorni: stesso corpo e momento, stesso scarto ±{REC_TOL_MIN} min — l\'orario può slittare con il corpo):')
+    found = 0
+    for r in rows:
+        m = past[(past.corpo == r['corpo']) & (past.momento == r['momento']) & ((past.scarto - r['scarto']).abs() <= REC_TOL_MIN)]
+        if len(m):
+            found += 1
+            serie = ', '.join(f"{a[5:]} {b}" for a, b in zip(m.day, m.t)) + f", OGGI {r['t']}"
+            L.append(f"  ★ {r['corpo']} {r['momento']} (scarto {r['scarto']:+.0f} min): {serie}")
+    if not found: L.append('  nessuna')
+    reg['sincronismi'] = len(rows); reg['ricorrenze_sinc'] = found
+
 # ─── SOLE, NODI, PERCORSI (D2 + D7 nella stessa tabella) ──────────────────────
 
 def _latest(folder, key):
@@ -736,6 +813,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
+    Ls = []; sec_sincronismi(folder, day, D, Ls, reg); L[2:2] = Ls   # i sincronismi in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
