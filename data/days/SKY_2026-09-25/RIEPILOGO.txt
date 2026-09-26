@@ -1,0 +1,136 @@
+══════════════════════════════════════════════════════════════════════
+SKY — RIEPILOGO GIORNATA
+Giornata: 2026-09-25 (UTC) — estrazione 2026-09-26 04:40 UT
+Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
+══════════════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────────────
+EFFEMERIDI DELLA GIORNATA
+venerdì 25 settembre 2026 — riferimento 2026-09-25 12:00 UT
+Posizioni geocentriche in longitudine eclittica — matematica pura (±0.3°)
+──────────────────────────────────────────────────────────────────────
+
+☉ Sole: 182.44° Bilancia
+☽ Luna: 347.55° — plenilunio (elong. 165.1°, illum. 98%)
+
+🪐 POSIZIONI:
+  ☉ Sole          182.44°  Bilancia      2.44°
+  ☽ Luna          347.55°  Pesci        17.55°
+  ☿ Mercurio      203.10°  Bilancia     23.10°
+  ♀ Venere        217.36°  Scorpione     7.36°
+  ♂ Marte         118.45°  Cancro       28.45°
+  ♃ Giove         138.61°  Leone        18.61°
+  ♄ Saturno        12.08°  Ariete       12.08° ℞
+  ♅ Urano          65.60°  Gemelli       5.60° ℞?
+  ♆ Nettuno         3.00°  Ariete        3.00° ℞
+  ☊ Nodo Nord     328.60°  Acquario     28.60°
+
+℞ RETROGRADI: ♄ Saturno, ♆ Nettuno
+
+📍 NODO SD 13°E (Δ≤2.0°):
+  ♄ Saturno Δ=0.92°
+
+⚡ ASPETTI (Δ≤2.0°):
+  ☉ Sole ☍ ♆ Nettuno  Δ=0.56°
+
+☄️ SCIAMI ATTIVI (catalogo IMO 2026, λ☉ alla data):
+☄️ Sextantidi diurne  λ=159°  AR=156° Dec=-2°  V=32 km/s  Δpicco=5.9°  picco λ☉=188.4°
+☄️ Lincidi di settembre  λ=105°  AR=112° Dec=+56°  V=60 km/s  Δpicco=12.1°  picco λ☉=170.4°
+☄️ Tauridi Sud  λ=54°  AR=52° Dec=+15°  V=27 km/s  Δpicco=40.9°  picco λ☉=223.4°
+
+ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · (≈) al bordo soglia · (+-) incertezza elevata
+
+──────────────────────────────────────────────────────────────────────
+DATI STAZIONI
+──────────────────────────────────────────────────────────────────────
+
+WIC — Conrad, Austria (220km)
+  NESSUN DATO DISPONIBILE per questa giornata
+
+LON — Lonjsko Polje, Croatia (290km)
+  record 1440/1440 (100%) — id lon/best-avail
+  X: 22342.2 … 22412.6  (Δ70.4)
+  Y: 1957.0 … 2035.6  (Δ78.6)
+  Z: 42827.2 … 42843.6  (Δ16.4)  mean=42835.3
+  F: non pubblicata
+
+THY — Tihany, Hungary (370km)
+  record 1440/1440 (100%) — id thy/best-avail
+  X: 21468.4 … 21545.5  (Δ77.1)
+  Y: 2010.1 … 2095.0  (Δ84.9)
+  Z: 43851.2 … 43871.0  (Δ19.8)  mean=43861.1
+  F: non pubblicata
+
+CLF — Chambon-la-Forêt, France (~830km)
+  record 1440/1440 (100%) — id clf/best-avail
+  X: 21260.9 … 21324.3  (Δ63.4)
+  Y: 705.2 … 794.5  (Δ89.3)
+  Z: 43310.7 … 43331.4  (Δ20.7)  mean=43321.1
+  F: 48255.7 … 48293.4  (Δ37.7)
+
+BFO — Black Forest, Germania (~430km)
+  record 1440/1440 (100%) — id bfo/best-avail
+  X: 20969.0 … 21034.6  (Δ65.6)
+  Y: 1265.6 … 1358.7  (Δ93.1)
+  Z: 43835.8 … 43856.7  (Δ20.9)  mean=43846.1
+  F: 48615.4 … 48650.5  (Δ35.2)
+
+NGK — Niemegk, Germania (~660km)
+  record 1440/1440 (100%) — id ngk/best-avail
+  X: 18799.4 … 18892.9  (Δ93.5)
+  Y: 1587.4 … 1701.3  (Δ113.8)
+  Z: 46130.2 … 46168.6  (Δ38.4)  mean=46150.3
+  F: 49858.1 … 49886.0  (Δ27.9)
+
+BEL — Belsk, Polonia (~850km)
+  record 1440/1440 (100%) — id bel/best-avail
+  X: 18821.6 … 18924.7  (Δ103.1)
+  Y: 2356.4 … 2460.1  (Δ103.7)
+  Z: 47134.9 … 47164.6  (Δ29.7)  mean=47149.1
+  F: 50811.1 … 50869.3  (Δ58.2)
+
+IZN — Iznik, Turchia (~1500km)
+  record 1440/1440 (100%) — id izn/best-avail
+  X: 25058.9 … 25130.9  (Δ72.0)
+  Y: 2601.9 … 2671.1  (Δ69.2)
+  Z: 40874.0 … 40889.6  (Δ15.6)  mean=40883.7
+  F: 48018.0 … 48064.8  (Δ46.8)
+
+DUR — Duronia, Italia (~520km)
+  record 1080/1440 (75%) — id dur/best-avail
+  X: 24839.6 … 24902.2  (Δ62.6)
+  Y: 10.4 … 67.4  (Δ57.0)
+  Z: 39903.6 … 39919.8  (Δ16.2)  mean=39912.6
+  F: 47048.0 … 47086.4  (Δ38.4)
+
+ABK — Abisko, Svezia (aurorale ~68°N)
+  record 1440/1440 (100%) — id abk/best-avail
+  X: 10725.4 … 11334.9  (Δ609.5)
+  Y: 2062.6 … 2386.7  (Δ324.1)
+  Z: 52219.5 … 52752.0  (Δ532.5)  mean=52484.0
+  F: 53388.1 … 53881.8  (Δ493.7)
+
+TRO — Tromsø, Norvegia (aurorale ~70°N)
+  NESSUN DATO DISPONIBILE per questa giornata
+
+KAK — Kakioka, Giappone
+  record 1440/1440 (100%) — id kak/best-avail
+  X: 29788.6 … 29853.2  (Δ64.5)
+  Y: -4249.4 … -4160.9  (Δ88.6)
+  Z: 36011.8 … 36051.5  (Δ39.7)  mean=36030.2
+  F: 46932.8 … 46994.0  (Δ61.2)
+
+FRD — Fredericksburg, USA
+  record 1440/1440 (100%) — id frd/best-avail
+  X: 21729.1 … 21800.9  (Δ71.9)
+  Y: -8.3 … 64.4  (Δ72.7)
+  Z: 45049.6 … 45079.9  (Δ30.3)  mean=45067.4
+  F: 50023.1 … 50051.3  (Δ28.2)
+
+OTT — Ottawa, Canada
+  NESSUN DATO DISPONIBILE per questa giornata
+
+BRD — Brandon, Canada
+  NESSUN DATO DISPONIBILE per questa giornata
+
+In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)
