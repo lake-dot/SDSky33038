@@ -317,18 +317,18 @@ def active_showers_probable(sun_lon_val, planets):
 
 # ─── NTFY ─────────────────────────────────────────────────────────────────────
 
-def ntfy_send(message, title="SKY", priority="default"):
+def ntfy_send(message, title="", priority="default"):
+    """Invio JSON: titolo e testo in UTF-8 (soli ☀️ e testo, nessuna etichetta SKY)."""
     if not NTFY_TOPIC:
         print("  [ntfy] topic mancante — messaggio solo nei log:")
-        print(message)
+        print(title); print(message)
         return
-    safe_title = title.encode('ascii', 'ignore').decode().strip() or "SKY"
+    prio = {'min': 1, 'low': 2, 'default': 3, 'high': 4, 'urgent': 5}.get(priority, 3)
+    body = {'topic': NTFY_TOPIC, 'message': message, 'priority': prio}
+    if title:
+        body['title'] = title
     try:
-        r = requests.post(
-            f"https://ntfy.sh/{NTFY_TOPIC}",
-            data=message.encode('utf-8'),
-            headers={'Title': safe_title, 'Priority': priority, 'Tags': 'satellite'},
-            timeout=15)
+        r = requests.post("https://ntfy.sh/", json=body, timeout=15)
         if r.status_code == 200:
             print("  [ntfy] inviato ✓")
         else:
@@ -549,19 +549,21 @@ def ultimo_evento_riga(state):
     return (f"evento precedente: {hl(e['start'], True)}–{hl(e['end'])} "
             f"({dur(e['start'], e['end'])}), picco {e['peak_class']} alle {hl(e['peak_time'])}")
 
+SOLI = {'⚪ BASSA': 1, '🟢 MEDIA': 2, '🟡 FORTE': 3, '🟠 ESTREMA': 4, '🔴 ECCEZIONALE': 5}
+
+def titolo_soli(classe):
+    parola = classe.split(' ', 1)[-1]
+    return f"{'☀️' * SOLI.get(classe, 1)} anomalia ({parola})"
+
 def format_alert(classe, onset, net_fresh, state):
-    lines = [f"⚡ anomalia in corso — intensità {classe}",
-             f"dalle {hl(onset)} ora italiana",
-             f"(dati fino alle {hl(net_fresh)})"]
+    lines = [f"Dalle {hl(onset)}"]
     prev = ultimo_evento_riga(state)
     if prev:
         lines += ["", prev]
-    return '\n'.join(lines)
+    return titolo_soli(classe), '\n'.join(lines)
 
 def format_update(classe, state, net_fresh):
-    return '\n'.join([f"⬆️ intensità {classe}",
-                      f"evento iniziato alle {hl(state['start_data'])} ora italiana",
-                      f"(dati fino alle {hl(net_fresh)})"])
+    return titolo_soli(classe), f"Dalle {hl(state['start_data'])}"
 
 # ─── CHECK ANOMALIA ───────────────────────────────────────────────────────────
 
@@ -619,8 +621,8 @@ def run_check():
         # ── INIZIO evento: ora vera d'inizio ricavata dai dati
         onset = find_onset(results, live, net_fresh)
         print(f"  → ⚡ invio: inizio evento (inizio nei dati {onset:%H:%M} UT)")
-        ntfy_send(format_alert(classe, onset, net_fresh, state),
-                  title="SKY anomalia in corso", priority="high")
+        t, m = format_alert(classe, onset, net_fresh, state)
+        ntfy_send(m, title=t, priority="high")
         state = {'active': True, 'started': now_iso,
                  'start_data': onset.isoformat(),
                  'last_alert_data': fresh_iso,
@@ -650,8 +652,8 @@ def run_check():
             gap_min = float('inf')
         if escalated and gap_min >= UPDATE_MIN_GAP_MIN:
             print("  → ⬆️ invio: escalation")
-            ntfy_send(format_update(classe, state, net_fresh),
-                      title="SKY intensita in aumento", priority="high")
+            t, m = format_update(classe, state, net_fresh)
+            ntfy_send(m, title=t, priority="high")
             state['last_notify'] = now_iso
             state['last_class'], state['last_zmax'] = classe, max_z
             state['stations'] = sorted(stations_alert)
@@ -793,11 +795,7 @@ def main():
     print(f"  SKY — {now:%Y-%m-%d %H:%M} UT")
     print("=" * 50)
 
-    if (FORCE_MORNING or now.hour == 9) and not MORNING_ALREADY:
-        print("→ Effemeridi mattutine")
-        run_morning()
-        with open('.morning_flag', 'w') as f:
-            f.write(now.isoformat())
+    # effemeridi mattutine disattivate (27/9/2026): run_morning() resta nel file ma non viene chiamata
 
     print("→ Check anomalia")
     run_check()
