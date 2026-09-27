@@ -546,7 +546,7 @@ def ultimo_evento_riga(state):
     e = state.get('last_event')
     if not e:
         return None
-    return (f"Trascorso: {hl(e['start'], True)}–{hl(e['end'])} "
+    return (f"Ultima: {hl(e['start'], True)}–{hl(e['end'])} "
             f"({dur(e['start'], e['end'])}), picco {e['peak_class']} alle {hl(e['peak_time'])}")
 
 SOLI = {'⚪ BASSA': 1, '🟢 MEDIA': 2, '🟡 FORTE': 3, '🟠 ESTREMA': 4, '🔴 ECCEZIONALE': 5}
