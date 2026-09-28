@@ -440,7 +440,7 @@ def build_ephemeridi(dt):
                 shower_lines.append(f"☄️ {sh['name']}  radiante mobile λ={sh['rad_lon_date']:.0f}°  V={sh['v']} km/s  (attivo fino al 20 set)")
             else:
                 shower_lines.append(f"☄️ {sh['name']}  λ={sh['rad_lon_date']:.0f}°  AR={sh['ra']:.0f}° Dec={sh['dec']:+.0f}°  "
-                                    f"V={sh['v']} km/s  Δpicco={sh['dist_peak']:.1f}°  picco λ☉={sh['peak_date_lon']:.1f}°")
+                                    f"V={sh['v']} km/s  Δpicco={sh['dist_peak']:.1f}°  picco λ☉={sh['peak_date_lon']:.1f}°" + CAT.tag(sh))
             for name, p in planets.items():
                 d = lon_delta(p['lon'], sh['rad_lon_date'])
                 if d <= ASPECT_TIGHT:
