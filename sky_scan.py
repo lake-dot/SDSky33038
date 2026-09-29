@@ -838,6 +838,167 @@ def sec_sun(folder, day, L, reg):
                 'p_diretto': cnt['diretto'], 'p_sole': cnt['attraverso il Sole'], 'p_standard': cnt['standard']})
 
 # ─────────────────────────────────────────────────────────────────────────────
+
+# ─── SERIE RICORRENTI DAI DATI (il marker di passaggio) ───────────────────────
+# Regola (28–29/9/2026): un evento che torna per più giorni più o meno alla stessa ora, spostandosi
+# con regolarità, segnala il passaggio di uno sciame; l'ampiezza indica la densità del filamento.
+# Si cercano PRIMA le serie nei dati (entrata in scena, presenza, uscita di scena), POI si confronta
+# la serie con i momenti del cielo (radianti, Sole, Luna, pianeti) che hanno la stessa ora e lo stesso spostamento.
+
+SERIE_MIN_DAYS = 3      # giorni minimi per chiamarla serie
+SERIE_TOL = 4           # minuti di tolleranza per giorno
+SERIE_GAP = 1           # giorni mancanti ammessi dentro una serie
+SERIE_DRIFTS = [x / 2 for x in range(-12, 13)]   # spostamento giornaliero provato: −6…+6 min/giorno
+
+def _day_events(D):
+    """eventi europei della giornata: minuto, componente, ampiezza (mediana delle stazioni / base)"""
+    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
+    out = []
+    for c in 'XY':
+        R = pd.DataFrame({s: (lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
+                          for s in eu if c in D[s]})
+        if R.empty: continue
+        med = R.median(axis=1); n = (R >= 3).sum(axis=1)
+        hit = med[(med >= 4) & (n >= min(5, len(eu)))]; last = None
+        for t, v in hit.items():
+            if last is None or (t - last).total_seconds() > 180:
+                out.append({'m': t.hour * 60 + t.minute, 'comp': c, 'amp': round(float(v), 1)})
+            last = t
+    return out
+
+def _twilight(day, h=-12.0):
+    """ora UT in cui il Sole scende a h gradi la sera e sale a h gradi la mattina, visto da SD"""
+    import sky_d, datetime as _dt
+    d0 = _dt.datetime.fromisoformat(day); lat, lon = COORD['SD']; res = {}
+    prev = None
+    for m in range(0, 1441, 1):
+        t = pd.Timestamp(d0) + pd.Timedelta(minutes=m)
+        _, sun = sky_d.get_planets(t.to_pydatetime()) if m % 30 == 0 or prev is None else (None, sun_l)
+        sun_l = sun
+        e = math.radians(23.44); l = math.radians(sun_l)
+        ra = math.degrees(math.atan2(math.sin(l) * math.cos(e), math.cos(l))) % 360
+        dec = math.degrees(math.asin(math.sin(l) * math.sin(e)))
+        a = _alt(ra, dec, lat, lon, t)
+        if prev is not None:
+            if prev > h >= a: res['Sole −12° sera'] = t
+            if prev < h <= a: res['Sole −12° mattino'] = t
+        prev = a
+    return res
+
+def _moments_min(day, cache_dir=None):
+    """momenti del cielo (minuti UT) visti da SD per il giorno; archivio SKY_MOMENTI.csv per non ricalcolare"""
+    cf = (cache_dir / 'SKY_MOMENTI.csv') if cache_dir else None
+    if cf and cf.exists():
+        c = pd.read_csv(cf)
+        c = c[c.day == day]
+        if not c.empty:
+            return {(r.nome, r.momento if isinstance(r.momento, str) else ''): int(r.m) for r in c.itertuples()}
+    out = {}
+    for name, kind, t in _geo_moments(day):
+        out[(name, kind)] = t.hour * 60 + t.minute
+    for k, t in _twilight(day).items():
+        out[(k, '')] = t.hour * 60 + t.minute
+    if cf:
+        old = pd.read_csv(cf) if cf.exists() else pd.DataFrame(columns=['day', 'nome', 'momento', 'm'])
+        new = pd.DataFrame([{'day': day, 'nome': k[0], 'momento': k[1], 'm': v} for k, v in out.items()])
+        pd.concat([old[old.day != day], new], ignore_index=True).to_csv(cf, index=False)
+    return out
+
+def sec_serie(folder, day, D, L):
+    L.append('\n══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══')
+    base = folder.parent
+    arch = base / 'SKY_SERIE_EVENTI.csv'
+    old = pd.read_csv(arch) if arch.exists() else pd.DataFrame(columns=['day', 'm', 'comp', 'amp'])
+    old = old[old.day != day]
+    today = pd.DataFrame([{'day': day, **e} for e in _day_events(D)])
+    allv = pd.concat([old, today], ignore_index=True); allv.to_csv(arch, index=False)
+    d0 = pd.Timestamp(day)
+    allv['k'] = [(d0 - pd.Timestamp(x)).days for x in allv.day]      # 0 = oggi, 1 = ieri …
+    allv = allv[(allv.k >= 0) & (allv.k <= REC_DAYS)]
+    byk = {k: g for k, g in allv.groupby('k')}
+    if 0 not in byk: L.append('  nessun evento oggi'); return
+    def chain(m0, drift, start_k=0):
+        hits, k, miss = [], start_k, 0          # (k, minuto, ampiezza)
+        while k <= REC_DAYS:
+            g = byk.get(k); exp = m0 - drift * (k - start_k)
+            if g is not None:
+                dm = ((g.m - exp + 720) % 1440 - 720).abs()
+                if (dm <= SERIE_TOL).any():
+                    j = dm.idxmin(); hits.append((k, int(g.loc[j, 'm']), float(g.loc[j, 'amp']))); miss = 0; k += 1; continue
+            miss += 1
+            if miss > SERIE_GAP: break
+            k += 1
+        return hits
+    def spread(h, m0, dr):
+        return sum(abs(((m - (m0 - dr * k)) + 720) % 1440 - 720) for k, m, a in h)
+    found = []
+    for _, e in byk[0].iterrows():
+        best = None
+        for dr in SERIE_DRIFTS:
+            h = chain(e.m, dr)
+            if len(h) >= SERIE_MIN_DAYS:
+                key = (len(h), -spread(h, e.m, dr))
+                if best is None or key > best[0]: best = (key, dr, h)
+        if best: found.append((int(e.m), e.comp, best[1], best[2]))
+    found.sort(key=lambda x: (-len(x[3]), x[0])); kept = []
+    for f in found:
+        if all(abs((f[0] - g[0] + 720) % 1440 - 720) > 8 for g in kept): kept.append(f)
+    # confronto con il cielo: il momento deve cadere entro ±5 min dall'evento IN OGNI giorno della serie
+    moms = {}
+    def mom(k):
+        if k not in moms: moms[k] = _moments_min((d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d'), base)
+        return moms[k]
+    def sky_match(h):
+        res = []
+        m_today = next(m for k, m, a in h if k == min(kk for kk, _, _ in h))
+        for key, t0 in mom(0).items():
+            if abs(((m_today - t0) + 720) % 1440 - 720) > 10: continue
+            offs = []
+            for k, m, a in h:
+                mk = mom(k).get(key)
+                if mk is None: break
+                g = byk.get(k)
+                oo = ((g.m - mk) + 720) % 1440 - 720 if g is not None else pd.Series(dtype=float)
+                oo = oo[oo.abs() <= 5]
+                if oo.empty: break
+                offs.append(int(oo.iloc[oo.abs().argmin()]))
+            else:
+                res.append(f"{key[0]} {key[1]}".strip() + f" (scarti {' '.join(f'{o:+d}' for o in reversed(offs))})")
+        return res
+    if not kept:
+        L.append(f'  nessuna serie di almeno {SERIE_MIN_DAYS} giorni che arrivi a oggi')
+    for m, comp, dr, h in sorted(kept, key=lambda x: x[0]):
+        entry = (d0 - pd.Timedelta(days=max(k for k, _, _ in h))).strftime('%d/%m')
+        amps = [a for _, _, a in h]; prof = ' '.join(f'{a:.0f}' for a in reversed(amps))
+        mx = max(amps); kmx = h[amps.index(mx)][0]
+        sm = sky_match(h)
+        L.append(f"  {m // 60:02d}:{m % 60:02d} {comp}: {len(h)} giorni dal {entry}, spostamento {(-dr) + 0.0:+.1f} min/g, "
+                 f"ampiezze {prof} (max {mx:.0f} il {(d0 - pd.Timedelta(days=kmx)).strftime('%d/%m')})"
+                 + (f" | cielo: {'; '.join(sm)}" if sm else " | cielo: nessun momento che la segua tutti i giorni"))
+    # uscite di scena: serie di almeno 4 giorni attive fino a ieri, assenti oggi
+    if 1 in byk:
+        outs = set()
+        for _, e in byk[1].iterrows():
+            for dr in SERIE_DRIFTS:
+                h = chain(e.m, dr, start_k=1)
+                if len(h) >= 4:
+                    exp = e.m + dr
+                    if not (((byk[0].m - exp + 720) % 1440 - 720).abs() <= SERIE_TOL).any():
+                        outs.add((int(e.m), len(h)))
+                    break
+        for m, n in sorted(outs)[:6]:
+            L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi assente")
+    # marker per sciame: ampiezza ai quattro momenti di ogni radiante attivo (archivio SKY_MARKER.csv)
+    rows = []
+    for (name, kind), t0 in mom(0).items():
+        if not name.startswith('☄'): continue
+        a = today[((today.m - t0 + 720) % 1440 - 720).abs() <= 6].amp.max() if not today.empty else np.nan
+        rows.append({'day': day, 'sciame': name[2:], 'momento': kind, 'ora': f'{t0 // 60:02d}:{t0 % 60:02d}',
+                     'ampiezza': 0.0 if pd.isna(a) else a})
+    mk = base / 'SKY_MARKER.csv'
+    mo = pd.read_csv(mk) if mk.exists() else pd.DataFrame(columns=['day', 'sciame', 'momento', 'ora', 'ampiezza'])
+    mo = mo[mo.day != day]; pd.concat([mo, pd.DataFrame(rows)], ignore_index=True).to_csv(mk, index=False)
+
 def main():
     if len(sys.argv) < 2:
         sys.exit('Uso: python3 sky_scan.py <cartella SKY_AAAA-MM-GG>')
@@ -868,7 +1029,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
-    Ls = []; sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
+    Ls = []; sec_serie(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
