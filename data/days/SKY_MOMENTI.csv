@@ -1,0 +1,2299 @@
+day,nome,momento,m
+2026-09-20,Sole,sorge,299
+2026-09-20,Sole,culmina,662
+2026-09-20,Sole,tramonta,1025
+2026-09-20,Sole,passaggio inferiore,1380
+2026-09-20,Luna,passaggio inferiore,379
+2026-09-20,Luna,sorge,840
+2026-09-20,Luna,culmina,1097
+2026-09-20,Luna,tramonta,1354
+2026-09-20,Mercurio,passaggio inferiore,11
+2026-09-20,Mercurio,sorge,396
+2026-09-20,Mercurio,culmina,729
+2026-09-20,Mercurio,tramonta,1062
+2026-09-20,Venere,passaggio inferiore,86
+2026-09-20,Venere,sorge,502
+2026-09-20,Venere,culmina,804
+2026-09-20,Venere,tramonta,1106
+2026-09-20,Marte,culmina,421
+2026-09-20,Marte,tramonta,875
+2026-09-20,Marte,passaggio inferiore,1139
+2026-09-20,Marte,sorge,1404
+2026-09-20,Giove,sorge,86
+2026-09-20,Giove,culmina,512
+2026-09-20,Giove,tramonta,938
+2026-09-20,Giove,passaggio inferiore,1230
+2026-09-20,Saturno,tramonta,378
+2026-09-20,Saturno,passaggio inferiore,717
+2026-09-20,Saturno,sorge,1055
+2026-09-20,Saturno,culmina,1435
+2026-09-20,Urano,culmina,207
+2026-09-20,Urano,tramonta,662
+2026-09-20,Urano,passaggio inferiore,925
+2026-09-20,Urano,sorge,1189
+2026-09-20,Nettuno,tramonta,329
+2026-09-20,Nettuno,passaggio inferiore,683
+2026-09-20,Nettuno,sorge,1036
+2026-09-20,Nettuno,culmina,1401
+2026-09-20,Nodo Nord,tramonta,147
+2026-09-20,Nodo Nord,passaggio inferiore,556
+2026-09-20,Nodo Nord,sorge,965
+2026-09-20,Nodo Nord,culmina,1274
+2026-09-20,☄ Northern iota-Aquariids,tramonta,383
+2026-09-20,☄ Northern iota-Aquariids,passaggio inferiore,708
+2026-09-20,☄ Northern iota-Aquariids,sorge,1033
+2026-09-20,☄ Northern iota-Aquariids,culmina,1426
+2026-09-20,☄ chi-Cygnids,tramonta,281
+2026-09-20,☄ chi-Cygnids,passaggio inferiore,425
+2026-09-20,☄ chi-Cygnids,sorge,569
+2026-09-20,☄ chi-Cygnids,culmina,1143
+2026-09-20,☄ Daytime kappa-Leonids,sorge,155
+2026-09-20,☄ Daytime kappa-Leonids,culmina,586
+2026-09-20,☄ Daytime kappa-Leonids,tramonta,1017
+2026-09-20,☄ Daytime kappa-Leonids,passaggio inferiore,1304
+2026-09-20,☄ Daytime Sextantids,sorge,171
+2026-09-20,☄ Daytime Sextantids,culmina,544
+2026-09-20,☄ Daytime Sextantids,tramonta,917
+2026-09-20,☄ Daytime Sextantids,passaggio inferiore,1262
+2026-09-20,☄ September epsilon-Perseids,culmina,191
+2026-09-20,☄ September epsilon-Perseids,tramonta,790
+2026-09-20,☄ September epsilon-Perseids,passaggio inferiore,909
+2026-09-20,☄ September epsilon-Perseids,sorge,1027
+2026-09-20,☄ nu-Eridanids,culmina,253
+2026-09-20,☄ nu-Eridanids,tramonta,631
+2026-09-20,☄ nu-Eridanids,passaggio inferiore,971
+2026-09-20,☄ nu-Eridanids,sorge,1311
+2026-09-20,☄ Northern delta-Piscids,culmina,6
+2026-09-20,☄ Northern delta-Piscids,tramonta,414
+2026-09-20,☄ Northern delta-Piscids,passaggio inferiore,724
+2026-09-20,☄ Northern delta-Piscids,sorge,1034
+2026-09-20,☄ pi6-Orionids,culmina,284
+2026-09-20,☄ pi6-Orionids,tramonta,648
+2026-09-20,☄ pi6-Orionids,passaggio inferiore,1002
+2026-09-20,☄ pi6-Orionids,sorge,1356
+2026-09-20,☄ Aurigids,culmina,403
+2026-09-20,☄ Aurigids,tramonta,992
+2026-09-20,☄ Aurigids,passaggio inferiore,1121
+2026-09-20,☄ Aurigids,sorge,1249
+2026-09-20,☄ xi-Draconids,culmina,433
+2026-09-20,☄ xi-Draconids,passaggio inferiore,1151
+2026-09-20,☄ epsilon-Geminids,culmina,278
+2026-09-20,☄ epsilon-Geminids,tramonta,786
+2026-09-20,☄ epsilon-Geminids,passaggio inferiore,996
+2026-09-20,☄ epsilon-Geminids,sorge,1206
+2026-09-20,☄ omicron-Geminids,culmina,488
+2026-09-20,☄ omicron-Geminids,tramonta,1115
+2026-09-20,☄ omicron-Geminids,passaggio inferiore,1206
+2026-09-20,☄ omicron-Geminids,sorge,1298
+2026-09-20,☄ August Draconids,passaggio inferiore,226
+2026-09-20,☄ August Draconids,culmina,944
+2026-09-20,☄ tau-Cancrids,culmina,393
+2026-09-20,☄ tau-Cancrids,tramonta,898
+2026-09-20,☄ tau-Cancrids,passaggio inferiore,1111
+2026-09-20,☄ tau-Cancrids,sorge,1325
+2026-09-20,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,309
+2026-09-20,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-20,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1005
+2026-09-20,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-20,☄ Southern Taurids,culmina,25
+2026-09-20,☄ Southern Taurids,tramonta,409
+2026-09-20,☄ Southern Taurids,passaggio inferiore,743
+2026-09-20,☄ Southern Taurids,sorge,1077
+2026-09-20,☄ Northern delta-Aquariids,culmina,20
+2026-09-20,☄ Northern delta-Aquariids,tramonta,443
+2026-09-20,☄ Northern delta-Aquariids,passaggio inferiore,738
+2026-09-20,☄ Northern delta-Aquariids,sorge,1033
+2026-09-20,☄ Orionids,culmina,237
+2026-09-20,☄ Orionids,tramonta,659
+2026-09-20,☄ Orionids,passaggio inferiore,955
+2026-09-20,☄ Orionids,sorge,1250
+2026-09-20,☄ kappa-Cygnids,passaggio inferiore,461
+2026-09-20,☄ kappa-Cygnids,culmina,1179
+2026-09-20,☄ Perseids,culmina,358
+2026-09-20,☄ Perseids,passaggio inferiore,1077
+2026-09-20,☄ eta-Eridanids,culmina,263
+2026-09-20,☄ eta-Eridanids,tramonta,617
+2026-09-20,☄ eta-Eridanids,passaggio inferiore,981
+2026-09-20,☄ eta-Eridanids,sorge,1346
+2026-09-20,☄ chi-Taurids,culmina,52
+2026-09-20,☄ chi-Taurids,tramonta,508
+2026-09-20,☄ chi-Taurids,passaggio inferiore,770
+2026-09-20,☄ chi-Taurids,sorge,1031
+2026-09-20,☄ Northern Taurids,culmina,13
+2026-09-20,☄ Northern Taurids,tramonta,424
+2026-09-20,☄ Northern Taurids,passaggio inferiore,731
+2026-09-20,☄ Northern Taurids,sorge,1038
+2026-09-20,☄ omicron-Eridanids,culmina,64
+2026-09-20,☄ omicron-Eridanids,tramonta,435
+2026-09-20,☄ omicron-Eridanids,passaggio inferiore,782
+2026-09-20,☄ omicron-Eridanids,sorge,1129
+2026-09-20,Sole −12° mattino,,227
+2026-09-20,Sole −12° sera,,1095
+2026-09-21,Sole,sorge,300
+2026-09-21,Sole,culmina,662
+2026-09-21,Sole,tramonta,1023
+2026-09-21,Sole,passaggio inferiore,1380
+2026-09-21,Luna,passaggio inferiore,426
+2026-09-21,Luna,sorge,877
+2026-09-21,Luna,culmina,1144
+2026-09-21,Luna,tramonta,1410
+2026-09-21,Mercurio,passaggio inferiore,12
+2026-09-21,Mercurio,sorge,400
+2026-09-21,Mercurio,culmina,731
+2026-09-21,Mercurio,tramonta,1061
+2026-09-21,Venere,passaggio inferiore,83
+2026-09-21,Venere,sorge,500
+2026-09-21,Venere,culmina,801
+2026-09-21,Venere,tramonta,1103
+2026-09-21,Marte,culmina,420
+2026-09-21,Marte,tramonta,873
+2026-09-21,Marte,passaggio inferiore,1138
+2026-09-21,Marte,sorge,1403
+2026-09-21,Giove,sorge,83
+2026-09-21,Giove,culmina,509
+2026-09-21,Giove,tramonta,935
+2026-09-21,Giove,passaggio inferiore,1227
+2026-09-21,Saturno,tramonta,374
+2026-09-21,Saturno,passaggio inferiore,713
+2026-09-21,Saturno,sorge,1051
+2026-09-21,Saturno,culmina,1431
+2026-09-21,Urano,culmina,203
+2026-09-21,Urano,tramonta,658
+2026-09-21,Urano,passaggio inferiore,921
+2026-09-21,Urano,sorge,1185
+2026-09-21,Nettuno,tramonta,325
+2026-09-21,Nettuno,passaggio inferiore,678
+2026-09-21,Nettuno,sorge,1032
+2026-09-21,Nettuno,culmina,1397
+2026-09-21,Nodo Nord,tramonta,145
+2026-09-21,Nodo Nord,passaggio inferiore,554
+2026-09-21,Nodo Nord,sorge,962
+2026-09-21,Nodo Nord,culmina,1272
+2026-09-21,☄ Northern iota-Aquariids,tramonta,383
+2026-09-21,☄ Northern iota-Aquariids,passaggio inferiore,707
+2026-09-21,☄ Northern iota-Aquariids,sorge,1030
+2026-09-21,☄ Northern iota-Aquariids,culmina,1425
+2026-09-21,☄ Daytime kappa-Leonids,sorge,155
+2026-09-21,☄ Daytime kappa-Leonids,culmina,585
+2026-09-21,☄ Daytime kappa-Leonids,tramonta,1014
+2026-09-21,☄ Daytime kappa-Leonids,passaggio inferiore,1303
+2026-09-21,☄ chi-Cygnids,tramonta,288
+2026-09-21,☄ chi-Cygnids,passaggio inferiore,419
+2026-09-21,☄ chi-Cygnids,sorge,551
+2026-09-21,☄ chi-Cygnids,culmina,1137
+2026-09-21,☄ Daytime Sextantids,sorge,172
+2026-09-21,☄ Daytime Sextantids,culmina,543
+2026-09-21,☄ Daytime Sextantids,tramonta,914
+2026-09-21,☄ Daytime Sextantids,passaggio inferiore,1261
+2026-09-21,☄ September epsilon-Perseids,culmina,192
+2026-09-21,☄ September epsilon-Perseids,tramonta,792
+2026-09-21,☄ September epsilon-Perseids,passaggio inferiore,910
+2026-09-21,☄ September epsilon-Perseids,sorge,1027
+2026-09-21,☄ nu-Eridanids,culmina,252
+2026-09-21,☄ nu-Eridanids,tramonta,631
+2026-09-21,☄ nu-Eridanids,passaggio inferiore,970
+2026-09-21,☄ nu-Eridanids,sorge,1309
+2026-09-21,☄ Northern delta-Piscids,culmina,5
+2026-09-21,☄ Northern delta-Piscids,tramonta,415
+2026-09-21,☄ Northern delta-Piscids,passaggio inferiore,723
+2026-09-21,☄ Northern delta-Piscids,sorge,1031
+2026-09-21,☄ pi6-Orionids,culmina,283
+2026-09-21,☄ pi6-Orionids,tramonta,648
+2026-09-21,☄ pi6-Orionids,passaggio inferiore,1002
+2026-09-21,☄ pi6-Orionids,sorge,1355
+2026-09-21,☄ Aurigids,culmina,403
+2026-09-21,☄ Aurigids,tramonta,993
+2026-09-21,☄ Aurigids,passaggio inferiore,1121
+2026-09-21,☄ Aurigids,sorge,1250
+2026-09-21,☄ xi-Draconids,culmina,435
+2026-09-21,☄ xi-Draconids,passaggio inferiore,1153
+2026-09-21,☄ epsilon-Geminids,culmina,274
+2026-09-21,☄ epsilon-Geminids,tramonta,782
+2026-09-21,☄ epsilon-Geminids,passaggio inferiore,992
+2026-09-21,☄ epsilon-Geminids,sorge,1202
+2026-09-21,☄ tau-Cancrids,culmina,393
+2026-09-21,☄ tau-Cancrids,tramonta,897
+2026-09-21,☄ tau-Cancrids,passaggio inferiore,1111
+2026-09-21,☄ tau-Cancrids,sorge,1325
+2026-09-21,☄ Southern Taurids,culmina,24
+2026-09-21,☄ Southern Taurids,tramonta,408
+2026-09-21,☄ Southern Taurids,passaggio inferiore,742
+2026-09-21,☄ Southern Taurids,sorge,1076
+2026-09-21,☄ omicron-Geminids,culmina,489
+2026-09-21,☄ omicron-Geminids,tramonta,1115
+2026-09-21,☄ omicron-Geminids,passaggio inferiore,1207
+2026-09-21,☄ omicron-Geminids,sorge,1300
+2026-09-21,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,310
+2026-09-21,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-21,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1004
+2026-09-21,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-21,☄ Orionids,culmina,236
+2026-09-21,☄ Orionids,tramonta,658
+2026-09-21,☄ Orionids,passaggio inferiore,954
+2026-09-21,☄ Orionids,sorge,1249
+2026-09-21,☄ Northern delta-Aquariids,culmina,19
+2026-09-21,☄ Northern delta-Aquariids,tramonta,443
+2026-09-21,☄ Northern delta-Aquariids,passaggio inferiore,737
+2026-09-21,☄ Northern delta-Aquariids,sorge,1030
+2026-09-21,☄ kappa-Cygnids,passaggio inferiore,460
+2026-09-21,☄ kappa-Cygnids,culmina,1178
+2026-09-21,☄ Perseids,culmina,360
+2026-09-21,☄ Perseids,passaggio inferiore,1078
+2026-09-21,☄ eta-Eridanids,culmina,263
+2026-09-21,☄ eta-Eridanids,tramonta,617
+2026-09-21,☄ eta-Eridanids,passaggio inferiore,981
+2026-09-21,☄ eta-Eridanids,sorge,1344
+2026-09-21,☄ chi-Taurids,culmina,48
+2026-09-21,☄ chi-Taurids,tramonta,504
+2026-09-21,☄ chi-Taurids,passaggio inferiore,766
+2026-09-21,☄ chi-Taurids,sorge,1027
+2026-09-21,☄ Northern Taurids,culmina,12
+2026-09-21,☄ Northern Taurids,tramonta,424
+2026-09-21,☄ Northern Taurids,passaggio inferiore,730
+2026-09-21,☄ Northern Taurids,sorge,1036
+2026-09-21,☄ omicron-Eridanids,culmina,60
+2026-09-21,☄ omicron-Eridanids,tramonta,432
+2026-09-21,☄ omicron-Eridanids,passaggio inferiore,778
+2026-09-21,☄ omicron-Eridanids,sorge,1125
+2026-09-21,☄ sigma-Hydrids,culmina,201
+2026-09-21,☄ sigma-Hydrids,tramonta,668
+2026-09-21,☄ sigma-Hydrids,passaggio inferiore,919
+2026-09-21,☄ sigma-Hydrids,sorge,1169
+2026-09-21,Sole −12° mattino,,229
+2026-09-21,Sole −12° sera,,1093
+2026-09-22,Sole,sorge,302
+2026-09-22,Sole,culmina,661
+2026-09-22,Sole,tramonta,1021
+2026-09-22,Sole,passaggio inferiore,1379
+2026-09-22,Luna,tramonta,34
+2026-09-22,Luna,passaggio inferiore,472
+2026-09-22,Luna,sorge,909
+2026-09-22,Luna,culmina,1190
+2026-09-22,Mercurio,passaggio inferiore,14
+2026-09-22,Mercurio,sorge,404
+2026-09-22,Mercurio,culmina,732
+2026-09-22,Mercurio,tramonta,1060
+2026-09-22,Venere,passaggio inferiore,81
+2026-09-22,Venere,sorge,498
+2026-09-22,Venere,culmina,799
+2026-09-22,Venere,tramonta,1100
+2026-09-22,Marte,culmina,419
+2026-09-22,Marte,tramonta,871
+2026-09-22,Marte,passaggio inferiore,1137
+2026-09-22,Marte,sorge,1403
+2026-09-22,Giove,sorge,80
+2026-09-22,Giove,culmina,506
+2026-09-22,Giove,tramonta,931
+2026-09-22,Giove,passaggio inferiore,1224
+2026-09-22,Saturno,tramonta,370
+2026-09-22,Saturno,passaggio inferiore,708
+2026-09-22,Saturno,sorge,1047
+2026-09-22,Saturno,culmina,1426
+2026-09-22,Urano,culmina,199
+2026-09-22,Urano,tramonta,654
+2026-09-22,Urano,passaggio inferiore,917
+2026-09-22,Urano,sorge,1181
+2026-09-22,Nettuno,tramonta,321
+2026-09-22,Nettuno,passaggio inferiore,674
+2026-09-22,Nettuno,sorge,1028
+2026-09-22,Nettuno,culmina,1392
+2026-09-22,Nodo Nord,tramonta,142
+2026-09-22,Nodo Nord,passaggio inferiore,551
+2026-09-22,Nodo Nord,sorge,959
+2026-09-22,Nodo Nord,culmina,1269
+2026-09-22,☄ Daytime kappa-Leonids,sorge,154
+2026-09-22,☄ Daytime kappa-Leonids,culmina,583
+2026-09-22,☄ Daytime kappa-Leonids,tramonta,1012
+2026-09-22,☄ Daytime kappa-Leonids,passaggio inferiore,1301
+2026-09-22,☄ Northern iota-Aquariids,tramonta,384
+2026-09-22,☄ Northern iota-Aquariids,passaggio inferiore,706
+2026-09-22,☄ Northern iota-Aquariids,sorge,1028
+2026-09-22,☄ Northern iota-Aquariids,culmina,1424
+2026-09-22,☄ chi-Cygnids,tramonta,297
+2026-09-22,☄ chi-Cygnids,passaggio inferiore,414
+2026-09-22,☄ chi-Cygnids,sorge,531
+2026-09-22,☄ chi-Cygnids,culmina,1132
+2026-09-22,☄ Daytime Sextantids,sorge,173
+2026-09-22,☄ Daytime Sextantids,culmina,541
+2026-09-22,☄ Daytime Sextantids,tramonta,910
+2026-09-22,☄ Daytime Sextantids,passaggio inferiore,1260
+2026-09-22,☄ September epsilon-Perseids,culmina,192
+2026-09-22,☄ September epsilon-Perseids,tramonta,793
+2026-09-22,☄ September epsilon-Perseids,passaggio inferiore,910
+2026-09-22,☄ September epsilon-Perseids,sorge,1027
+2026-09-22,☄ nu-Eridanids,culmina,251
+2026-09-22,☄ nu-Eridanids,tramonta,632
+2026-09-22,☄ nu-Eridanids,passaggio inferiore,969
+2026-09-22,☄ nu-Eridanids,sorge,1307
+2026-09-22,☄ October Camelopardalids,culmina,602
+2026-09-22,☄ October Camelopardalids,passaggio inferiore,1320
+2026-09-22,☄ Northern delta-Piscids,culmina,0
+2026-09-22,☄ Northern delta-Piscids,tramonta,416
+2026-09-22,☄ Northern delta-Piscids,passaggio inferiore,722
+2026-09-22,☄ Northern delta-Piscids,sorge,1029
+2026-09-22,☄ pi6-Orionids,culmina,283
+2026-09-22,☄ pi6-Orionids,tramonta,648
+2026-09-22,☄ pi6-Orionids,passaggio inferiore,1001
+2026-09-22,☄ pi6-Orionids,sorge,1354
+2026-09-22,☄ Aurigids,culmina,404
+2026-09-22,☄ Aurigids,tramonta,993
+2026-09-22,☄ Aurigids,passaggio inferiore,1122
+2026-09-22,☄ Aurigids,sorge,1250
+2026-09-22,☄ xi-Draconids,culmina,437
+2026-09-22,☄ xi-Draconids,passaggio inferiore,1155
+2026-09-22,☄ epsilon-Geminids,culmina,270
+2026-09-22,☄ epsilon-Geminids,tramonta,778
+2026-09-22,☄ epsilon-Geminids,passaggio inferiore,988
+2026-09-22,☄ epsilon-Geminids,sorge,1198
+2026-09-22,☄ tau-Cancrids,culmina,392
+2026-09-22,☄ tau-Cancrids,tramonta,897
+2026-09-22,☄ tau-Cancrids,passaggio inferiore,1111
+2026-09-22,☄ tau-Cancrids,sorge,1324
+2026-09-22,☄ Southern Taurids,culmina,23
+2026-09-22,☄ Southern Taurids,tramonta,408
+2026-09-22,☄ Southern Taurids,passaggio inferiore,741
+2026-09-22,☄ Southern Taurids,sorge,1074
+2026-09-22,☄ omicron-Geminids,culmina,490
+2026-09-22,☄ omicron-Geminids,tramonta,1114
+2026-09-22,☄ omicron-Geminids,passaggio inferiore,1208
+2026-09-22,☄ omicron-Geminids,sorge,1302
+2026-09-22,☄ Orionids,culmina,235
+2026-09-22,☄ Orionids,tramonta,657
+2026-09-22,☄ Orionids,passaggio inferiore,953
+2026-09-22,☄ Orionids,sorge,1248
+2026-09-22,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,311
+2026-09-22,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-22,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1003
+2026-09-22,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-22,☄ Northern delta-Aquariids,culmina,18
+2026-09-22,☄ Northern delta-Aquariids,tramonta,444
+2026-09-22,☄ Northern delta-Aquariids,passaggio inferiore,736
+2026-09-22,☄ Northern delta-Aquariids,sorge,1028
+2026-09-22,☄ kappa-Cygnids,passaggio inferiore,458
+2026-09-22,☄ kappa-Cygnids,culmina,1176
+2026-09-22,☄ Perseids,culmina,362
+2026-09-22,☄ Perseids,passaggio inferiore,1080
+2026-09-22,☄ chi-Taurids,culmina,44
+2026-09-22,☄ chi-Taurids,tramonta,501
+2026-09-22,☄ chi-Taurids,passaggio inferiore,762
+2026-09-22,☄ chi-Taurids,sorge,1023
+2026-09-22,☄ eta-Eridanids,culmina,262
+2026-09-22,☄ eta-Eridanids,tramonta,617
+2026-09-22,☄ eta-Eridanids,passaggio inferiore,980
+2026-09-22,☄ eta-Eridanids,sorge,1342
+2026-09-22,☄ Northern Taurids,culmina,11
+2026-09-22,☄ Northern Taurids,tramonta,424
+2026-09-22,☄ Northern Taurids,passaggio inferiore,729
+2026-09-22,☄ Northern Taurids,sorge,1035
+2026-09-22,☄ omicron-Eridanids,culmina,56
+2026-09-22,☄ omicron-Eridanids,tramonta,428
+2026-09-22,☄ omicron-Eridanids,passaggio inferiore,774
+2026-09-22,☄ omicron-Eridanids,sorge,1121
+2026-09-22,☄ sigma-Hydrids,culmina,197
+2026-09-22,☄ sigma-Hydrids,tramonta,664
+2026-09-22,☄ sigma-Hydrids,passaggio inferiore,915
+2026-09-22,☄ sigma-Hydrids,sorge,1165
+2026-09-22,Sole −12° mattino,,230
+2026-09-22,Sole −12° sera,,1091
+2026-09-23,Sole,sorge,303
+2026-09-23,Sole,culmina,661
+2026-09-23,Sole,tramonta,1019
+2026-09-23,Sole,passaggio inferiore,1379
+2026-09-23,Luna,tramonta,97
+2026-09-23,Luna,passaggio inferiore,517
+2026-09-23,Luna,sorge,937
+2026-09-23,Luna,culmina,1235
+2026-09-23,Mercurio,passaggio inferiore,16
+2026-09-23,Mercurio,sorge,408
+2026-09-23,Mercurio,culmina,734
+2026-09-23,Mercurio,tramonta,1060
+2026-09-23,Venere,passaggio inferiore,78
+2026-09-23,Venere,sorge,496
+2026-09-23,Venere,culmina,796
+2026-09-23,Venere,tramonta,1097
+2026-09-23,Marte,culmina,417
+2026-09-23,Marte,tramonta,869
+2026-09-23,Marte,passaggio inferiore,1135
+2026-09-23,Marte,sorge,1402
+2026-09-23,Giove,sorge,77
+2026-09-23,Giove,culmina,502
+2026-09-23,Giove,tramonta,928
+2026-09-23,Giove,passaggio inferiore,1220
+2026-09-23,Saturno,tramonta,365
+2026-09-23,Saturno,passaggio inferiore,704
+2026-09-23,Saturno,sorge,1043
+2026-09-23,Saturno,culmina,1422
+2026-09-23,Urano,culmina,195
+2026-09-23,Urano,tramonta,650
+2026-09-23,Urano,passaggio inferiore,913
+2026-09-23,Urano,sorge,1177
+2026-09-23,Nettuno,tramonta,316
+2026-09-23,Nettuno,passaggio inferiore,670
+2026-09-23,Nettuno,sorge,1024
+2026-09-23,Nettuno,culmina,1388
+2026-09-23,Nodo Nord,tramonta,138
+2026-09-23,Nodo Nord,passaggio inferiore,546
+2026-09-23,Nodo Nord,sorge,955
+2026-09-23,Nodo Nord,culmina,1264
+2026-09-23,☄ Daytime kappa-Leonids,sorge,154
+2026-09-23,☄ Daytime kappa-Leonids,culmina,581
+2026-09-23,☄ Daytime kappa-Leonids,tramonta,1009
+2026-09-23,☄ Daytime kappa-Leonids,passaggio inferiore,1300
+2026-09-23,☄ Northern iota-Aquariids,tramonta,384
+2026-09-23,☄ Northern iota-Aquariids,passaggio inferiore,705
+2026-09-23,☄ Northern iota-Aquariids,sorge,1026
+2026-09-23,☄ Northern iota-Aquariids,culmina,1423
+2026-09-23,☄ Daytime Sextantids,sorge,174
+2026-09-23,☄ Daytime Sextantids,culmina,540
+2026-09-23,☄ Daytime Sextantids,tramonta,907
+2026-09-23,☄ Daytime Sextantids,passaggio inferiore,1258
+2026-09-23,☄ chi-Cygnids,tramonta,308
+2026-09-23,☄ chi-Cygnids,passaggio inferiore,408
+2026-09-23,☄ chi-Cygnids,sorge,508
+2026-09-23,☄ chi-Cygnids,culmina,1126
+2026-09-23,☄ September epsilon-Perseids,culmina,193
+2026-09-23,☄ September epsilon-Perseids,tramonta,794
+2026-09-23,☄ September epsilon-Perseids,passaggio inferiore,911
+2026-09-23,☄ September epsilon-Perseids,sorge,1027
+2026-09-23,☄ October Camelopardalids,culmina,598
+2026-09-23,☄ October Camelopardalids,passaggio inferiore,1316
+2026-09-23,☄ nu-Eridanids,culmina,250
+2026-09-23,☄ nu-Eridanids,tramonta,633
+2026-09-23,☄ nu-Eridanids,passaggio inferiore,969
+2026-09-23,☄ nu-Eridanids,sorge,1304
+2026-09-23,☄ Northern delta-Piscids,culmina,1439
+2026-09-23,☄ Northern delta-Piscids,tramonta,417
+2026-09-23,☄ Northern delta-Piscids,passaggio inferiore,721
+2026-09-23,☄ Northern delta-Piscids,sorge,1026
+2026-09-23,☄ pi6-Orionids,culmina,283
+2026-09-23,☄ pi6-Orionids,tramonta,649
+2026-09-23,☄ pi6-Orionids,passaggio inferiore,1001
+2026-09-23,☄ pi6-Orionids,sorge,1353
+2026-09-23,☄ Aurigids,culmina,404
+2026-09-23,☄ Aurigids,tramonta,994
+2026-09-23,☄ Aurigids,passaggio inferiore,1122
+2026-09-23,☄ Aurigids,sorge,1251
+2026-09-23,☄ xi-Draconids,culmina,439
+2026-09-23,☄ xi-Draconids,passaggio inferiore,1157
+2026-09-23,☄ epsilon-Geminids,culmina,266
+2026-09-23,☄ epsilon-Geminids,tramonta,774
+2026-09-23,☄ epsilon-Geminids,passaggio inferiore,984
+2026-09-23,☄ epsilon-Geminids,sorge,1194
+2026-09-23,☄ tau-Cancrids,culmina,392
+2026-09-23,☄ tau-Cancrids,tramonta,896
+2026-09-23,☄ tau-Cancrids,passaggio inferiore,1110
+2026-09-23,☄ tau-Cancrids,sorge,1324
+2026-09-23,☄ Southern Taurids,culmina,22
+2026-09-23,☄ Southern Taurids,tramonta,408
+2026-09-23,☄ Southern Taurids,passaggio inferiore,740
+2026-09-23,☄ Southern Taurids,sorge,1072
+2026-09-23,☄ Orionids,culmina,234
+2026-09-23,☄ Orionids,tramonta,657
+2026-09-23,☄ Orionids,passaggio inferiore,952
+2026-09-23,☄ Orionids,sorge,1247
+2026-09-23,☄ omicron-Geminids,culmina,491
+2026-09-23,☄ omicron-Geminids,tramonta,1114
+2026-09-23,☄ omicron-Geminids,passaggio inferiore,1209
+2026-09-23,☄ omicron-Geminids,sorge,1303
+2026-09-23,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,313
+2026-09-23,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-23,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1001
+2026-09-23,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-23,☄ Northern delta-Aquariids,culmina,17
+2026-09-23,☄ Northern delta-Aquariids,tramonta,445
+2026-09-23,☄ Northern delta-Aquariids,passaggio inferiore,735
+2026-09-23,☄ Northern delta-Aquariids,sorge,1025
+2026-09-23,☄ kappa-Cygnids,passaggio inferiore,457
+2026-09-23,☄ kappa-Cygnids,culmina,1175
+2026-09-23,☄ Perseids,culmina,363
+2026-09-23,☄ Perseids,passaggio inferiore,1081
+2026-09-23,☄ chi-Taurids,culmina,40
+2026-09-23,☄ chi-Taurids,tramonta,497
+2026-09-23,☄ chi-Taurids,passaggio inferiore,758
+2026-09-23,☄ chi-Taurids,sorge,1019
+2026-09-23,☄ eta-Eridanids,culmina,258
+2026-09-23,☄ eta-Eridanids,tramonta,613
+2026-09-23,☄ eta-Eridanids,passaggio inferiore,976
+2026-09-23,☄ eta-Eridanids,sorge,1338
+2026-09-23,☄ Northern Taurids,culmina,11
+2026-09-23,☄ Northern Taurids,tramonta,425
+2026-09-23,☄ Northern Taurids,passaggio inferiore,729
+2026-09-23,☄ Northern Taurids,sorge,1033
+2026-09-23,☄ omicron-Eridanids,culmina,52
+2026-09-23,☄ omicron-Eridanids,tramonta,424
+2026-09-23,☄ omicron-Eridanids,passaggio inferiore,770
+2026-09-23,☄ omicron-Eridanids,sorge,1117
+2026-09-23,☄ sigma-Hydrids,culmina,193
+2026-09-23,☄ sigma-Hydrids,tramonta,660
+2026-09-23,☄ sigma-Hydrids,passaggio inferiore,911
+2026-09-23,☄ sigma-Hydrids,sorge,1161
+2026-09-23,Sole −12° mattino,,231
+2026-09-23,Sole −12° sera,,1089
+2026-09-24,Sole,sorge,304
+2026-09-24,Sole,culmina,661
+2026-09-24,Sole,tramonta,1017
+2026-09-24,Sole,passaggio inferiore,1379
+2026-09-24,Luna,tramonta,161
+2026-09-24,Luna,passaggio inferiore,561
+2026-09-24,Luna,sorge,962
+2026-09-24,Luna,culmina,1279
+2026-09-24,Mercurio,passaggio inferiore,17
+2026-09-24,Mercurio,sorge,412
+2026-09-24,Mercurio,culmina,735
+2026-09-24,Mercurio,tramonta,1059
+2026-09-24,Venere,passaggio inferiore,76
+2026-09-24,Venere,sorge,494
+2026-09-24,Venere,culmina,794
+2026-09-24,Venere,tramonta,1093
+2026-09-24,Marte,culmina,416
+2026-09-24,Marte,tramonta,867
+2026-09-24,Marte,passaggio inferiore,1134
+2026-09-24,Marte,sorge,1401
+2026-09-24,Giove,sorge,74
+2026-09-24,Giove,culmina,499
+2026-09-24,Giove,tramonta,924
+2026-09-24,Giove,passaggio inferiore,1217
+2026-09-24,Saturno,tramonta,361
+2026-09-24,Saturno,passaggio inferiore,700
+2026-09-24,Saturno,sorge,1039
+2026-09-24,Saturno,culmina,1418
+2026-09-24,Urano,culmina,191
+2026-09-24,Urano,tramonta,646
+2026-09-24,Urano,passaggio inferiore,909
+2026-09-24,Urano,sorge,1173
+2026-09-24,Nettuno,tramonta,312
+2026-09-24,Nettuno,passaggio inferiore,666
+2026-09-24,Nettuno,sorge,1020
+2026-09-24,Nettuno,culmina,1384
+2026-09-24,Nodo Nord,tramonta,132
+2026-09-24,Nodo Nord,passaggio inferiore,541
+2026-09-24,Nodo Nord,sorge,950
+2026-09-24,Nodo Nord,culmina,1259
+2026-09-24,☄ Daytime kappa-Leonids,sorge,154
+2026-09-24,☄ Daytime kappa-Leonids,culmina,580
+2026-09-24,☄ Daytime kappa-Leonids,tramonta,1006
+2026-09-24,☄ Daytime kappa-Leonids,passaggio inferiore,1298
+2026-09-24,☄ Daytime Sextantids,sorge,174
+2026-09-24,☄ Daytime Sextantids,culmina,539
+2026-09-24,☄ Daytime Sextantids,tramonta,904
+2026-09-24,☄ Daytime Sextantids,passaggio inferiore,1257
+2026-09-24,☄ Northern iota-Aquariids,tramonta,384
+2026-09-24,☄ Northern iota-Aquariids,passaggio inferiore,704
+2026-09-24,☄ Northern iota-Aquariids,sorge,1024
+2026-09-24,☄ Northern iota-Aquariids,culmina,1422
+2026-09-24,☄ chi-Cygnids,tramonta,323
+2026-09-24,☄ chi-Cygnids,passaggio inferiore,402
+2026-09-24,☄ chi-Cygnids,sorge,482
+2026-09-24,☄ chi-Cygnids,culmina,1120
+2026-09-24,☄ October Camelopardalids,culmina,594
+2026-09-24,☄ October Camelopardalids,passaggio inferiore,1312
+2026-09-24,☄ September epsilon-Perseids,culmina,193
+2026-09-24,☄ September epsilon-Perseids,tramonta,796
+2026-09-24,☄ September epsilon-Perseids,passaggio inferiore,911
+2026-09-24,☄ September epsilon-Perseids,sorge,1027
+2026-09-24,☄ nu-Eridanids,culmina,250
+2026-09-24,☄ nu-Eridanids,tramonta,634
+2026-09-24,☄ nu-Eridanids,passaggio inferiore,968
+2026-09-24,☄ nu-Eridanids,sorge,1302
+2026-09-24,☄ Northern delta-Piscids,culmina,1439
+2026-09-24,☄ Northern delta-Piscids,tramonta,418
+2026-09-24,☄ Northern delta-Piscids,passaggio inferiore,721
+2026-09-24,☄ Northern delta-Piscids,sorge,1023
+2026-09-24,☄ pi6-Orionids,culmina,282
+2026-09-24,☄ pi6-Orionids,tramonta,649
+2026-09-24,☄ pi6-Orionids,passaggio inferiore,1000
+2026-09-24,☄ pi6-Orionids,sorge,1352
+2026-09-24,☄ Aurigids,culmina,405
+2026-09-24,☄ Aurigids,tramonta,994
+2026-09-24,☄ Aurigids,passaggio inferiore,1123
+2026-09-24,☄ Aurigids,sorge,1252
+2026-09-24,☄ xi-Draconids,culmina,441
+2026-09-24,☄ xi-Draconids,passaggio inferiore,1159
+2026-09-24,☄ epsilon-Geminids,culmina,262
+2026-09-24,☄ epsilon-Geminids,tramonta,770
+2026-09-24,☄ epsilon-Geminids,passaggio inferiore,980
+2026-09-24,☄ epsilon-Geminids,sorge,1190
+2026-09-24,☄ tau-Cancrids,culmina,392
+2026-09-24,☄ tau-Cancrids,tramonta,896
+2026-09-24,☄ tau-Cancrids,passaggio inferiore,1110
+2026-09-24,☄ tau-Cancrids,sorge,1323
+2026-09-24,☄ Southern Taurids,culmina,21
+2026-09-24,☄ Southern Taurids,tramonta,407
+2026-09-24,☄ Southern Taurids,passaggio inferiore,739
+2026-09-24,☄ Southern Taurids,sorge,1070
+2026-09-24,☄ Orionids,culmina,233
+2026-09-24,☄ Orionids,tramonta,656
+2026-09-24,☄ Orionids,passaggio inferiore,951
+2026-09-24,☄ Orionids,sorge,1246
+2026-09-24,☄ omicron-Geminids,culmina,492
+2026-09-24,☄ omicron-Geminids,tramonta,1114
+2026-09-24,☄ omicron-Geminids,passaggio inferiore,1210
+2026-09-24,☄ omicron-Geminids,sorge,1305
+2026-09-24,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,314
+2026-09-24,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-24,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1000
+2026-09-24,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-24,☄ Northern delta-Aquariids,culmina,16
+2026-09-24,☄ Northern delta-Aquariids,tramonta,446
+2026-09-24,☄ Northern delta-Aquariids,passaggio inferiore,734
+2026-09-24,☄ Northern delta-Aquariids,sorge,1023
+2026-09-24,☄ kappa-Cygnids,passaggio inferiore,455
+2026-09-24,☄ kappa-Cygnids,culmina,1173
+2026-09-24,☄ chi-Taurids,culmina,36
+2026-09-24,☄ chi-Taurids,tramonta,493
+2026-09-24,☄ chi-Taurids,passaggio inferiore,754
+2026-09-24,☄ chi-Taurids,sorge,1016
+2026-09-24,☄ Perseids,culmina,359
+2026-09-24,☄ Perseids,passaggio inferiore,1077
+2026-09-24,☄ Northern Taurids,culmina,10
+2026-09-24,☄ Northern Taurids,tramonta,425
+2026-09-24,☄ Northern Taurids,passaggio inferiore,728
+2026-09-24,☄ Northern Taurids,sorge,1031
+2026-09-24,☄ eta-Eridanids,culmina,254
+2026-09-24,☄ eta-Eridanids,tramonta,609
+2026-09-24,☄ eta-Eridanids,passaggio inferiore,972
+2026-09-24,☄ eta-Eridanids,sorge,1334
+2026-09-24,☄ omicron-Eridanids,culmina,49
+2026-09-24,☄ omicron-Eridanids,tramonta,420
+2026-09-24,☄ omicron-Eridanids,passaggio inferiore,767
+2026-09-24,☄ omicron-Eridanids,sorge,1113
+2026-09-24,☄ sigma-Hydrids,culmina,189
+2026-09-24,☄ sigma-Hydrids,tramonta,657
+2026-09-24,☄ sigma-Hydrids,passaggio inferiore,907
+2026-09-24,☄ sigma-Hydrids,sorge,1157
+2026-09-24,Sole −12° mattino,,233
+2026-09-24,Sole −12° sera,,1087
+2026-09-25,Sole,sorge,305
+2026-09-25,Sole,culmina,660
+2026-09-25,Sole,tramonta,1015
+2026-09-25,Sole,passaggio inferiore,1378
+2026-09-25,Luna,tramonta,226
+2026-09-25,Luna,passaggio inferiore,606
+2026-09-25,Luna,sorge,985
+2026-09-25,Luna,culmina,1324
+2026-09-25,Mercurio,passaggio inferiore,19
+2026-09-25,Mercurio,sorge,415
+2026-09-25,Mercurio,culmina,737
+2026-09-25,Mercurio,tramonta,1058
+2026-09-25,Venere,passaggio inferiore,73
+2026-09-25,Venere,sorge,492
+2026-09-25,Venere,culmina,791
+2026-09-25,Venere,tramonta,1090
+2026-09-25,Marte,culmina,414
+2026-09-25,Marte,tramonta,865
+2026-09-25,Marte,passaggio inferiore,1132
+2026-09-25,Marte,sorge,1400
+2026-09-25,Giove,sorge,71
+2026-09-25,Giove,culmina,496
+2026-09-25,Giove,tramonta,921
+2026-09-25,Giove,passaggio inferiore,1214
+2026-09-25,Saturno,tramonta,357
+2026-09-25,Saturno,passaggio inferiore,696
+2026-09-25,Saturno,sorge,1035
+2026-09-25,Saturno,culmina,1414
+2026-09-25,Urano,culmina,187
+2026-09-25,Urano,tramonta,642
+2026-09-25,Urano,passaggio inferiore,905
+2026-09-25,Urano,sorge,1169
+2026-09-25,Nettuno,tramonta,308
+2026-09-25,Nettuno,passaggio inferiore,662
+2026-09-25,Nettuno,sorge,1016
+2026-09-25,Nettuno,culmina,1380
+2026-09-25,Nodo Nord,tramonta,125
+2026-09-25,Nodo Nord,passaggio inferiore,535
+2026-09-25,Nodo Nord,sorge,945
+2026-09-25,Nodo Nord,culmina,1253
+2026-09-25,☄ Daytime kappa-Leonids,sorge,154
+2026-09-25,☄ Daytime kappa-Leonids,culmina,578
+2026-09-25,☄ Daytime kappa-Leonids,tramonta,1003
+2026-09-25,☄ Daytime kappa-Leonids,passaggio inferiore,1297
+2026-09-25,☄ Daytime Sextantids,sorge,175
+2026-09-25,☄ Daytime Sextantids,culmina,538
+2026-09-25,☄ Daytime Sextantids,tramonta,900
+2026-09-25,☄ Daytime Sextantids,passaggio inferiore,1256
+2026-09-25,☄ Northern iota-Aquariids,tramonta,384
+2026-09-25,☄ Northern iota-Aquariids,passaggio inferiore,703
+2026-09-25,☄ Northern iota-Aquariids,sorge,1021
+2026-09-25,☄ Northern iota-Aquariids,culmina,1421
+2026-09-25,☄ chi-Cygnids,tramonta,347
+2026-09-25,☄ chi-Cygnids,passaggio inferiore,397
+2026-09-25,☄ chi-Cygnids,sorge,447
+2026-09-25,☄ chi-Cygnids,culmina,1115
+2026-09-25,☄ October Camelopardalids,culmina,590
+2026-09-25,☄ October Camelopardalids,passaggio inferiore,1308
+2026-09-25,☄ October Draconids,passaggio inferiore,254
+2026-09-25,☄ October Draconids,culmina,972
+2026-09-25,☄ September epsilon-Perseids,culmina,194
+2026-09-25,☄ September epsilon-Perseids,tramonta,797
+2026-09-25,☄ September epsilon-Perseids,passaggio inferiore,912
+2026-09-25,☄ September epsilon-Perseids,sorge,1027
+2026-09-25,☄ nu-Eridanids,culmina,249
+2026-09-25,☄ nu-Eridanids,tramonta,634
+2026-09-25,☄ nu-Eridanids,passaggio inferiore,967
+2026-09-25,☄ nu-Eridanids,sorge,1299
+2026-09-25,☄ Northern delta-Piscids,culmina,1438
+2026-09-25,☄ Northern delta-Piscids,tramonta,418
+2026-09-25,☄ Northern delta-Piscids,passaggio inferiore,720
+2026-09-25,☄ Northern delta-Piscids,sorge,1021
+2026-09-25,☄ pi6-Orionids,culmina,282
+2026-09-25,☄ pi6-Orionids,tramonta,649
+2026-09-25,☄ pi6-Orionids,passaggio inferiore,1000
+2026-09-25,☄ pi6-Orionids,sorge,1351
+2026-09-25,☄ xi-Draconids,culmina,442
+2026-09-25,☄ xi-Draconids,passaggio inferiore,1160
+2026-09-25,☄ epsilon-Geminids,culmina,258
+2026-09-25,☄ epsilon-Geminids,tramonta,766
+2026-09-25,☄ epsilon-Geminids,passaggio inferiore,976
+2026-09-25,☄ epsilon-Geminids,sorge,1186
+2026-09-25,☄ Aurigids,culmina,405
+2026-09-25,☄ Aurigids,tramonta,994
+2026-09-25,☄ Aurigids,passaggio inferiore,1123
+2026-09-25,☄ Aurigids,sorge,1252
+2026-09-25,☄ tau-Cancrids,culmina,391
+2026-09-25,☄ tau-Cancrids,tramonta,896
+2026-09-25,☄ tau-Cancrids,passaggio inferiore,1109
+2026-09-25,☄ tau-Cancrids,sorge,1323
+2026-09-25,☄ Southern Taurids,culmina,20
+2026-09-25,☄ Southern Taurids,tramonta,407
+2026-09-25,☄ Southern Taurids,passaggio inferiore,738
+2026-09-25,☄ Southern Taurids,sorge,1069
+2026-09-25,☄ Orionids,culmina,232
+2026-09-25,☄ Orionids,tramonta,655
+2026-09-25,☄ Orionids,passaggio inferiore,950
+2026-09-25,☄ Orionids,sorge,1245
+2026-09-25,☄ omicron-Geminids,culmina,493
+2026-09-25,☄ omicron-Geminids,tramonta,1114
+2026-09-25,☄ omicron-Geminids,passaggio inferiore,1211
+2026-09-25,☄ omicron-Geminids,sorge,1307
+2026-09-25,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,315
+2026-09-25,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-25,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,999
+2026-09-25,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-25,☄ Northern delta-Aquariids,culmina,15
+2026-09-25,☄ Northern delta-Aquariids,tramonta,446
+2026-09-25,☄ Northern delta-Aquariids,passaggio inferiore,733
+2026-09-25,☄ Northern delta-Aquariids,sorge,1020
+2026-09-25,☄ chi-Taurids,culmina,36
+2026-09-25,☄ chi-Taurids,tramonta,493
+2026-09-25,☄ chi-Taurids,passaggio inferiore,754
+2026-09-25,☄ chi-Taurids,sorge,1015
+2026-09-25,☄ kappa-Cygnids,passaggio inferiore,453
+2026-09-25,☄ kappa-Cygnids,culmina,1171
+2026-09-25,☄ Perseids,culmina,355
+2026-09-25,☄ Perseids,passaggio inferiore,1073
+2026-09-25,☄ Northern Taurids,culmina,9
+2026-09-25,☄ Northern Taurids,tramonta,425
+2026-09-25,☄ Northern Taurids,passaggio inferiore,727
+2026-09-25,☄ Northern Taurids,sorge,1030
+2026-09-25,☄ omicron-Eridanids,culmina,47
+2026-09-25,☄ omicron-Eridanids,tramonta,418
+2026-09-25,☄ omicron-Eridanids,passaggio inferiore,765
+2026-09-25,☄ omicron-Eridanids,sorge,1112
+2026-09-25,☄ eta-Eridanids,culmina,250
+2026-09-25,☄ eta-Eridanids,tramonta,605
+2026-09-25,☄ eta-Eridanids,passaggio inferiore,968
+2026-09-25,☄ eta-Eridanids,sorge,1330
+2026-09-25,☄ sigma-Hydrids,culmina,185
+2026-09-25,☄ sigma-Hydrids,tramonta,653
+2026-09-25,☄ sigma-Hydrids,passaggio inferiore,903
+2026-09-25,☄ sigma-Hydrids,sorge,1153
+2026-09-25,Sole −12° mattino,,234
+2026-09-25,Sole −12° sera,,1085
+2026-09-26,Sole,sorge,307
+2026-09-26,Sole,culmina,660
+2026-09-26,Sole,tramonta,1013
+2026-09-26,Sole,passaggio inferiore,1378
+2026-09-26,Luna,tramonta,293
+2026-09-26,Luna,passaggio inferiore,651
+2026-09-26,Luna,sorge,1008
+2026-09-26,Luna,culmina,1369
+2026-09-26,Mercurio,passaggio inferiore,20
+2026-09-26,Mercurio,sorge,419
+2026-09-26,Mercurio,culmina,738
+2026-09-26,Mercurio,tramonta,1057
+2026-09-26,Venere,passaggio inferiore,70
+2026-09-26,Venere,sorge,489
+2026-09-26,Venere,culmina,788
+2026-09-26,Venere,tramonta,1087
+2026-09-26,Marte,culmina,413
+2026-09-26,Marte,tramonta,862
+2026-09-26,Marte,passaggio inferiore,1131
+2026-09-26,Marte,sorge,1399
+2026-09-26,Giove,sorge,68
+2026-09-26,Giove,culmina,493
+2026-09-26,Giove,tramonta,917
+2026-09-26,Giove,passaggio inferiore,1211
+2026-09-26,Saturno,tramonta,352
+2026-09-26,Saturno,passaggio inferiore,691
+2026-09-26,Saturno,sorge,1031
+2026-09-26,Saturno,culmina,1410
+2026-09-26,Urano,culmina,183
+2026-09-26,Urano,tramonta,638
+2026-09-26,Urano,passaggio inferiore,901
+2026-09-26,Urano,sorge,1165
+2026-09-26,Nettuno,tramonta,304
+2026-09-26,Nettuno,passaggio inferiore,658
+2026-09-26,Nettuno,sorge,1012
+2026-09-26,Nettuno,culmina,1376
+2026-09-26,Nodo Nord,tramonta,117
+2026-09-26,Nodo Nord,passaggio inferiore,528
+2026-09-26,Nodo Nord,sorge,939
+2026-09-26,Nodo Nord,culmina,1246
+2026-09-26,☄ Daytime kappa-Leonids,sorge,154
+2026-09-26,☄ Daytime kappa-Leonids,culmina,577
+2026-09-26,☄ Daytime kappa-Leonids,tramonta,1000
+2026-09-26,☄ Daytime kappa-Leonids,passaggio inferiore,1295
+2026-09-26,☄ Daytime Sextantids,sorge,176
+2026-09-26,☄ Daytime Sextantids,culmina,537
+2026-09-26,☄ Daytime Sextantids,tramonta,897
+2026-09-26,☄ Daytime Sextantids,passaggio inferiore,1255
+2026-09-26,☄ Northern iota-Aquariids,tramonta,384
+2026-09-26,☄ Northern iota-Aquariids,passaggio inferiore,702
+2026-09-26,☄ Northern iota-Aquariids,sorge,1019
+2026-09-26,☄ Northern iota-Aquariids,culmina,1420
+2026-09-26,☄ October Camelopardalids,culmina,586
+2026-09-26,☄ October Camelopardalids,passaggio inferiore,1304
+2026-09-26,☄ chi-Cygnids,passaggio inferiore,391
+2026-09-26,☄ chi-Cygnids,culmina,1109
+2026-09-26,☄ October Draconids,passaggio inferiore,250
+2026-09-26,☄ October Draconids,culmina,968
+2026-09-26,☄ September epsilon-Perseids,culmina,195
+2026-09-26,☄ September epsilon-Perseids,tramonta,799
+2026-09-26,☄ September epsilon-Perseids,passaggio inferiore,913
+2026-09-26,☄ September epsilon-Perseids,sorge,1027
+2026-09-26,☄ nu-Eridanids,culmina,248
+2026-09-26,☄ nu-Eridanids,tramonta,635
+2026-09-26,☄ nu-Eridanids,passaggio inferiore,966
+2026-09-26,☄ nu-Eridanids,sorge,1297
+2026-09-26,☄ Northern delta-Piscids,culmina,1437
+2026-09-26,☄ Northern delta-Piscids,tramonta,419
+2026-09-26,☄ Northern delta-Piscids,passaggio inferiore,719
+2026-09-26,☄ Northern delta-Piscids,sorge,1018
+2026-09-26,☄ pi6-Orionids,culmina,281
+2026-09-26,☄ pi6-Orionids,tramonta,649
+2026-09-26,☄ pi6-Orionids,passaggio inferiore,999
+2026-09-26,☄ pi6-Orionids,sorge,1349
+2026-09-26,☄ xi-Draconids,culmina,444
+2026-09-26,☄ xi-Draconids,passaggio inferiore,1162
+2026-09-26,☄ epsilon-Geminids,culmina,258
+2026-09-26,☄ epsilon-Geminids,tramonta,765
+2026-09-26,☄ epsilon-Geminids,passaggio inferiore,976
+2026-09-26,☄ epsilon-Geminids,sorge,1186
+2026-09-26,☄ tau-Cancrids,culmina,391
+2026-09-26,☄ tau-Cancrids,tramonta,895
+2026-09-26,☄ tau-Cancrids,passaggio inferiore,1109
+2026-09-26,☄ tau-Cancrids,sorge,1323
+2026-09-26,☄ Southern Taurids,culmina,19
+2026-09-26,☄ Southern Taurids,tramonta,406
+2026-09-26,☄ Southern Taurids,passaggio inferiore,737
+2026-09-26,☄ Southern Taurids,sorge,1067
+2026-09-26,☄ Aurigids,culmina,401
+2026-09-26,☄ Aurigids,tramonta,990
+2026-09-26,☄ Aurigids,passaggio inferiore,1119
+2026-09-26,☄ Aurigids,sorge,1248
+2026-09-26,☄ Orionids,culmina,231
+2026-09-26,☄ Orionids,tramonta,654
+2026-09-26,☄ Orionids,passaggio inferiore,949
+2026-09-26,☄ Orionids,sorge,1244
+2026-09-26,☄ omicron-Geminids,culmina,493
+2026-09-26,☄ omicron-Geminids,tramonta,1114
+2026-09-26,☄ omicron-Geminids,passaggio inferiore,1212
+2026-09-26,☄ omicron-Geminids,sorge,1309
+2026-09-26,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,314
+2026-09-26,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,655
+2026-09-26,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,997
+2026-09-26,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1373
+2026-09-26,☄ Northern delta-Aquariids,culmina,15
+2026-09-26,☄ Northern delta-Aquariids,tramonta,447
+2026-09-26,☄ Northern delta-Aquariids,passaggio inferiore,733
+2026-09-26,☄ Northern delta-Aquariids,sorge,1018
+2026-09-26,☄ chi-Taurids,culmina,36
+2026-09-26,☄ chi-Taurids,tramonta,494
+2026-09-26,☄ chi-Taurids,passaggio inferiore,754
+2026-09-26,☄ chi-Taurids,sorge,1014
+2026-09-26,☄ kappa-Cygnids,passaggio inferiore,452
+2026-09-26,☄ kappa-Cygnids,culmina,1170
+2026-09-26,☄ Perseids,culmina,351
+2026-09-26,☄ Perseids,passaggio inferiore,1069
+2026-09-26,☄ Northern Taurids,culmina,9
+2026-09-26,☄ Northern Taurids,tramonta,425
+2026-09-26,☄ Northern Taurids,passaggio inferiore,727
+2026-09-26,☄ Northern Taurids,sorge,1028
+2026-09-26,☄ omicron-Eridanids,culmina,45
+2026-09-26,☄ omicron-Eridanids,tramonta,416
+2026-09-26,☄ omicron-Eridanids,passaggio inferiore,763
+2026-09-26,☄ omicron-Eridanids,sorge,1111
+2026-09-26,☄ eta-Eridanids,culmina,246
+2026-09-26,☄ eta-Eridanids,tramonta,601
+2026-09-26,☄ eta-Eridanids,passaggio inferiore,964
+2026-09-26,☄ eta-Eridanids,sorge,1326
+2026-09-26,☄ sigma-Hydrids,culmina,181
+2026-09-26,☄ sigma-Hydrids,tramonta,649
+2026-09-26,☄ sigma-Hydrids,passaggio inferiore,899
+2026-09-26,☄ sigma-Hydrids,sorge,1149
+2026-09-26,Sole −12° mattino,,235
+2026-09-26,Sole −12° sera,,1083
+2026-09-27,Sole,sorge,308
+2026-09-27,Sole,culmina,660
+2026-09-27,Sole,tramonta,1011
+2026-09-27,Sole,passaggio inferiore,1378
+2026-09-27,Luna,tramonta,362
+2026-09-27,Luna,passaggio inferiore,697
+2026-09-27,Luna,sorge,1032
+2026-09-27,Luna,culmina,1415
+2026-09-27,Mercurio,passaggio inferiore,21
+2026-09-27,Mercurio,sorge,423
+2026-09-27,Mercurio,culmina,739
+2026-09-27,Mercurio,tramonta,1056
+2026-09-27,Venere,passaggio inferiore,67
+2026-09-27,Venere,sorge,487
+2026-09-27,Venere,culmina,785
+2026-09-27,Venere,tramonta,1083
+2026-09-27,Marte,culmina,411
+2026-09-27,Marte,tramonta,860
+2026-09-27,Marte,passaggio inferiore,1129
+2026-09-27,Marte,sorge,1398
+2026-09-27,Giove,sorge,65
+2026-09-27,Giove,culmina,490
+2026-09-27,Giove,tramonta,914
+2026-09-27,Giove,passaggio inferiore,1208
+2026-09-27,Saturno,tramonta,348
+2026-09-27,Saturno,passaggio inferiore,687
+2026-09-27,Saturno,sorge,1027
+2026-09-27,Saturno,culmina,1405
+2026-09-27,Urano,culmina,179
+2026-09-27,Urano,tramonta,634
+2026-09-27,Urano,passaggio inferiore,898
+2026-09-27,Urano,sorge,1161
+2026-09-27,Nettuno,tramonta,300
+2026-09-27,Nettuno,passaggio inferiore,654
+2026-09-27,Nettuno,sorge,1008
+2026-09-27,Nettuno,culmina,1372
+2026-09-27,Nodo Nord,tramonta,110
+2026-09-27,Nodo Nord,passaggio inferiore,522
+2026-09-27,Nodo Nord,sorge,934
+2026-09-27,Nodo Nord,culmina,1240
+2026-09-27,☄ Daytime kappa-Leonids,sorge,154
+2026-09-27,☄ Daytime kappa-Leonids,culmina,575
+2026-09-27,☄ Daytime kappa-Leonids,tramonta,997
+2026-09-27,☄ Daytime kappa-Leonids,passaggio inferiore,1293
+2026-09-27,☄ Daytime Sextantids,sorge,177
+2026-09-27,☄ Daytime Sextantids,culmina,535
+2026-09-27,☄ Daytime Sextantids,tramonta,894
+2026-09-27,☄ Daytime Sextantids,passaggio inferiore,1254
+2026-09-27,☄ October Camelopardalids,culmina,583
+2026-09-27,☄ October Camelopardalids,passaggio inferiore,1301
+2026-09-27,☄ Northern iota-Aquariids,tramonta,385
+2026-09-27,☄ Northern iota-Aquariids,passaggio inferiore,701
+2026-09-27,☄ Northern iota-Aquariids,sorge,1017
+2026-09-27,☄ Northern iota-Aquariids,culmina,1419
+2026-09-27,☄ October Draconids,passaggio inferiore,246
+2026-09-27,☄ October Draconids,culmina,964
+2026-09-27,☄ chi-Cygnids,passaggio inferiore,385
+2026-09-27,☄ chi-Cygnids,culmina,1103
+2026-09-27,☄ September epsilon-Perseids,culmina,195
+2026-09-27,☄ September epsilon-Perseids,tramonta,800
+2026-09-27,☄ September epsilon-Perseids,passaggio inferiore,913
+2026-09-27,☄ September epsilon-Perseids,sorge,1027
+2026-09-27,☄ nu-Eridanids,culmina,247
+2026-09-27,☄ nu-Eridanids,tramonta,636
+2026-09-27,☄ nu-Eridanids,passaggio inferiore,965
+2026-09-27,☄ nu-Eridanids,sorge,1295
+2026-09-27,☄ xi-Draconids,culmina,446
+2026-09-27,☄ xi-Draconids,passaggio inferiore,1164
+2026-09-27,☄ epsilon-Geminids,culmina,257
+2026-09-27,☄ epsilon-Geminids,tramonta,764
+2026-09-27,☄ epsilon-Geminids,passaggio inferiore,975
+2026-09-27,☄ epsilon-Geminids,sorge,1187
+2026-09-27,☄ Northern delta-Piscids,tramonta,420
+2026-09-27,☄ Northern delta-Piscids,passaggio inferiore,718
+2026-09-27,☄ Northern delta-Piscids,sorge,1016
+2026-09-27,☄ Northern delta-Piscids,culmina,1436
+2026-09-27,☄ pi6-Orionids,culmina,281
+2026-09-27,☄ pi6-Orionids,tramonta,650
+2026-09-27,☄ pi6-Orionids,passaggio inferiore,999
+2026-09-27,☄ pi6-Orionids,sorge,1348
+2026-09-27,☄ tau-Cancrids,culmina,390
+2026-09-27,☄ tau-Cancrids,tramonta,895
+2026-09-27,☄ tau-Cancrids,passaggio inferiore,1108
+2026-09-27,☄ tau-Cancrids,sorge,1322
+2026-09-27,☄ Southern Taurids,culmina,18
+2026-09-27,☄ Southern Taurids,tramonta,406
+2026-09-27,☄ Southern Taurids,passaggio inferiore,736
+2026-09-27,☄ Southern Taurids,sorge,1065
+2026-09-27,☄ Aurigids,culmina,397
+2026-09-27,☄ Aurigids,tramonta,986
+2026-09-27,☄ Aurigids,passaggio inferiore,1115
+2026-09-27,☄ Aurigids,sorge,1244
+2026-09-27,☄ Orionids,culmina,230
+2026-09-27,☄ Orionids,tramonta,654
+2026-09-27,☄ Orionids,passaggio inferiore,948
+2026-09-27,☄ Orionids,sorge,1243
+2026-09-27,☄ omicron-Geminids,culmina,494
+2026-09-27,☄ omicron-Geminids,tramonta,1114
+2026-09-27,☄ omicron-Geminids,passaggio inferiore,1212
+2026-09-27,☄ omicron-Geminids,sorge,1311
+2026-09-27,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,310
+2026-09-27,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,651
+2026-09-27,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,993
+2026-09-27,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1369
+2026-09-27,☄ chi-Taurids,culmina,36
+2026-09-27,☄ chi-Taurids,tramonta,494
+2026-09-27,☄ chi-Taurids,passaggio inferiore,754
+2026-09-27,☄ chi-Taurids,sorge,1013
+2026-09-27,☄ Northern delta-Aquariids,culmina,14
+2026-09-27,☄ Northern delta-Aquariids,tramonta,448
+2026-09-27,☄ Northern delta-Aquariids,passaggio inferiore,732
+2026-09-27,☄ Northern delta-Aquariids,sorge,1016
+2026-09-27,☄ kappa-Cygnids,passaggio inferiore,450
+2026-09-27,☄ kappa-Cygnids,culmina,1168
+2026-09-27,☄ Northern Taurids,culmina,8
+2026-09-27,☄ Northern Taurids,tramonta,425
+2026-09-27,☄ Northern Taurids,passaggio inferiore,726
+2026-09-27,☄ Northern Taurids,sorge,1027
+2026-09-27,☄ Perseids,culmina,347
+2026-09-27,☄ Perseids,passaggio inferiore,1065
+2026-09-27,☄ omicron-Eridanids,culmina,44
+2026-09-27,☄ omicron-Eridanids,tramonta,414
+2026-09-27,☄ omicron-Eridanids,passaggio inferiore,762
+2026-09-27,☄ omicron-Eridanids,sorge,1110
+2026-09-27,☄ sigma-Hydrids,culmina,180
+2026-09-27,☄ sigma-Hydrids,tramonta,647
+2026-09-27,☄ sigma-Hydrids,passaggio inferiore,898
+2026-09-27,☄ sigma-Hydrids,sorge,1150
+2026-09-27,Sole −12° mattino,,237
+2026-09-27,Sole −12° sera,,1081
+2026-09-28,Sole,sorge,309
+2026-09-28,Sole,culmina,659
+2026-09-28,Sole,tramonta,1009
+2026-09-28,Sole,passaggio inferiore,1377
+2026-09-28,Luna,culmina,27
+2026-09-28,Luna,tramonta,432
+2026-09-28,Luna,passaggio inferiore,745
+2026-09-28,Luna,sorge,1058
+2026-09-28,Mercurio,passaggio inferiore,23
+2026-09-28,Mercurio,sorge,426
+2026-09-28,Mercurio,culmina,741
+2026-09-28,Mercurio,tramonta,1055
+2026-09-28,Venere,passaggio inferiore,64
+2026-09-28,Venere,sorge,484
+2026-09-28,Venere,culmina,782
+2026-09-28,Venere,tramonta,1080
+2026-09-28,Marte,culmina,410
+2026-09-28,Marte,tramonta,858
+2026-09-28,Marte,passaggio inferiore,1128
+2026-09-28,Marte,sorge,1398
+2026-09-28,Giove,sorge,62
+2026-09-28,Giove,culmina,486
+2026-09-28,Giove,tramonta,910
+2026-09-28,Giove,passaggio inferiore,1204
+2026-09-28,Saturno,tramonta,344
+2026-09-28,Saturno,passaggio inferiore,683
+2026-09-28,Saturno,sorge,1023
+2026-09-28,Saturno,culmina,1401
+2026-09-28,Urano,culmina,175
+2026-09-28,Urano,tramonta,630
+2026-09-28,Urano,passaggio inferiore,893
+2026-09-28,Urano,sorge,1157
+2026-09-28,Nettuno,tramonta,296
+2026-09-28,Nettuno,passaggio inferiore,650
+2026-09-28,Nettuno,sorge,1004
+2026-09-28,Nettuno,culmina,1368
+2026-09-28,Nodo Nord,tramonta,103
+2026-09-28,Nodo Nord,passaggio inferiore,516
+2026-09-28,Nodo Nord,sorge,928
+2026-09-28,Nodo Nord,culmina,1234
+2026-09-28,☄ Daytime Sextantids,sorge,178
+2026-09-28,☄ Daytime Sextantids,culmina,534
+2026-09-28,☄ Daytime Sextantids,tramonta,891
+2026-09-28,☄ Daytime Sextantids,passaggio inferiore,1252
+2026-09-28,☄ Daytime kappa-Leonids,sorge,154
+2026-09-28,☄ Daytime kappa-Leonids,culmina,574
+2026-09-28,☄ Daytime kappa-Leonids,tramonta,994
+2026-09-28,☄ Daytime kappa-Leonids,passaggio inferiore,1292
+2026-09-28,☄ October Camelopardalids,culmina,581
+2026-09-28,☄ October Camelopardalids,passaggio inferiore,1299
+2026-09-28,☄ Northern iota-Aquariids,tramonta,385
+2026-09-28,☄ Northern iota-Aquariids,passaggio inferiore,700
+2026-09-28,☄ Northern iota-Aquariids,sorge,1014
+2026-09-28,☄ Northern iota-Aquariids,culmina,1418
+2026-09-28,☄ October Draconids,passaggio inferiore,242
+2026-09-28,☄ October Draconids,culmina,960
+2026-09-28,☄ chi-Cygnids,passaggio inferiore,380
+2026-09-28,☄ chi-Cygnids,culmina,1098
+2026-09-28,☄ September epsilon-Perseids,culmina,196
+2026-09-28,☄ September epsilon-Perseids,tramonta,801
+2026-09-28,☄ September epsilon-Perseids,passaggio inferiore,914
+2026-09-28,☄ September epsilon-Perseids,sorge,1027
+2026-09-28,☄ October Ursae Majorids,culmina,409
+2026-09-28,☄ October Ursae Majorids,passaggio inferiore,1127
+2026-09-28,☄ nu-Eridanids,culmina,246
+2026-09-28,☄ nu-Eridanids,tramonta,636
+2026-09-28,☄ nu-Eridanids,passaggio inferiore,964
+2026-09-28,☄ nu-Eridanids,sorge,1292
+2026-09-28,☄ xi-Draconids,culmina,448
+2026-09-28,☄ xi-Draconids,passaggio inferiore,1166
+2026-09-28,☄ epsilon-Geminids,culmina,256
+2026-09-28,☄ epsilon-Geminids,tramonta,762
+2026-09-28,☄ epsilon-Geminids,passaggio inferiore,974
+2026-09-28,☄ epsilon-Geminids,sorge,1187
+2026-09-28,☄ tau-Cancrids,culmina,390
+2026-09-28,☄ tau-Cancrids,tramonta,894
+2026-09-28,☄ tau-Cancrids,passaggio inferiore,1108
+2026-09-28,☄ tau-Cancrids,sorge,1322
+2026-09-28,☄ Southern Taurids,culmina,17
+2026-09-28,☄ Southern Taurids,tramonta,406
+2026-09-28,☄ Southern Taurids,passaggio inferiore,735
+2026-09-28,☄ Southern Taurids,sorge,1064
+2026-09-28,☄ Northern delta-Piscids,tramonta,421
+2026-09-28,☄ Northern delta-Piscids,passaggio inferiore,717
+2026-09-28,☄ Northern delta-Piscids,sorge,1013
+2026-09-28,☄ Northern delta-Piscids,culmina,1435
+2026-09-28,☄ pi6-Orionids,culmina,281
+2026-09-28,☄ pi6-Orionids,tramonta,650
+2026-09-28,☄ pi6-Orionids,passaggio inferiore,999
+2026-09-28,☄ pi6-Orionids,sorge,1347
+2026-09-28,☄ Orionids,culmina,229
+2026-09-28,☄ Orionids,tramonta,653
+2026-09-28,☄ Orionids,passaggio inferiore,948
+2026-09-28,☄ Orionids,sorge,1242
+2026-09-28,☄ Aurigids,culmina,393
+2026-09-28,☄ Aurigids,tramonta,982
+2026-09-28,☄ Aurigids,passaggio inferiore,1111
+2026-09-28,☄ Aurigids,sorge,1240
+2026-09-28,☄ omicron-Geminids,culmina,493
+2026-09-28,☄ omicron-Geminids,tramonta,1112
+2026-09-28,☄ omicron-Geminids,passaggio inferiore,1211
+2026-09-28,☄ omicron-Geminids,sorge,1311
+2026-09-28,☄ chi-Taurids,culmina,35
+2026-09-28,☄ chi-Taurids,tramonta,494
+2026-09-28,☄ chi-Taurids,passaggio inferiore,754
+2026-09-28,☄ chi-Taurids,sorge,1013
+2026-09-28,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,306
+2026-09-28,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,647
+2026-09-28,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,989
+2026-09-28,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1365
+2026-09-28,☄ Northern delta-Aquariids,culmina,13
+2026-09-28,☄ Northern delta-Aquariids,tramonta,449
+2026-09-28,☄ Northern delta-Aquariids,passaggio inferiore,731
+2026-09-28,☄ Northern delta-Aquariids,sorge,1013
+2026-09-28,☄ Northern Taurids,culmina,7
+2026-09-28,☄ Northern Taurids,tramonta,426
+2026-09-28,☄ Northern Taurids,passaggio inferiore,725
+2026-09-28,☄ Northern Taurids,sorge,1025
+2026-09-28,☄ omicron-Eridanids,culmina,42
+2026-09-28,☄ omicron-Eridanids,tramonta,412
+2026-09-28,☄ omicron-Eridanids,passaggio inferiore,760
+2026-09-28,☄ omicron-Eridanids,sorge,1109
+2026-09-28,☄ kappa-Cygnids,passaggio inferiore,449
+2026-09-28,☄ kappa-Cygnids,culmina,1167
+2026-09-28,☄ sigma-Hydrids,culmina,180
+2026-09-28,☄ sigma-Hydrids,tramonta,644
+2026-09-28,☄ sigma-Hydrids,passaggio inferiore,898
+2026-09-28,☄ sigma-Hydrids,sorge,1151
+2026-09-28,Sole −12° mattino,,238
+2026-09-28,Sole −12° sera,,1079
+2026-09-10,Sole,sorge,286
+2026-09-10,Sole,culmina,666
+2026-09-10,Sole,tramonta,1045
+2026-09-10,Sole,passaggio inferiore,1384
+2026-09-10,Luna,sorge,242
+2026-09-10,Luna,culmina,635
+2026-09-10,Luna,tramonta,1028
+2026-09-10,Luna,passaggio inferiore,1353
+2026-09-10,Mercurio,sorge,350
+2026-09-10,Mercurio,culmina,709
+2026-09-10,Mercurio,tramonta,1069
+2026-09-10,Mercurio,passaggio inferiore,1427
+2026-09-10,Venere,passaggio inferiore,104
+2026-09-10,Venere,sorge,512
+2026-09-10,Venere,culmina,822
+2026-09-10,Venere,tramonta,1132
+2026-09-10,Marte,culmina,435
+2026-09-10,Marte,tramonta,893
+2026-09-10,Marte,passaggio inferiore,1153
+2026-09-10,Marte,sorge,1412
+2026-09-10,Giove,sorge,114
+2026-09-10,Giove,culmina,543
+2026-09-10,Giove,tramonta,972
+2026-09-10,Giove,passaggio inferiore,1261
+2026-09-10,Saturno,culmina,41
+2026-09-10,Saturno,tramonta,421
+2026-09-10,Saturno,passaggio inferiore,759
+2026-09-10,Saturno,sorge,1096
+2026-09-10,Urano,culmina,247
+2026-09-10,Urano,tramonta,701
+2026-09-10,Urano,passaggio inferiore,965
+2026-09-10,Urano,sorge,1229
+2026-09-10,Nettuno,culmina,5
+2026-09-10,Nettuno,tramonta,369
+2026-09-10,Nettuno,passaggio inferiore,723
+2026-09-10,Nettuno,sorge,1076
+2026-09-10,Nodo Nord,tramonta,189
+2026-09-10,Nodo Nord,passaggio inferiore,597
+2026-09-10,Nodo Nord,sorge,1006
+2026-09-10,Nodo Nord,culmina,1315
+2026-09-10,☄ nu-Eridanids,culmina,262
+2026-09-10,☄ nu-Eridanids,tramonta,624
+2026-09-10,☄ nu-Eridanids,passaggio inferiore,980
+2026-09-10,☄ nu-Eridanids,sorge,1335
+2026-09-10,☄ September epsilon-Perseids,culmina,185
+2026-09-10,☄ September epsilon-Perseids,tramonta,778
+2026-09-10,☄ September epsilon-Perseids,passaggio inferiore,903
+2026-09-10,☄ September epsilon-Perseids,sorge,1028
+2026-09-10,☄ chi-Cygnids,tramonta,251
+2026-09-10,☄ chi-Cygnids,passaggio inferiore,481
+2026-09-10,☄ chi-Cygnids,sorge,711
+2026-09-10,☄ chi-Cygnids,culmina,1199
+2026-09-10,☄ Northern delta-Piscids,culmina,14
+2026-09-10,☄ Northern delta-Piscids,tramonta,406
+2026-09-10,☄ Northern delta-Piscids,passaggio inferiore,733
+2026-09-10,☄ Northern delta-Piscids,sorge,1059
+2026-09-10,☄ pi6-Orionids,culmina,288
+2026-09-10,☄ pi6-Orionids,tramonta,646
+2026-09-10,☄ pi6-Orionids,passaggio inferiore,1006
+2026-09-10,☄ pi6-Orionids,sorge,1367
+2026-09-10,☄ Northern iota-Aquariids,tramonta,382
+2026-09-10,☄ Northern iota-Aquariids,passaggio inferiore,719
+2026-09-10,☄ Northern iota-Aquariids,sorge,1055
+2026-09-10,☄ Northern iota-Aquariids,culmina,1437
+2026-09-10,☄ Aurigids,culmina,397
+2026-09-10,☄ Aurigids,tramonta,988
+2026-09-10,☄ Aurigids,passaggio inferiore,1115
+2026-09-10,☄ Aurigids,sorge,1242
+2026-09-10,☄ August gamma-Cepheids,culmina,15
+2026-09-10,☄ August gamma-Cepheids,passaggio inferiore,733
+2026-09-10,☄ Daytime kappa-Leonids,sorge,156
+2026-09-10,☄ Daytime kappa-Leonids,culmina,601
+2026-09-10,☄ Daytime kappa-Leonids,tramonta,1047
+2026-09-10,☄ Daytime kappa-Leonids,passaggio inferiore,1319
+2026-09-10,☄ omicron-Geminids,culmina,480
+2026-09-10,☄ omicron-Geminids,tramonta,1118
+2026-09-10,☄ omicron-Geminids,passaggio inferiore,1198
+2026-09-10,☄ omicron-Geminids,sorge,1277
+2026-09-10,☄ Daytime Sextantids,sorge,170
+2026-09-10,☄ Daytime Sextantids,culmina,560
+2026-09-10,☄ Daytime Sextantids,tramonta,951
+2026-09-10,☄ Daytime Sextantids,passaggio inferiore,1278
+2026-09-10,☄ August Draconids,passaggio inferiore,285
+2026-09-10,☄ August Draconids,culmina,1003
+2026-09-10,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,299
+2026-09-10,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-10,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1018
+2026-09-10,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1377
+2026-09-10,☄ Northern delta-Aquariids,culmina,28
+2026-09-10,☄ Northern delta-Aquariids,tramonta,436
+2026-09-10,☄ Northern delta-Aquariids,passaggio inferiore,746
+2026-09-10,☄ Northern delta-Aquariids,sorge,1056
+2026-09-10,☄ kappa-Cygnids,passaggio inferiore,477
+2026-09-10,☄ kappa-Cygnids,culmina,1195
+2026-09-10,☄ Perseids,culmina,341
+2026-09-10,☄ Perseids,passaggio inferiore,1060
+2026-09-10,☄ eta-Eridanids,culmina,269
+2026-09-10,☄ eta-Eridanids,tramonta,612
+2026-09-10,☄ eta-Eridanids,passaggio inferiore,987
+2026-09-10,☄ eta-Eridanids,sorge,1363
+2026-09-10,☄ tau-Cancrids,culmina,398
+2026-09-10,☄ tau-Cancrids,tramonta,902
+2026-09-10,☄ tau-Cancrids,passaggio inferiore,1116
+2026-09-10,☄ tau-Cancrids,sorge,1329
+2026-09-10,☄ Southern Taurids,culmina,35
+2026-09-10,☄ Southern Taurids,tramonta,413
+2026-09-10,☄ Southern Taurids,passaggio inferiore,754
+2026-09-10,☄ Southern Taurids,sorge,1094
+2026-09-10,☄ Northern Taurids,culmina,20
+2026-09-10,☄ Northern Taurids,tramonta,423
+2026-09-10,☄ Northern Taurids,passaggio inferiore,738
+2026-09-10,☄ Northern Taurids,sorge,1053
+2026-09-10,"☄ Antielio (ANT, ex Piscidi)",tramonta,286
+2026-09-10,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,666
+2026-09-10,"☄ Antielio (ANT, ex Piscidi)",sorge,1045
+2026-09-10,"☄ Antielio (ANT, ex Piscidi)",culmina,1384
+2026-09-10,Sole −12° mattino,,213
+2026-09-10,Sole −12° sera,,1116
+2026-09-12,Sole,sorge,289
+2026-09-12,Sole,culmina,665
+2026-09-12,Sole,tramonta,1041
+2026-09-12,Sole,passaggio inferiore,1383
+2026-09-12,Luna,passaggio inferiore,9
+2026-09-12,Luna,sorge,380
+2026-09-12,Luna,culmina,727
+2026-09-12,Luna,tramonta,1075
+2026-09-12,Mercurio,sorge,360
+2026-09-12,Mercurio,culmina,714
+2026-09-12,Mercurio,tramonta,1068
+2026-09-12,Mercurio,passaggio inferiore,1432
+2026-09-12,Venere,passaggio inferiore,101
+2026-09-12,Venere,sorge,511
+2026-09-12,Venere,culmina,819
+2026-09-12,Venere,tramonta,1127
+2026-09-12,Marte,culmina,432
+2026-09-12,Marte,tramonta,890
+2026-09-12,Marte,passaggio inferiore,1150
+2026-09-12,Marte,sorge,1411
+2026-09-12,Giove,sorge,109
+2026-09-12,Giove,culmina,537
+2026-09-12,Giove,tramonta,966
+2026-09-12,Giove,passaggio inferiore,1255
+2026-09-12,Saturno,culmina,32
+2026-09-12,Saturno,tramonta,413
+2026-09-12,Saturno,passaggio inferiore,750
+2026-09-12,Saturno,sorge,1088
+2026-09-12,Urano,culmina,239
+2026-09-12,Urano,tramonta,693
+2026-09-12,Urano,passaggio inferiore,957
+2026-09-12,Urano,sorge,1221
+2026-09-12,Nettuno,tramonta,361
+2026-09-12,Nettuno,passaggio inferiore,715
+2026-09-12,Nettuno,sorge,1068
+2026-09-12,Nettuno,culmina,1433
+2026-09-12,Nodo Nord,tramonta,174
+2026-09-12,Nodo Nord,passaggio inferiore,584
+2026-09-12,Nodo Nord,sorge,995
+2026-09-12,Nodo Nord,culmina,1302
+2026-09-12,☄ September epsilon-Perseids,culmina,186
+2026-09-12,☄ September epsilon-Perseids,tramonta,780
+2026-09-12,☄ September epsilon-Perseids,passaggio inferiore,904
+2026-09-12,☄ September epsilon-Perseids,sorge,1028
+2026-09-12,☄ nu-Eridanids,culmina,260
+2026-09-12,☄ nu-Eridanids,tramonta,626
+2026-09-12,☄ nu-Eridanids,passaggio inferiore,978
+2026-09-12,☄ nu-Eridanids,sorge,1330
+2026-09-12,☄ chi-Cygnids,tramonta,254
+2026-09-12,☄ chi-Cygnids,passaggio inferiore,470
+2026-09-12,☄ chi-Cygnids,sorge,686
+2026-09-12,☄ chi-Cygnids,culmina,1188
+2026-09-12,☄ Northern iota-Aquariids,tramonta,382
+2026-09-12,☄ Northern iota-Aquariids,passaggio inferiore,716
+2026-09-12,☄ Northern iota-Aquariids,sorge,1051
+2026-09-12,☄ Northern iota-Aquariids,culmina,1434
+2026-09-12,☄ Northern delta-Piscids,culmina,13
+2026-09-12,☄ Northern delta-Piscids,tramonta,408
+2026-09-12,☄ Northern delta-Piscids,passaggio inferiore,731
+2026-09-12,☄ Northern delta-Piscids,sorge,1054
+2026-09-12,☄ pi6-Orionids,culmina,287
+2026-09-12,☄ pi6-Orionids,tramonta,646
+2026-09-12,☄ pi6-Orionids,passaggio inferiore,1005
+2026-09-12,☄ pi6-Orionids,sorge,1364
+2026-09-12,☄ Aurigids,culmina,398
+2026-09-12,☄ Aurigids,tramonta,989
+2026-09-12,☄ Aurigids,passaggio inferiore,1116
+2026-09-12,☄ Aurigids,sorge,1244
+2026-09-12,☄ Daytime kappa-Leonids,sorge,155
+2026-09-12,☄ Daytime kappa-Leonids,culmina,598
+2026-09-12,☄ Daytime kappa-Leonids,tramonta,1041
+2026-09-12,☄ Daytime kappa-Leonids,passaggio inferiore,1316
+2026-09-12,☄ August gamma-Cepheids,culmina,7
+2026-09-12,☄ August gamma-Cepheids,passaggio inferiore,725
+2026-09-12,☄ Daytime Sextantids,sorge,164
+2026-09-12,☄ Daytime Sextantids,culmina,554
+2026-09-12,☄ Daytime Sextantids,tramonta,943
+2026-09-12,☄ Daytime Sextantids,passaggio inferiore,1272
+2026-09-12,☄ omicron-Geminids,culmina,481
+2026-09-12,☄ omicron-Geminids,tramonta,1118
+2026-09-12,☄ omicron-Geminids,passaggio inferiore,1199
+2026-09-12,☄ omicron-Geminids,sorge,1281
+2026-09-12,☄ August Draconids,passaggio inferiore,270
+2026-09-12,☄ August Draconids,culmina,988
+2026-09-12,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,301
+2026-09-12,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-12,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1016
+2026-09-12,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-12,☄ Northern delta-Aquariids,culmina,26
+2026-09-12,☄ Northern delta-Aquariids,tramonta,438
+2026-09-12,☄ Northern delta-Aquariids,passaggio inferiore,745
+2026-09-12,☄ Northern delta-Aquariids,sorge,1051
+2026-09-12,☄ kappa-Cygnids,passaggio inferiore,474
+2026-09-12,☄ kappa-Cygnids,culmina,1192
+2026-09-12,☄ Perseids,culmina,345
+2026-09-12,☄ Perseids,passaggio inferiore,1063
+2026-09-12,☄ eta-Eridanids,culmina,268
+2026-09-12,☄ eta-Eridanids,tramonta,613
+2026-09-12,☄ eta-Eridanids,passaggio inferiore,986
+2026-09-12,☄ eta-Eridanids,sorge,1360
+2026-09-12,☄ tau-Cancrids,culmina,397
+2026-09-12,☄ tau-Cancrids,tramonta,901
+2026-09-12,☄ tau-Cancrids,passaggio inferiore,1115
+2026-09-12,☄ tau-Cancrids,sorge,1328
+2026-09-12,☄ Southern Taurids,culmina,33
+2026-09-12,☄ Southern Taurids,tramonta,412
+2026-09-12,☄ Southern Taurids,passaggio inferiore,751
+2026-09-12,☄ Southern Taurids,sorge,1091
+2026-09-12,☄ Orionids,culmina,258
+2026-09-12,☄ Orionids,tramonta,680
+2026-09-12,☄ Orionids,passaggio inferiore,976
+2026-09-12,☄ Orionids,sorge,1272
+2026-09-12,☄ Northern Taurids,culmina,18
+2026-09-12,☄ Northern Taurids,tramonta,423
+2026-09-12,☄ Northern Taurids,passaggio inferiore,736
+2026-09-12,☄ Northern Taurids,sorge,1050
+2026-09-12,"☄ Antielio (ANT, ex Piscidi)",tramonta,289
+2026-09-12,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,665
+2026-09-12,"☄ Antielio (ANT, ex Piscidi)",sorge,1041
+2026-09-12,"☄ Antielio (ANT, ex Piscidi)",culmina,1383
+2026-09-12,Sole −12° mattino,,216
+2026-09-12,Sole −12° sera,,1112
+2026-09-13,Sole,sorge,290
+2026-09-13,Sole,culmina,665
+2026-09-13,Sole,tramonta,1039
+2026-09-13,Sole,passaggio inferiore,1383
+2026-09-13,Luna,passaggio inferiore,54
+2026-09-13,Luna,sorge,446
+2026-09-13,Luna,culmina,772
+2026-09-13,Luna,tramonta,1098
+2026-09-13,Mercurio,sorge,364
+2026-09-13,Mercurio,culmina,716
+2026-09-13,Mercurio,tramonta,1067
+2026-09-13,Mercurio,passaggio inferiore,1434
+2026-09-13,Venere,passaggio inferiore,99
+2026-09-13,Venere,sorge,510
+2026-09-13,Venere,culmina,817
+2026-09-13,Venere,tramonta,1125
+2026-09-13,Marte,culmina,431
+2026-09-13,Marte,tramonta,888
+2026-09-13,Marte,passaggio inferiore,1149
+2026-09-13,Marte,sorge,1410
+2026-09-13,Giove,sorge,106
+2026-09-13,Giove,culmina,534
+2026-09-13,Giove,tramonta,962
+2026-09-13,Giove,passaggio inferiore,1252
+2026-09-13,Saturno,culmina,28
+2026-09-13,Saturno,tramonta,408
+2026-09-13,Saturno,passaggio inferiore,746
+2026-09-13,Saturno,sorge,1084
+2026-09-13,Urano,culmina,235
+2026-09-13,Urano,tramonta,689
+2026-09-13,Urano,passaggio inferiore,953
+2026-09-13,Urano,sorge,1217
+2026-09-13,Nettuno,tramonta,357
+2026-09-13,Nettuno,passaggio inferiore,711
+2026-09-13,Nettuno,sorge,1064
+2026-09-13,Nettuno,culmina,1429
+2026-09-13,Nodo Nord,tramonta,167
+2026-09-13,Nodo Nord,passaggio inferiore,578
+2026-09-13,Nodo Nord,sorge,989
+2026-09-13,Nodo Nord,culmina,1296
+2026-09-13,☄ chi-Cygnids,tramonta,256
+2026-09-13,☄ chi-Cygnids,passaggio inferiore,464
+2026-09-13,☄ chi-Cygnids,sorge,673
+2026-09-13,☄ chi-Cygnids,culmina,1183
+2026-09-13,☄ September epsilon-Perseids,culmina,187
+2026-09-13,☄ September epsilon-Perseids,tramonta,781
+2026-09-13,☄ September epsilon-Perseids,passaggio inferiore,905
+2026-09-13,☄ September epsilon-Perseids,sorge,1028
+2026-09-13,☄ nu-Eridanids,culmina,259
+2026-09-13,☄ nu-Eridanids,tramonta,626
+2026-09-13,☄ nu-Eridanids,passaggio inferiore,977
+2026-09-13,☄ nu-Eridanids,sorge,1328
+2026-09-13,☄ Northern iota-Aquariids,tramonta,382
+2026-09-13,☄ Northern iota-Aquariids,passaggio inferiore,715
+2026-09-13,☄ Northern iota-Aquariids,sorge,1048
+2026-09-13,☄ Northern iota-Aquariids,culmina,1433
+2026-09-13,☄ Northern delta-Piscids,culmina,12
+2026-09-13,☄ Northern delta-Piscids,tramonta,408
+2026-09-13,☄ Northern delta-Piscids,passaggio inferiore,730
+2026-09-13,☄ Northern delta-Piscids,sorge,1051
+2026-09-13,☄ pi6-Orionids,culmina,287
+2026-09-13,☄ pi6-Orionids,tramonta,647
+2026-09-13,☄ pi6-Orionids,passaggio inferiore,1005
+2026-09-13,☄ pi6-Orionids,sorge,1363
+2026-09-13,☄ Aurigids,culmina,399
+2026-09-13,☄ Aurigids,tramonta,989
+2026-09-13,☄ Aurigids,passaggio inferiore,1117
+2026-09-13,☄ Aurigids,sorge,1244
+2026-09-13,☄ Daytime kappa-Leonids,sorge,155
+2026-09-13,☄ Daytime kappa-Leonids,culmina,597
+2026-09-13,☄ Daytime kappa-Leonids,tramonta,1038
+2026-09-13,☄ Daytime kappa-Leonids,passaggio inferiore,1315
+2026-09-13,☄ August gamma-Cepheids,culmina,1439
+2026-09-13,☄ August gamma-Cepheids,passaggio inferiore,721
+2026-09-13,☄ Daytime Sextantids,sorge,165
+2026-09-13,☄ Daytime Sextantids,culmina,552
+2026-09-13,☄ Daytime Sextantids,tramonta,940
+2026-09-13,☄ Daytime Sextantids,passaggio inferiore,1270
+2026-09-13,☄ omicron-Geminids,culmina,482
+2026-09-13,☄ omicron-Geminids,tramonta,1117
+2026-09-13,☄ omicron-Geminids,passaggio inferiore,1200
+2026-09-13,☄ omicron-Geminids,sorge,1283
+2026-09-13,☄ August Draconids,passaggio inferiore,263
+2026-09-13,☄ August Draconids,culmina,981
+2026-09-13,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,302
+2026-09-13,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-13,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1014
+2026-09-13,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-13,☄ Northern delta-Aquariids,culmina,26
+2026-09-13,☄ Northern delta-Aquariids,tramonta,438
+2026-09-13,☄ Northern delta-Aquariids,passaggio inferiore,744
+2026-09-13,☄ Northern delta-Aquariids,sorge,1049
+2026-09-13,☄ kappa-Cygnids,passaggio inferiore,472
+2026-09-13,☄ kappa-Cygnids,culmina,1191
+2026-09-13,☄ Perseids,culmina,347
+2026-09-13,☄ Perseids,passaggio inferiore,1065
+2026-09-13,☄ eta-Eridanids,culmina,268
+2026-09-13,☄ eta-Eridanids,tramonta,613
+2026-09-13,☄ eta-Eridanids,passaggio inferiore,986
+2026-09-13,☄ eta-Eridanids,sorge,1358
+2026-09-13,☄ tau-Cancrids,culmina,396
+2026-09-13,☄ tau-Cancrids,tramonta,901
+2026-09-13,☄ tau-Cancrids,passaggio inferiore,1114
+2026-09-13,☄ tau-Cancrids,sorge,1328
+2026-09-13,☄ Southern Taurids,culmina,32
+2026-09-13,☄ Southern Taurids,tramonta,411
+2026-09-13,☄ Southern Taurids,passaggio inferiore,750
+2026-09-13,☄ Southern Taurids,sorge,1089
+2026-09-13,☄ Orionids,culmina,254
+2026-09-13,☄ Orionids,tramonta,676
+2026-09-13,☄ Orionids,passaggio inferiore,972
+2026-09-13,☄ Orionids,sorge,1268
+2026-09-13,☄ Northern Taurids,culmina,18
+2026-09-13,☄ Northern Taurids,tramonta,423
+2026-09-13,☄ Northern Taurids,passaggio inferiore,736
+2026-09-13,☄ Northern Taurids,sorge,1049
+2026-09-13,"☄ Antielio (ANT, ex Piscidi)",tramonta,290
+2026-09-13,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,665
+2026-09-13,"☄ Antielio (ANT, ex Piscidi)",sorge,1039
+2026-09-13,"☄ Antielio (ANT, ex Piscidi)",culmina,1383
+2026-09-13,Sole −12° mattino,,218
+2026-09-13,Sole −12° sera,,1110
+2026-09-14,Sole,sorge,291
+2026-09-14,Sole,culmina,664
+2026-09-14,Sole,tramonta,1037
+2026-09-14,Sole,passaggio inferiore,1382
+2026-09-14,Luna,passaggio inferiore,99
+2026-09-14,Luna,sorge,511
+2026-09-14,Luna,culmina,817
+2026-09-14,Luna,tramonta,1123
+2026-09-14,Mercurio,sorge,369
+2026-09-14,Mercurio,culmina,718
+2026-09-14,Mercurio,tramonta,1066
+2026-09-14,Mercurio,passaggio inferiore,1436
+2026-09-14,Venere,passaggio inferiore,98
+2026-09-14,Venere,sorge,509
+2026-09-14,Venere,culmina,816
+2026-09-14,Venere,tramonta,1122
+2026-09-14,Marte,culmina,430
+2026-09-14,Marte,tramonta,886
+2026-09-14,Marte,passaggio inferiore,1148
+2026-09-14,Marte,sorge,1409
+2026-09-14,Giove,sorge,103
+2026-09-14,Giove,culmina,531
+2026-09-14,Giove,tramonta,959
+2026-09-14,Giove,passaggio inferiore,1249
+2026-09-14,Saturno,culmina,24
+2026-09-14,Saturno,tramonta,404
+2026-09-14,Saturno,passaggio inferiore,742
+2026-09-14,Saturno,sorge,1080
+2026-09-14,Urano,culmina,231
+2026-09-14,Urano,tramonta,685
+2026-09-14,Urano,passaggio inferiore,949
+2026-09-14,Urano,sorge,1213
+2026-09-14,Nettuno,tramonta,353
+2026-09-14,Nettuno,passaggio inferiore,707
+2026-09-14,Nettuno,sorge,1060
+2026-09-14,Nettuno,culmina,1425
+2026-09-14,Nodo Nord,tramonta,161
+2026-09-14,Nodo Nord,passaggio inferiore,573
+2026-09-14,Nodo Nord,sorge,985
+2026-09-14,Nodo Nord,culmina,1291
+2026-09-14,☄ chi-Cygnids,tramonta,257
+2026-09-14,☄ chi-Cygnids,passaggio inferiore,459
+2026-09-14,☄ chi-Cygnids,sorge,660
+2026-09-14,☄ chi-Cygnids,culmina,1177
+2026-09-14,☄ September epsilon-Perseids,culmina,187
+2026-09-14,☄ September epsilon-Perseids,tramonta,783
+2026-09-14,☄ September epsilon-Perseids,passaggio inferiore,905
+2026-09-14,☄ September epsilon-Perseids,sorge,1028
+2026-09-14,☄ Northern iota-Aquariids,tramonta,382
+2026-09-14,☄ Northern iota-Aquariids,passaggio inferiore,714
+2026-09-14,☄ Northern iota-Aquariids,sorge,1046
+2026-09-14,☄ Northern iota-Aquariids,culmina,1432
+2026-09-14,☄ nu-Eridanids,culmina,258
+2026-09-14,☄ nu-Eridanids,tramonta,627
+2026-09-14,☄ nu-Eridanids,passaggio inferiore,976
+2026-09-14,☄ nu-Eridanids,sorge,1326
+2026-09-14,☄ Northern delta-Piscids,culmina,11
+2026-09-14,☄ Northern delta-Piscids,tramonta,409
+2026-09-14,☄ Northern delta-Piscids,passaggio inferiore,729
+2026-09-14,☄ Northern delta-Piscids,sorge,1049
+2026-09-14,☄ pi6-Orionids,culmina,286
+2026-09-14,☄ pi6-Orionids,tramonta,647
+2026-09-14,☄ pi6-Orionids,passaggio inferiore,1005
+2026-09-14,☄ pi6-Orionids,sorge,1362
+2026-09-14,☄ Daytime kappa-Leonids,sorge,155
+2026-09-14,☄ Daytime kappa-Leonids,culmina,595
+2026-09-14,☄ Daytime kappa-Leonids,tramonta,1035
+2026-09-14,☄ Daytime kappa-Leonids,passaggio inferiore,1313
+2026-09-14,☄ Aurigids,culmina,399
+2026-09-14,☄ Aurigids,tramonta,990
+2026-09-14,☄ Aurigids,passaggio inferiore,1117
+2026-09-14,☄ Aurigids,sorge,1245
+2026-09-14,☄ Daytime Sextantids,sorge,166
+2026-09-14,☄ Daytime Sextantids,culmina,551
+2026-09-14,☄ Daytime Sextantids,tramonta,937
+2026-09-14,☄ Daytime Sextantids,passaggio inferiore,1269
+2026-09-14,☄ August gamma-Cepheids,passaggio inferiore,717
+2026-09-14,☄ August gamma-Cepheids,culmina,1435
+2026-09-14,☄ omicron-Geminids,culmina,483
+2026-09-14,☄ omicron-Geminids,tramonta,1117
+2026-09-14,☄ omicron-Geminids,passaggio inferiore,1201
+2026-09-14,☄ omicron-Geminids,sorge,1285
+2026-09-14,☄ August Draconids,passaggio inferiore,256
+2026-09-14,☄ August Draconids,culmina,974
+2026-09-14,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,303
+2026-09-14,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-14,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1013
+2026-09-14,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-14,☄ Northern delta-Aquariids,culmina,25
+2026-09-14,☄ Northern delta-Aquariids,tramonta,439
+2026-09-14,☄ Northern delta-Aquariids,passaggio inferiore,743
+2026-09-14,☄ Northern delta-Aquariids,sorge,1047
+2026-09-14,☄ kappa-Cygnids,passaggio inferiore,471
+2026-09-14,☄ kappa-Cygnids,culmina,1189
+2026-09-14,☄ Perseids,culmina,348
+2026-09-14,☄ Perseids,passaggio inferiore,1066
+2026-09-14,☄ xi-Draconids,culmina,450
+2026-09-14,☄ xi-Draconids,passaggio inferiore,1168
+2026-09-14,☄ tau-Cancrids,culmina,396
+2026-09-14,☄ tau-Cancrids,tramonta,900
+2026-09-14,☄ tau-Cancrids,passaggio inferiore,1114
+2026-09-14,☄ tau-Cancrids,sorge,1328
+2026-09-14,☄ Southern Taurids,culmina,31
+2026-09-14,☄ Southern Taurids,tramonta,411
+2026-09-14,☄ Southern Taurids,passaggio inferiore,749
+2026-09-14,☄ Southern Taurids,sorge,1087
+2026-09-14,☄ eta-Eridanids,culmina,267
+2026-09-14,☄ eta-Eridanids,tramonta,614
+2026-09-14,☄ eta-Eridanids,passaggio inferiore,985
+2026-09-14,☄ eta-Eridanids,sorge,1356
+2026-09-14,☄ Orionids,culmina,250
+2026-09-14,☄ Orionids,tramonta,672
+2026-09-14,☄ Orionids,passaggio inferiore,968
+2026-09-14,☄ Orionids,sorge,1264
+2026-09-14,☄ Northern Taurids,culmina,17
+2026-09-14,☄ Northern Taurids,tramonta,423
+2026-09-14,☄ Northern Taurids,passaggio inferiore,735
+2026-09-14,☄ Northern Taurids,sorge,1047
+2026-09-14,"☄ Antielio (ANT, ex Piscidi)",tramonta,291
+2026-09-14,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,664
+2026-09-14,"☄ Antielio (ANT, ex Piscidi)",sorge,1037
+2026-09-14,"☄ Antielio (ANT, ex Piscidi)",culmina,1382
+2026-09-14,Sole −12° mattino,,219
+2026-09-14,Sole −12° sera,,1108
+2026-09-15,Sole,sorge,293
+2026-09-15,Sole,culmina,664
+2026-09-15,Sole,tramonta,1035
+2026-09-15,Sole,passaggio inferiore,1382
+2026-09-15,Luna,passaggio inferiore,144
+2026-09-15,Luna,sorge,574
+2026-09-15,Luna,culmina,862
+2026-09-15,Luna,tramonta,1149
+2026-09-15,Mercurio,passaggio inferiore,1438
+2026-09-15,Mercurio,sorge,374
+2026-09-15,Mercurio,culmina,720
+2026-09-15,Mercurio,tramonta,1066
+2026-09-15,Venere,passaggio inferiore,96
+2026-09-15,Venere,sorge,508
+2026-09-15,Venere,culmina,814
+2026-09-15,Venere,tramonta,1120
+2026-09-15,Marte,culmina,428
+2026-09-15,Marte,tramonta,884
+2026-09-15,Marte,passaggio inferiore,1146
+2026-09-15,Marte,sorge,1408
+2026-09-15,Giove,sorge,100
+2026-09-15,Giove,culmina,528
+2026-09-15,Giove,tramonta,955
+2026-09-15,Giove,passaggio inferiore,1246
+2026-09-15,Saturno,culmina,20
+2026-09-15,Saturno,tramonta,400
+2026-09-15,Saturno,passaggio inferiore,738
+2026-09-15,Saturno,sorge,1076
+2026-09-15,Urano,culmina,227
+2026-09-15,Urano,tramonta,681
+2026-09-15,Urano,passaggio inferiore,945
+2026-09-15,Urano,sorge,1209
+2026-09-15,Nettuno,tramonta,349
+2026-09-15,Nettuno,passaggio inferiore,703
+2026-09-15,Nettuno,sorge,1056
+2026-09-15,Nettuno,culmina,1421
+2026-09-15,Nodo Nord,tramonta,156
+2026-09-15,Nodo Nord,passaggio inferiore,568
+2026-09-15,Nodo Nord,sorge,980
+2026-09-15,Nodo Nord,culmina,1286
+2026-09-15,☄ chi-Cygnids,tramonta,260
+2026-09-15,☄ chi-Cygnids,passaggio inferiore,453
+2026-09-15,☄ chi-Cygnids,sorge,646
+2026-09-15,☄ chi-Cygnids,culmina,1171
+2026-09-15,☄ Northern iota-Aquariids,tramonta,383
+2026-09-15,☄ Northern iota-Aquariids,passaggio inferiore,713
+2026-09-15,☄ Northern iota-Aquariids,sorge,1044
+2026-09-15,☄ Northern iota-Aquariids,culmina,1431
+2026-09-15,☄ September epsilon-Perseids,culmina,188
+2026-09-15,☄ September epsilon-Perseids,tramonta,784
+2026-09-15,☄ September epsilon-Perseids,passaggio inferiore,906
+2026-09-15,☄ September epsilon-Perseids,sorge,1028
+2026-09-15,☄ nu-Eridanids,culmina,257
+2026-09-15,☄ nu-Eridanids,tramonta,628
+2026-09-15,☄ nu-Eridanids,passaggio inferiore,975
+2026-09-15,☄ nu-Eridanids,sorge,1323
+2026-09-15,☄ Northern delta-Piscids,culmina,10
+2026-09-15,☄ Northern delta-Piscids,tramonta,410
+2026-09-15,☄ Northern delta-Piscids,passaggio inferiore,728
+2026-09-15,☄ Northern delta-Piscids,sorge,1046
+2026-09-15,☄ pi6-Orionids,culmina,286
+2026-09-15,☄ pi6-Orionids,tramonta,647
+2026-09-15,☄ pi6-Orionids,passaggio inferiore,1004
+2026-09-15,☄ pi6-Orionids,sorge,1361
+2026-09-15,☄ Daytime kappa-Leonids,sorge,155
+2026-09-15,☄ Daytime kappa-Leonids,culmina,594
+2026-09-15,☄ Daytime kappa-Leonids,tramonta,1032
+2026-09-15,☄ Daytime kappa-Leonids,passaggio inferiore,1312
+2026-09-15,☄ Aurigids,culmina,400
+2026-09-15,☄ Aurigids,tramonta,990
+2026-09-15,☄ Aurigids,passaggio inferiore,1118
+2026-09-15,☄ Aurigids,sorge,1246
+2026-09-15,☄ Daytime Sextantids,sorge,167
+2026-09-15,☄ Daytime Sextantids,culmina,550
+2026-09-15,☄ Daytime Sextantids,tramonta,933
+2026-09-15,☄ Daytime Sextantids,passaggio inferiore,1268
+2026-09-15,☄ omicron-Geminids,culmina,484
+2026-09-15,☄ omicron-Geminids,tramonta,1116
+2026-09-15,☄ omicron-Geminids,passaggio inferiore,1202
+2026-09-15,☄ omicron-Geminids,sorge,1288
+2026-09-15,☄ August Draconids,passaggio inferiore,248
+2026-09-15,☄ August Draconids,culmina,966
+2026-09-15,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,304
+2026-09-15,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-15,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1012
+2026-09-15,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-15,☄ Northern delta-Aquariids,culmina,24
+2026-09-15,☄ Northern delta-Aquariids,tramonta,440
+2026-09-15,☄ Northern delta-Aquariids,passaggio inferiore,742
+2026-09-15,☄ Northern delta-Aquariids,sorge,1044
+2026-09-15,☄ kappa-Cygnids,passaggio inferiore,469
+2026-09-15,☄ kappa-Cygnids,culmina,1187
+2026-09-15,☄ Perseids,culmina,350
+2026-09-15,☄ Perseids,passaggio inferiore,1068
+2026-09-15,☄ xi-Draconids,culmina,446
+2026-09-15,☄ xi-Draconids,passaggio inferiore,1164
+2026-09-15,☄ tau-Cancrids,culmina,395
+2026-09-15,☄ tau-Cancrids,tramonta,900
+2026-09-15,☄ tau-Cancrids,passaggio inferiore,1114
+2026-09-15,☄ tau-Cancrids,sorge,1327
+2026-09-15,☄ Southern Taurids,culmina,30
+2026-09-15,☄ Southern Taurids,tramonta,411
+2026-09-15,☄ Southern Taurids,passaggio inferiore,748
+2026-09-15,☄ Southern Taurids,sorge,1086
+2026-09-15,☄ Orionids,culmina,246
+2026-09-15,☄ Orionids,tramonta,668
+2026-09-15,☄ Orionids,passaggio inferiore,964
+2026-09-15,☄ Orionids,sorge,1260
+2026-09-15,☄ eta-Eridanids,culmina,266
+2026-09-15,☄ eta-Eridanids,tramonta,614
+2026-09-15,☄ eta-Eridanids,passaggio inferiore,984
+2026-09-15,☄ eta-Eridanids,sorge,1355
+2026-09-15,☄ Northern Taurids,culmina,16
+2026-09-15,☄ Northern Taurids,tramonta,423
+2026-09-15,☄ Northern Taurids,passaggio inferiore,734
+2026-09-15,☄ Northern Taurids,sorge,1045
+2026-09-15,"☄ Antielio (ANT, ex Piscidi)",tramonta,293
+2026-09-15,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,664
+2026-09-15,"☄ Antielio (ANT, ex Piscidi)",sorge,1035
+2026-09-15,"☄ Antielio (ANT, ex Piscidi)",culmina,1382
+2026-09-15,Sole −12° mattino,,220
+2026-09-15,Sole −12° sera,,1106
+2026-09-16,Sole,sorge,294
+2026-09-16,Sole,culmina,663
+2026-09-16,Sole,tramonta,1033
+2026-09-16,Sole,passaggio inferiore,1382
+2026-09-16,Luna,passaggio inferiore,189
+2026-09-16,Luna,sorge,635
+2026-09-16,Luna,culmina,907
+2026-09-16,Luna,tramonta,1180
+2026-09-16,Mercurio,passaggio inferiore,0
+2026-09-16,Mercurio,sorge,378
+2026-09-16,Mercurio,culmina,722
+2026-09-16,Mercurio,tramonta,1065
+2026-09-16,Venere,passaggio inferiore,94
+2026-09-16,Venere,sorge,507
+2026-09-16,Venere,culmina,812
+2026-09-16,Venere,tramonta,1117
+2026-09-16,Marte,culmina,427
+2026-09-16,Marte,tramonta,882
+2026-09-16,Marte,passaggio inferiore,1145
+2026-09-16,Marte,sorge,1408
+2026-09-16,Giove,sorge,97
+2026-09-16,Giove,culmina,525
+2026-09-16,Giove,tramonta,952
+2026-09-16,Giove,passaggio inferiore,1243
+2026-09-16,Saturno,culmina,16
+2026-09-16,Saturno,tramonta,396
+2026-09-16,Saturno,passaggio inferiore,734
+2026-09-16,Saturno,sorge,1072
+2026-09-16,Urano,culmina,223
+2026-09-16,Urano,tramonta,677
+2026-09-16,Urano,passaggio inferiore,941
+2026-09-16,Urano,sorge,1205
+2026-09-16,Nettuno,tramonta,345
+2026-09-16,Nettuno,passaggio inferiore,699
+2026-09-16,Nettuno,sorge,1052
+2026-09-16,Nettuno,culmina,1417
+2026-09-16,Nodo Nord,tramonta,152
+2026-09-16,Nodo Nord,passaggio inferiore,565
+2026-09-16,Nodo Nord,sorge,977
+2026-09-16,Nodo Nord,culmina,1283
+2026-09-16,☄ chi-Cygnids,tramonta,263
+2026-09-16,☄ chi-Cygnids,passaggio inferiore,448
+2026-09-16,☄ chi-Cygnids,sorge,632
+2026-09-16,☄ chi-Cygnids,culmina,1166
+2026-09-16,☄ Northern iota-Aquariids,tramonta,383
+2026-09-16,☄ Northern iota-Aquariids,passaggio inferiore,712
+2026-09-16,☄ Northern iota-Aquariids,sorge,1042
+2026-09-16,☄ Northern iota-Aquariids,culmina,1430
+2026-09-16,☄ September epsilon-Perseids,culmina,188
+2026-09-16,☄ September epsilon-Perseids,tramonta,785
+2026-09-16,☄ September epsilon-Perseids,passaggio inferiore,906
+2026-09-16,☄ September epsilon-Perseids,sorge,1028
+2026-09-16,☄ nu-Eridanids,culmina,256
+2026-09-16,☄ nu-Eridanids,tramonta,628
+2026-09-16,☄ nu-Eridanids,passaggio inferiore,975
+2026-09-16,☄ nu-Eridanids,sorge,1321
+2026-09-16,☄ Daytime kappa-Leonids,sorge,155
+2026-09-16,☄ Daytime kappa-Leonids,culmina,592
+2026-09-16,☄ Daytime kappa-Leonids,tramonta,1029
+2026-09-16,☄ Daytime kappa-Leonids,passaggio inferiore,1310
+2026-09-16,☄ Northern delta-Piscids,culmina,9
+2026-09-16,☄ Northern delta-Piscids,tramonta,411
+2026-09-16,☄ Northern delta-Piscids,passaggio inferiore,727
+2026-09-16,☄ Northern delta-Piscids,sorge,1044
+2026-09-16,☄ pi6-Orionids,culmina,286
+2026-09-16,☄ pi6-Orionids,tramonta,647
+2026-09-16,☄ pi6-Orionids,passaggio inferiore,1004
+2026-09-16,☄ pi6-Orionids,sorge,1360
+2026-09-16,☄ Daytime Sextantids,sorge,167
+2026-09-16,☄ Daytime Sextantids,culmina,549
+2026-09-16,☄ Daytime Sextantids,tramonta,930
+2026-09-16,☄ Daytime Sextantids,passaggio inferiore,1267
+2026-09-16,☄ Aurigids,culmina,400
+2026-09-16,☄ Aurigids,tramonta,991
+2026-09-16,☄ Aurigids,passaggio inferiore,1118
+2026-09-16,☄ Aurigids,sorge,1246
+2026-09-16,☄ omicron-Geminids,culmina,485
+2026-09-16,☄ omicron-Geminids,tramonta,1116
+2026-09-16,☄ omicron-Geminids,passaggio inferiore,1203
+2026-09-16,☄ omicron-Geminids,sorge,1290
+2026-09-16,☄ August Draconids,passaggio inferiore,242
+2026-09-16,☄ August Draconids,culmina,960
+2026-09-16,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,305
+2026-09-16,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-16,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1010
+2026-09-16,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-16,☄ Northern delta-Aquariids,culmina,23
+2026-09-16,☄ Northern delta-Aquariids,tramonta,440
+2026-09-16,☄ Northern delta-Aquariids,passaggio inferiore,741
+2026-09-16,☄ Northern delta-Aquariids,sorge,1042
+2026-09-16,☄ xi-Draconids,culmina,442
+2026-09-16,☄ xi-Draconids,passaggio inferiore,1160
+2026-09-16,☄ kappa-Cygnids,passaggio inferiore,468
+2026-09-16,☄ kappa-Cygnids,culmina,1186
+2026-09-16,☄ tau-Cancrids,culmina,395
+2026-09-16,☄ tau-Cancrids,tramonta,899
+2026-09-16,☄ tau-Cancrids,passaggio inferiore,1113
+2026-09-16,☄ tau-Cancrids,sorge,1327
+2026-09-16,☄ Perseids,culmina,352
+2026-09-16,☄ Perseids,passaggio inferiore,1070
+2026-09-16,☄ Southern Taurids,culmina,29
+2026-09-16,☄ Southern Taurids,tramonta,410
+2026-09-16,☄ Southern Taurids,passaggio inferiore,747
+2026-09-16,☄ Southern Taurids,sorge,1084
+2026-09-16,☄ Orionids,culmina,242
+2026-09-16,☄ Orionids,tramonta,664
+2026-09-16,☄ Orionids,passaggio inferiore,960
+2026-09-16,☄ Orionids,sorge,1256
+2026-09-16,☄ eta-Eridanids,culmina,266
+2026-09-16,☄ eta-Eridanids,tramonta,615
+2026-09-16,☄ eta-Eridanids,passaggio inferiore,984
+2026-09-16,☄ eta-Eridanids,sorge,1353
+2026-09-16,☄ Northern Taurids,culmina,16
+2026-09-16,☄ Northern Taurids,tramonta,423
+2026-09-16,☄ Northern Taurids,passaggio inferiore,734
+2026-09-16,☄ Northern Taurids,sorge,1044
+2026-09-16,"☄ Antielio (ANT, ex Piscidi)",tramonta,294
+2026-09-16,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,663
+2026-09-16,"☄ Antielio (ANT, ex Piscidi)",sorge,1033
+2026-09-16,"☄ Antielio (ANT, ex Piscidi)",culmina,1382
+2026-09-16,Sole −12° mattino,,222
+2026-09-16,Sole −12° sera,,1104
+2026-09-17,Sole,sorge,295
+2026-09-17,Sole,culmina,663
+2026-09-17,Sole,tramonta,1031
+2026-09-17,Sole,passaggio inferiore,1381
+2026-09-17,Luna,passaggio inferiore,236
+2026-09-17,Luna,sorge,694
+2026-09-17,Luna,culmina,954
+2026-09-17,Luna,tramonta,1214
+2026-09-17,Mercurio,passaggio inferiore,6
+2026-09-17,Mercurio,sorge,383
+2026-09-17,Mercurio,culmina,724
+2026-09-17,Mercurio,tramonta,1064
+2026-09-17,Venere,passaggio inferiore,92
+2026-09-17,Venere,sorge,506
+2026-09-17,Venere,culmina,810
+2026-09-17,Venere,tramonta,1114
+2026-09-17,Marte,culmina,426
+2026-09-17,Marte,tramonta,880
+2026-09-17,Marte,passaggio inferiore,1144
+2026-09-17,Marte,sorge,1407
+2026-09-17,Giove,sorge,94
+2026-09-17,Giove,culmina,521
+2026-09-17,Giove,tramonta,948
+2026-09-17,Giove,passaggio inferiore,1239
+2026-09-17,Saturno,culmina,11
+2026-09-17,Saturno,tramonta,391
+2026-09-17,Saturno,passaggio inferiore,729
+2026-09-17,Saturno,sorge,1067
+2026-09-17,Urano,culmina,219
+2026-09-17,Urano,tramonta,673
+2026-09-17,Urano,passaggio inferiore,937
+2026-09-17,Urano,sorge,1201
+2026-09-17,Nettuno,tramonta,341
+2026-09-17,Nettuno,passaggio inferiore,695
+2026-09-17,Nettuno,sorge,1048
+2026-09-17,Nettuno,culmina,1413
+2026-09-17,Nodo Nord,tramonta,150
+2026-09-17,Nodo Nord,passaggio inferiore,562
+2026-09-17,Nodo Nord,sorge,973
+2026-09-17,Nodo Nord,culmina,1280
+2026-09-17,☄ Northern iota-Aquariids,tramonta,383
+2026-09-17,☄ Northern iota-Aquariids,passaggio inferiore,711
+2026-09-17,☄ Northern iota-Aquariids,sorge,1039
+2026-09-17,☄ Northern iota-Aquariids,culmina,1429
+2026-09-17,☄ chi-Cygnids,tramonta,266
+2026-09-17,☄ chi-Cygnids,passaggio inferiore,442
+2026-09-17,☄ chi-Cygnids,sorge,618
+2026-09-17,☄ chi-Cygnids,culmina,1160
+2026-09-17,☄ September epsilon-Perseids,culmina,189
+2026-09-17,☄ September epsilon-Perseids,tramonta,787
+2026-09-17,☄ September epsilon-Perseids,passaggio inferiore,907
+2026-09-17,☄ September epsilon-Perseids,sorge,1028
+2026-09-17,☄ nu-Eridanids,culmina,256
+2026-09-17,☄ nu-Eridanids,tramonta,629
+2026-09-17,☄ nu-Eridanids,passaggio inferiore,974
+2026-09-17,☄ nu-Eridanids,sorge,1318
+2026-09-17,☄ Daytime kappa-Leonids,sorge,155
+2026-09-17,☄ Daytime kappa-Leonids,culmina,591
+2026-09-17,☄ Daytime kappa-Leonids,tramonta,1026
+2026-09-17,☄ Daytime kappa-Leonids,passaggio inferiore,1309
+2026-09-17,☄ Daytime Sextantids,sorge,168
+2026-09-17,☄ Daytime Sextantids,culmina,547
+2026-09-17,☄ Daytime Sextantids,tramonta,927
+2026-09-17,☄ Daytime Sextantids,passaggio inferiore,1266
+2026-09-17,☄ Northern delta-Piscids,culmina,8
+2026-09-17,☄ Northern delta-Piscids,tramonta,412
+2026-09-17,☄ Northern delta-Piscids,passaggio inferiore,726
+2026-09-17,☄ Northern delta-Piscids,sorge,1041
+2026-09-17,☄ pi6-Orionids,culmina,285
+2026-09-17,☄ pi6-Orionids,tramonta,647
+2026-09-17,☄ pi6-Orionids,passaggio inferiore,1003
+2026-09-17,☄ pi6-Orionids,sorge,1359
+2026-09-17,☄ Aurigids,culmina,401
+2026-09-17,☄ Aurigids,tramonta,991
+2026-09-17,☄ Aurigids,passaggio inferiore,1119
+2026-09-17,☄ Aurigids,sorge,1247
+2026-09-17,☄ omicron-Geminids,culmina,486
+2026-09-17,☄ omicron-Geminids,tramonta,1116
+2026-09-17,☄ omicron-Geminids,passaggio inferiore,1204
+2026-09-17,☄ omicron-Geminids,sorge,1292
+2026-09-17,☄ August Draconids,passaggio inferiore,238
+2026-09-17,☄ August Draconids,culmina,956
+2026-09-17,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,306
+2026-09-17,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,658
+2026-09-17,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1009
+2026-09-17,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-17,☄ Northern delta-Aquariids,culmina,22
+2026-09-17,☄ Northern delta-Aquariids,tramonta,441
+2026-09-17,☄ Northern delta-Aquariids,passaggio inferiore,740
+2026-09-17,☄ Northern delta-Aquariids,sorge,1040
+2026-09-17,☄ xi-Draconids,culmina,438
+2026-09-17,☄ xi-Draconids,passaggio inferiore,1156
+2026-09-17,☄ tau-Cancrids,culmina,395
+2026-09-17,☄ tau-Cancrids,tramonta,899
+2026-09-17,☄ tau-Cancrids,passaggio inferiore,1113
+2026-09-17,☄ tau-Cancrids,sorge,1326
+2026-09-17,☄ Southern Taurids,culmina,28
+2026-09-17,☄ Southern Taurids,tramonta,410
+2026-09-17,☄ Southern Taurids,passaggio inferiore,746
+2026-09-17,☄ Southern Taurids,sorge,1082
+2026-09-17,☄ kappa-Cygnids,passaggio inferiore,466
+2026-09-17,☄ kappa-Cygnids,culmina,1184
+2026-09-17,☄ Perseids,culmina,353
+2026-09-17,☄ Perseids,passaggio inferiore,1071
+2026-09-17,☄ Orionids,culmina,239
+2026-09-17,☄ Orionids,tramonta,661
+2026-09-17,☄ Orionids,passaggio inferiore,957
+2026-09-17,☄ Orionids,sorge,1253
+2026-09-17,☄ eta-Eridanids,culmina,265
+2026-09-17,☄ eta-Eridanids,tramonta,615
+2026-09-17,☄ eta-Eridanids,passaggio inferiore,983
+2026-09-17,☄ eta-Eridanids,sorge,1351
+2026-09-17,☄ Northern Taurids,culmina,15
+2026-09-17,☄ Northern Taurids,tramonta,424
+2026-09-17,☄ Northern Taurids,passaggio inferiore,733
+2026-09-17,☄ Northern Taurids,sorge,1042
+2026-09-17,"☄ Antielio (ANT, ex Piscidi)",tramonta,295
+2026-09-17,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,663
+2026-09-17,"☄ Antielio (ANT, ex Piscidi)",sorge,1031
+2026-09-17,"☄ Antielio (ANT, ex Piscidi)",culmina,1381
+2026-09-17,Sole −12° mattino,,223
+2026-09-17,Sole −12° sera,,1102
+2026-09-18,Sole,sorge,296
+2026-09-18,Sole,culmina,663
+2026-09-18,Sole,tramonta,1029
+2026-09-18,Sole,passaggio inferiore,1381
+2026-09-18,Luna,passaggio inferiore,284
+2026-09-18,Luna,sorge,748
+2026-09-18,Luna,culmina,1002
+2026-09-18,Luna,tramonta,1255
+2026-09-18,Mercurio,passaggio inferiore,7
+2026-09-18,Mercurio,sorge,387
+2026-09-18,Mercurio,culmina,725
+2026-09-18,Mercurio,tramonta,1064
+2026-09-18,Venere,passaggio inferiore,90
+2026-09-18,Venere,sorge,505
+2026-09-18,Venere,culmina,808
+2026-09-18,Venere,tramonta,1111
+2026-09-18,Marte,culmina,424
+2026-09-18,Marte,tramonta,879
+2026-09-18,Marte,passaggio inferiore,1142
+2026-09-18,Marte,sorge,1406
+2026-09-18,Giove,sorge,92
+2026-09-18,Giove,culmina,518
+2026-09-18,Giove,tramonta,945
+2026-09-18,Giove,passaggio inferiore,1236
+2026-09-18,Saturno,culmina,7
+2026-09-18,Saturno,tramonta,387
+2026-09-18,Saturno,passaggio inferiore,725
+2026-09-18,Saturno,sorge,1063
+2026-09-18,Urano,culmina,215
+2026-09-18,Urano,tramonta,670
+2026-09-18,Urano,passaggio inferiore,933
+2026-09-18,Urano,sorge,1197
+2026-09-18,Nettuno,tramonta,337
+2026-09-18,Nettuno,passaggio inferiore,691
+2026-09-18,Nettuno,sorge,1044
+2026-09-18,Nettuno,culmina,1409
+2026-09-18,Nodo Nord,tramonta,149
+2026-09-18,Nodo Nord,passaggio inferiore,560
+2026-09-18,Nodo Nord,sorge,971
+2026-09-18,Nodo Nord,culmina,1278
+2026-09-18,☄ Northern iota-Aquariids,tramonta,383
+2026-09-18,☄ Northern iota-Aquariids,passaggio inferiore,710
+2026-09-18,☄ Northern iota-Aquariids,sorge,1037
+2026-09-18,☄ Northern iota-Aquariids,culmina,1428
+2026-09-18,☄ chi-Cygnids,tramonta,270
+2026-09-18,☄ chi-Cygnids,passaggio inferiore,436
+2026-09-18,☄ chi-Cygnids,sorge,602
+2026-09-18,☄ chi-Cygnids,culmina,1154
+2026-09-18,☄ September epsilon-Perseids,culmina,190
+2026-09-18,☄ September epsilon-Perseids,tramonta,788
+2026-09-18,☄ September epsilon-Perseids,passaggio inferiore,908
+2026-09-18,☄ September epsilon-Perseids,sorge,1027
+2026-09-18,☄ Daytime kappa-Leonids,sorge,155
+2026-09-18,☄ Daytime kappa-Leonids,culmina,589
+2026-09-18,☄ Daytime kappa-Leonids,tramonta,1023
+2026-09-18,☄ Daytime kappa-Leonids,passaggio inferiore,1307
+2026-09-18,☄ nu-Eridanids,culmina,255
+2026-09-18,☄ nu-Eridanids,tramonta,629
+2026-09-18,☄ nu-Eridanids,passaggio inferiore,973
+2026-09-18,☄ nu-Eridanids,sorge,1316
+2026-09-18,☄ Daytime Sextantids,sorge,169
+2026-09-18,☄ Daytime Sextantids,culmina,546
+2026-09-18,☄ Daytime Sextantids,tramonta,923
+2026-09-18,☄ Daytime Sextantids,passaggio inferiore,1264
+2026-09-18,☄ Northern delta-Piscids,culmina,8
+2026-09-18,☄ Northern delta-Piscids,tramonta,412
+2026-09-18,☄ Northern delta-Piscids,passaggio inferiore,726
+2026-09-18,☄ Northern delta-Piscids,sorge,1039
+2026-09-18,☄ pi6-Orionids,culmina,285
+2026-09-18,☄ pi6-Orionids,tramonta,648
+2026-09-18,☄ pi6-Orionids,passaggio inferiore,1003
+2026-09-18,☄ pi6-Orionids,sorge,1358
+2026-09-18,☄ Aurigids,culmina,402
+2026-09-18,☄ Aurigids,tramonta,991
+2026-09-18,☄ Aurigids,passaggio inferiore,1120
+2026-09-18,☄ Aurigids,sorge,1248
+2026-09-18,☄ omicron-Geminids,culmina,487
+2026-09-18,☄ omicron-Geminids,tramonta,1115
+2026-09-18,☄ omicron-Geminids,passaggio inferiore,1205
+2026-09-18,☄ omicron-Geminids,sorge,1294
+2026-09-18,☄ August Draconids,passaggio inferiore,234
+2026-09-18,☄ August Draconids,culmina,952
+2026-09-18,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,307
+2026-09-18,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-18,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1008
+2026-09-18,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1376
+2026-09-18,☄ xi-Draconids,culmina,434
+2026-09-18,☄ xi-Draconids,passaggio inferiore,1152
+2026-09-18,☄ Northern delta-Aquariids,culmina,21
+2026-09-18,☄ Northern delta-Aquariids,tramonta,441
+2026-09-18,☄ Northern delta-Aquariids,passaggio inferiore,739
+2026-09-18,☄ Northern delta-Aquariids,sorge,1037
+2026-09-18,☄ tau-Cancrids,culmina,394
+2026-09-18,☄ tau-Cancrids,tramonta,899
+2026-09-18,☄ tau-Cancrids,passaggio inferiore,1112
+2026-09-18,☄ tau-Cancrids,sorge,1326
+2026-09-18,☄ Southern Taurids,culmina,27
+2026-09-18,☄ Southern Taurids,tramonta,409
+2026-09-18,☄ Southern Taurids,passaggio inferiore,745
+2026-09-18,☄ Southern Taurids,sorge,1081
+2026-09-18,☄ Orionids,culmina,238
+2026-09-18,☄ Orionids,tramonta,660
+2026-09-18,☄ Orionids,passaggio inferiore,956
+2026-09-18,☄ Orionids,sorge,1252
+2026-09-18,☄ kappa-Cygnids,passaggio inferiore,464
+2026-09-18,☄ kappa-Cygnids,culmina,1183
+2026-09-18,☄ Perseids,culmina,355
+2026-09-18,☄ Perseids,passaggio inferiore,1073
+2026-09-18,☄ eta-Eridanids,culmina,264
+2026-09-18,☄ eta-Eridanids,tramonta,616
+2026-09-18,☄ eta-Eridanids,passaggio inferiore,982
+2026-09-18,☄ eta-Eridanids,sorge,1349
+2026-09-18,☄ Northern Taurids,culmina,14
+2026-09-18,☄ Northern Taurids,tramonta,424
+2026-09-18,☄ Northern Taurids,passaggio inferiore,732
+2026-09-18,☄ Northern Taurids,sorge,1041
+2026-09-18,"☄ Antielio (ANT, ex Piscidi)",tramonta,296
+2026-09-18,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,663
+2026-09-18,"☄ Antielio (ANT, ex Piscidi)",sorge,1029
+2026-09-18,"☄ Antielio (ANT, ex Piscidi)",culmina,1381
+2026-09-18,Sole −12° mattino,,225
+2026-09-18,Sole −12° sera,,1100
+2026-09-19,Sole,sorge,298
+2026-09-19,Sole,culmina,662
+2026-09-19,Sole,tramonta,1027
+2026-09-19,Sole,passaggio inferiore,1380
+2026-09-19,Luna,passaggio inferiore,331
+2026-09-19,Luna,sorge,797
+2026-09-19,Luna,culmina,1049
+2026-09-19,Luna,tramonta,1301
+2026-09-19,Mercurio,passaggio inferiore,9
+2026-09-19,Mercurio,sorge,392
+2026-09-19,Mercurio,culmina,727
+2026-09-19,Mercurio,tramonta,1063
+2026-09-19,Venere,passaggio inferiore,88
+2026-09-19,Venere,sorge,504
+2026-09-19,Venere,culmina,806
+2026-09-19,Venere,tramonta,1108
+2026-09-19,Marte,culmina,423
+2026-09-19,Marte,tramonta,877
+2026-09-19,Marte,passaggio inferiore,1141
+2026-09-19,Marte,sorge,1405
+2026-09-19,Giove,sorge,89
+2026-09-19,Giove,culmina,515
+2026-09-19,Giove,tramonta,942
+2026-09-19,Giove,passaggio inferiore,1233
+2026-09-19,Saturno,culmina,1439
+2026-09-19,Saturno,tramonta,383
+2026-09-19,Saturno,passaggio inferiore,721
+2026-09-19,Saturno,sorge,1059
+2026-09-19,Urano,culmina,211
+2026-09-19,Urano,tramonta,666
+2026-09-19,Urano,passaggio inferiore,929
+2026-09-19,Urano,sorge,1193
+2026-09-19,Nettuno,tramonta,333
+2026-09-19,Nettuno,passaggio inferiore,687
+2026-09-19,Nettuno,sorge,1040
+2026-09-19,Nettuno,culmina,1405
+2026-09-19,Nodo Nord,tramonta,148
+2026-09-19,Nodo Nord,passaggio inferiore,558
+2026-09-19,Nodo Nord,sorge,968
+2026-09-19,Nodo Nord,culmina,1276
+2026-09-19,☄ Northern iota-Aquariids,tramonta,383
+2026-09-19,☄ Northern iota-Aquariids,passaggio inferiore,709
+2026-09-19,☄ Northern iota-Aquariids,sorge,1035
+2026-09-19,☄ Northern iota-Aquariids,culmina,1427
+2026-09-19,☄ chi-Cygnids,tramonta,275
+2026-09-19,☄ chi-Cygnids,passaggio inferiore,431
+2026-09-19,☄ chi-Cygnids,sorge,586
+2026-09-19,☄ chi-Cygnids,culmina,1149
+2026-09-19,☄ Daytime kappa-Leonids,sorge,155
+2026-09-19,☄ Daytime kappa-Leonids,culmina,588
+2026-09-19,☄ Daytime kappa-Leonids,tramonta,1020
+2026-09-19,☄ Daytime kappa-Leonids,passaggio inferiore,1306
+2026-09-19,☄ September epsilon-Perseids,culmina,190
+2026-09-19,☄ September epsilon-Perseids,tramonta,789
+2026-09-19,☄ September epsilon-Perseids,passaggio inferiore,908
+2026-09-19,☄ September epsilon-Perseids,sorge,1027
+2026-09-19,☄ nu-Eridanids,culmina,254
+2026-09-19,☄ nu-Eridanids,tramonta,630
+2026-09-19,☄ nu-Eridanids,passaggio inferiore,972
+2026-09-19,☄ nu-Eridanids,sorge,1314
+2026-09-19,☄ Daytime Sextantids,sorge,170
+2026-09-19,☄ Daytime Sextantids,culmina,545
+2026-09-19,☄ Daytime Sextantids,tramonta,920
+2026-09-19,☄ Daytime Sextantids,passaggio inferiore,1263
+2026-09-19,☄ Northern delta-Piscids,culmina,7
+2026-09-19,☄ Northern delta-Piscids,tramonta,413
+2026-09-19,☄ Northern delta-Piscids,passaggio inferiore,725
+2026-09-19,☄ Northern delta-Piscids,sorge,1036
+2026-09-19,☄ pi6-Orionids,culmina,284
+2026-09-19,☄ pi6-Orionids,tramonta,648
+2026-09-19,☄ pi6-Orionids,passaggio inferiore,1002
+2026-09-19,☄ pi6-Orionids,sorge,1357
+2026-09-19,☄ Aurigids,culmina,402
+2026-09-19,☄ Aurigids,tramonta,992
+2026-09-19,☄ Aurigids,passaggio inferiore,1120
+2026-09-19,☄ Aurigids,sorge,1248
+2026-09-19,☄ omicron-Geminids,culmina,487
+2026-09-19,☄ omicron-Geminids,tramonta,1115
+2026-09-19,☄ omicron-Geminids,passaggio inferiore,1205
+2026-09-19,☄ omicron-Geminids,sorge,1296
+2026-09-19,☄ August Draconids,passaggio inferiore,230
+2026-09-19,☄ August Draconids,culmina,948
+2026-09-19,☄ Northern iota-Aquariids [variante 1973-mm λ148],tramonta,308
+2026-09-19,☄ Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,657
+2026-09-19,☄ Northern iota-Aquariids [variante 1973-mm λ148],sorge,1006
+2026-09-19,☄ Northern iota-Aquariids [variante 1973-mm λ148],culmina,1375
+2026-09-19,☄ xi-Draconids,culmina,431
+2026-09-19,☄ xi-Draconids,passaggio inferiore,1149
+2026-09-19,☄ tau-Cancrids,culmina,394
+2026-09-19,☄ tau-Cancrids,tramonta,898
+2026-09-19,☄ tau-Cancrids,passaggio inferiore,1112
+2026-09-19,☄ tau-Cancrids,sorge,1325
+2026-09-19,☄ Northern delta-Aquariids,culmina,20
+2026-09-19,☄ Northern delta-Aquariids,tramonta,442
+2026-09-19,☄ Northern delta-Aquariids,passaggio inferiore,739
+2026-09-19,☄ Northern delta-Aquariids,sorge,1035
+2026-09-19,☄ Southern Taurids,culmina,26
+2026-09-19,☄ Southern Taurids,tramonta,409
+2026-09-19,☄ Southern Taurids,passaggio inferiore,744
+2026-09-19,☄ Southern Taurids,sorge,1079
+2026-09-19,☄ Orionids,culmina,237
+2026-09-19,☄ Orionids,tramonta,660
+2026-09-19,☄ Orionids,passaggio inferiore,956
+2026-09-19,☄ Orionids,sorge,1251
+2026-09-19,☄ kappa-Cygnids,passaggio inferiore,463
+2026-09-19,☄ kappa-Cygnids,culmina,1181
+2026-09-19,☄ Perseids,culmina,357
+2026-09-19,☄ Perseids,passaggio inferiore,1075
+2026-09-19,☄ eta-Eridanids,culmina,264
+2026-09-19,☄ eta-Eridanids,tramonta,616
+2026-09-19,☄ eta-Eridanids,passaggio inferiore,982
+2026-09-19,☄ eta-Eridanids,sorge,1347
+2026-09-19,☄ chi-Taurids,culmina,56
+2026-09-19,☄ chi-Taurids,tramonta,512
+2026-09-19,☄ chi-Taurids,passaggio inferiore,774
+2026-09-19,☄ chi-Taurids,sorge,1035
+2026-09-19,☄ Northern Taurids,culmina,14
+2026-09-19,☄ Northern Taurids,tramonta,424
+2026-09-19,☄ Northern Taurids,passaggio inferiore,732
+2026-09-19,☄ Northern Taurids,sorge,1039
+2026-09-19,☄ omicron-Eridanids,culmina,68
+2026-09-19,☄ omicron-Eridanids,tramonta,439
+2026-09-19,☄ omicron-Eridanids,passaggio inferiore,786
+2026-09-19,☄ omicron-Eridanids,sorge,1133
+2026-09-19,"☄ Antielio (ANT, ex Piscidi)",tramonta,298
+2026-09-19,"☄ Antielio (ANT, ex Piscidi)",passaggio inferiore,662
+2026-09-19,"☄ Antielio (ANT, ex Piscidi)",sorge,1027
+2026-09-19,"☄ Antielio (ANT, ex Piscidi)",culmina,1380
+2026-09-19,Sole −12° mattino,,226
+2026-09-19,Sole −12° sera,,1098
