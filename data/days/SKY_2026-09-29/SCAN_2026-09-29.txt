@@ -60,7 +60,7 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   Z medio: LON42834.1 THY43859.6 CLF43315.4 BFO43841.9 NGK46147.0 BEL47145.5 IZN40881.1 ABK52486.3 KAK36025.0 FRD45066.9
 
 ══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
-  sorgente SOLAR1, distanza 1.58 Mkm, velocità 308 km/s, ritardo tipico 85 min
+  sorgente SOLAR1, distanza 1.58 Mkm, velocità 307 km/s, ritardo tipico 86 min
   copertura L1 → Terra: 12:51 del 28/09 in poi
   Discontinuità a L1 (arrivo stimato a Terra): 15:50[svolta Bz →nord] 19:12[svolta Bz →nord]
   (pressione su → X su atteso; pressione giù → X giù)
