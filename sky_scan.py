@@ -986,8 +986,14 @@ def sec_serie(folder, day, D, L):
                     if not (((byk[0].m - exp + 720) % 1440 - 720).abs() <= SERIE_TOL).any():
                         outs.add((int(e.m), len(h)))
                     break
-        for m, n in sorted(outs)[:6]:
-            L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi assente")
+        eu7 = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
+        for m, n in sorted(outs)[:8]:
+            t = pd.Timestamp(day) + pd.Timedelta(minutes=m)
+            cov = sum(1 for st in eu7 if t in D[st].index and pd.notna(D[st].X.get(t)))
+            if cov < 5:
+                L.append(f"  … serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi NON VALUTABILE (solo {cov} stazioni con dati)")
+            else:
+                L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi assente")
     # marker per sciame: ampiezza ai quattro momenti di ogni radiante attivo (archivio SKY_MARKER.csv)
     rows = []
     for (name, kind), t0 in mom(0).items():
