@@ -851,7 +851,8 @@ SERIE_GAP = 1           # giorni mancanti ammessi dentro una serie
 SERIE_DRIFTS = [x / 2 for x in range(-12, 13)]   # spostamento giornaliero provato: −6…+6 min/giorno
 
 def _day_events(D):
-    """eventi europei della giornata: minuto, componente, ampiezza (mediana delle stazioni / base)"""
+    """eventi europei della giornata: minuto d'inizio, componente, ampiezza = PICCO del gruppo
+    (mediana delle stazioni / base, massimo sui minuti consecutivi dell'evento — regola 1/10/2026)"""
     eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
     out = []
     for c in 'XY':
@@ -863,6 +864,8 @@ def _day_events(D):
         for t, v in hit.items():
             if last is None or (t - last).total_seconds() > 180:
                 out.append({'m': t.hour * 60 + t.minute, 'comp': c, 'amp': round(float(v), 1)})
+            else:
+                out[-1]['amp'] = max(out[-1]['amp'], round(float(v), 1))
             last = t
     return out
 
