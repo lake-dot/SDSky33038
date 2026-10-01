@@ -840,7 +840,7 @@ day,sciame,momento,ora,ampiezza
 2026-09-29,September epsilon-Perseids,passaggio inferiore,15:15,0.0
 2026-09-29,September epsilon-Perseids,sorge,17:07,0.0
 2026-09-29,xi-Draconids,culmina,07:30,0.0
-2026-09-29,xi-Draconids,passaggio inferiore,19:28,0.0
+2026-09-29,xi-Draconids,passaggio inferiore,19:28,10.0
 2026-09-29,nu-Eridanids,culmina,04:05,0.0
 2026-09-29,nu-Eridanids,tramonta,10:37,0.0
 2026-09-29,nu-Eridanids,passaggio inferiore,16:03,0.0
@@ -858,7 +858,7 @@ day,sciame,momento,ora,ampiezza
 2026-09-29,Southern Taurids,passaggio inferiore,12:14,0.0
 2026-09-29,Southern Taurids,sorge,17:42,0.0
 2026-09-29,Orionids,culmina,03:49,0.0
-2026-09-29,Orionids,tramonta,10:52,0.0
+2026-09-29,Orionids,tramonta,10:52,4.7
 2026-09-29,Orionids,passaggio inferiore,15:47,0.0
 2026-09-29,Orionids,sorge,20:41,0.0
 2026-09-29,Northern delta-Piscids,tramonta,07:02,0.0
@@ -866,25 +866,25 @@ day,sciame,momento,ora,ampiezza
 2026-09-29,Northern delta-Piscids,sorge,16:51,0.0
 2026-09-29,Northern delta-Piscids,culmina,23:54,0.0
 2026-09-29,pi6-Orionids,culmina,04:40,0.0
-2026-09-29,pi6-Orionids,tramonta,10:50,0.0
+2026-09-29,pi6-Orionids,tramonta,10:50,5.2
 2026-09-29,pi6-Orionids,passaggio inferiore,16:38,0.0
-2026-09-29,pi6-Orionids,sorge,22:26,0.0
+2026-09-29,pi6-Orionids,sorge,22:26,6.1
 2026-09-29,Aurigids,culmina,06:29,0.0
 2026-09-29,Aurigids,tramonta,16:18,0.0
 2026-09-29,Aurigids,passaggio inferiore,18:27,0.0
 2026-09-29,Aurigids,sorge,20:36,0.0
 2026-09-29,chi-Taurids,culmina,00:35,0.0
-2026-09-29,chi-Taurids,tramonta,08:15,0.0
+2026-09-29,chi-Taurids,tramonta,08:15,4.6
 2026-09-29,chi-Taurids,passaggio inferiore,12:33,0.0
 2026-09-29,chi-Taurids,sorge,16:52,0.0
-2026-09-29,omicron-Geminids,culmina,08:09,0.0
+2026-09-29,omicron-Geminids,culmina,08:09,4.6
 2026-09-29,omicron-Geminids,tramonta,18:28,0.0
 2026-09-29,omicron-Geminids,passaggio inferiore,20:08,0.0
-2026-09-29,omicron-Geminids,sorge,21:47,0.0
+2026-09-29,omicron-Geminids,sorge,21:47,4.5
 2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],tramonta,05:02,0.0
-2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,10:43,0.0
+2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],passaggio inferiore,10:43,5.2
 2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],sorge,16:25,0.0
-2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],culmina,22:42,0.0
+2026-09-29,Northern iota-Aquariids [variante 1973-mm λ148],culmina,22:42,13.8
 2026-09-29,Northern delta-Aquariids,culmina,00:09,0.0
 2026-09-29,Northern delta-Aquariids,tramonta,07:25,0.0
 2026-09-29,Northern delta-Aquariids,passaggio inferiore,12:07,0.0
@@ -898,9 +898,9 @@ day,sciame,momento,ora,ampiezza
 2026-09-29,omicron-Eridanids,passaggio inferiore,12:39,0.0
 2026-09-29,omicron-Eridanids,sorge,18:28,0.0
 2026-09-29,kappa-Cygnids,passaggio inferiore,07:27,0.0
-2026-09-29,kappa-Cygnids,culmina,19:25,0.0
+2026-09-29,kappa-Cygnids,culmina,19:25,10.0
 2026-09-29,sigma-Hydrids,culmina,02:59,0.0
-2026-09-29,sigma-Hydrids,tramonta,10:42,0.0
+2026-09-29,sigma-Hydrids,tramonta,10:42,5.2
 2026-09-29,sigma-Hydrids,passaggio inferiore,14:57,0.0
 2026-09-29,sigma-Hydrids,sorge,19:12,0.0
 2026-09-30,Daytime Sextantids,sorge,03:00,0.0
@@ -918,9 +918,9 @@ day,sciame,momento,ora,ampiezza
 2026-09-30,Northern iota-Aquariids,tramonta,06:25,0.0
 2026-09-30,Northern iota-Aquariids,passaggio inferiore,11:38,0.0
 2026-09-30,Northern iota-Aquariids,sorge,16:50,0.0
-2026-09-30,Northern iota-Aquariids,culmina,23:36,5.7
+2026-09-30,Northern iota-Aquariids,culmina,23:36,7.8
 2026-09-30,chi-Cygnids,passaggio inferiore,06:08,0.0
-2026-09-30,chi-Cygnids,culmina,18:06,5.2
+2026-09-30,chi-Cygnids,culmina,18:06,13.9
 2026-09-30,October Ursae Majorids,culmina,06:41,0.0
 2026-09-30,October Ursae Majorids,passaggio inferiore,18:39,0.0
 2026-09-30,xi-Draconids,culmina,07:32,0.0
@@ -936,7 +936,7 @@ day,sciame,momento,ora,ampiezza
 2026-09-30,tau-Cancrids,culmina,06:29,0.0
 2026-09-30,tau-Cancrids,tramonta,14:54,0.0
 2026-09-30,tau-Cancrids,passaggio inferiore,18:27,0.0
-2026-09-30,tau-Cancrids,sorge,22:01,6.0
+2026-09-30,tau-Cancrids,sorge,22:01,19.4
 2026-09-30,Southern Taurids,culmina,00:15,5.3
 2026-09-30,Southern Taurids,tramonta,06:45,0.0
 2026-09-30,Southern Taurids,passaggio inferiore,12:13,0.0
@@ -955,7 +955,7 @@ day,sciame,momento,ora,ampiezza
 2026-09-30,Northern delta-Piscids,culmina,23:53,4.7
 2026-09-30,pi6-Orionids,culmina,04:40,0.0
 2026-09-30,pi6-Orionids,tramonta,10:50,0.0
-2026-09-30,pi6-Orionids,passaggio inferiore,16:38,4.6
+2026-09-30,pi6-Orionids,passaggio inferiore,16:38,6.1
 2026-09-30,pi6-Orionids,sorge,22:25,0.0
 2026-09-30,Aurigids,culmina,06:25,0.0
 2026-09-30,Aurigids,tramonta,16:14,0.0
@@ -984,7 +984,7 @@ day,sciame,momento,ora,ampiezza
 2026-09-30,Northern delta-Aquariids,culmina,00:05,5.3
 2026-09-30,Northern delta-Aquariids,tramonta,07:21,0.0
 2026-09-30,Northern delta-Aquariids,passaggio inferiore,12:03,0.0
-2026-09-30,Northern delta-Aquariids,sorge,16:45,4.6
+2026-09-30,Northern delta-Aquariids,sorge,16:45,6.1
 2026-09-30,kappa-Cygnids,passaggio inferiore,07:25,0.0
 2026-09-30,kappa-Cygnids,culmina,19:23,0.0
 2026-09-30,sigma-Hydrids,culmina,02:59,0.0
