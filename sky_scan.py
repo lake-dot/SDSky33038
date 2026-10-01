@@ -975,25 +975,36 @@ def sec_serie(folder, day, D, L):
         L.append(f"  {m // 60:02d}:{m % 60:02d} {comp}: {len(h)} giorni dal {entry}, spostamento {(-dr) + 0.0:+.1f} min/g, "
                  f"ampiezze {prof} (max {mx:.0f} il {(d0 - pd.Timedelta(days=kmx)).strftime('%d/%m')})"
                  + (f" | cielo: {'; '.join(sm)}" if sm else " | cielo: nessun momento che la segua tutti i giorni"))
-    # uscite di scena: serie di almeno 4 giorni attive fino a ieri, assenti oggi
-    if 1 in byk:
-        outs = set()
-        for _, e in byk[1].iterrows():
-            for dr in SERIE_DRIFTS:
-                h = chain(e.m, dr, start_k=1)
-                if len(h) >= 4:
-                    exp = e.m + dr
-                    if not (((byk[0].m - exp + 720) % 1440 - 720).abs() <= SERIE_TOL).any():
-                        outs.add((int(e.m), len(h)))
-                    break
-        eu7 = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
-        for m, n in sorted(outs)[:8]:
-            t = pd.Timestamp(day) + pd.Timedelta(minutes=m)
-            cov = sum(1 for st in eu7 if t in D[st].index and pd.notna(D[st].X.get(t)))
-            if cov < 5:
-                L.append(f"  … serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi NON VALUTABILE (solo {cov} stazioni con dati)")
-            else:
-                L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi assente")
+    # pausa e uscita di scena (regola 1/10/2026): dentro una serie è ammesso SERIE_GAP giorno mancante,
+    # quindi il primo giorno di assenza è solo "in pausa"; l'uscita scatta dopo SERIE_GAP+1 giorni consecutivi di assenza.
+    def _absent(k, exp):
+        g = byk.get(k)
+        return g is None or not (((g.m - exp + 720) % 1440 - 720).abs() <= SERIE_TOL).any()
+    def _series_ending(start_k):
+        res, seen = [], []
+        if start_k not in byk: return res
+        for _, e in byk[start_k].iterrows():
+            # tutte le derive che danno una serie di ≥4 giorni: è assente solo se NESSUNA la ritrova dopo
+            cands = [(dr, chain(e.m, dr, start_k=start_k)) for dr in SERIE_DRIFTS]
+            cands = [(dr, h) for dr, h in cands if len(h) >= 4]
+            if not cands: continue
+            if all(all(_absent(k, e.m + dr * (start_k - k)) for k in range(start_k - 1, -1, -1)) for dr, _ in cands) \
+                    and all(abs((int(e.m) - s + 720) % 1440 - 720) > 8 for s in seen):
+                dr, h = max(cands, key=lambda x: len(x[1]))
+                res.append((int(e.m), len(h), dr)); seen.append(int(e.m))
+        return sorted(res)
+    eu7 = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
+    def _cov(m):
+        t = pd.Timestamp(day) + pd.Timedelta(minutes=m % 1440)
+        return sum(1 for st in eu7 if t in D[st].index and pd.notna(D[st].X.get(t)))
+    for m, n, dr in _series_ending(1)[:8]:                  # attiva fino a ieri, assente oggi → pausa
+        cov = _cov(int(round(m + dr)))
+        if cov < 5:
+            L.append(f"  … serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi NON VALUTABILE (solo {cov} stazioni con dati)")
+        else:
+            L.append(f"  ⏸ in pausa oggi: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — 1° giorno di assenza")
+    for m, n, dr in _series_ending(SERIE_GAP + 1)[:8]:     # attiva fino a 2 giorni fa, assente ieri e oggi → uscita
+        L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni) — assente da {SERIE_GAP + 1} giorni consecutivi")
     # marker per sciame: ampiezza ai quattro momenti di ogni radiante attivo (archivio SKY_MARKER.csv)
     rows = []
     for (name, kind), t0 in mom(0).items():
