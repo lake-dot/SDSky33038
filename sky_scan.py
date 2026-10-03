@@ -1019,6 +1019,107 @@ def sec_serie(folder, day, D, L):
     mo = pd.read_csv(mk) if mk.exists() else pd.DataFrame(columns=['day', 'sciame', 'momento', 'ora', 'ampiezza'])
     mo = mo[mo.day != day]; pd.concat([mo, pd.DataFrame(rows)], ignore_index=True).to_csv(mk, index=False)
 
+# ─── RICORRENZE A PIÙ SCALE + SCIAMI IN ARRIVO (regola 3/10/2026) ─────────────
+# Sempre due letture: le ricorrenze puntuali (±4 min, sezione 0c) E i movimenti più larghi.
+# Scala media: eventi ≥5× entro ±10 min; scala larga: i blocchi forti (≥7×) entro ±25 min, con spostamento libero.
+# Sciami in arrivo: per ogni sciame entro 12° dal picco, ampiezza ai quattro momenti negli ultimi giorni (±12 min).
+SCALE = [('media', 10, 5.0, 3, 9, [x / 2 for x in range(-12, 13)]),
+         ('larga', 25, 7.0, 3, 12, list(range(-45, 46, 3)))]   # nome, tolleranza min, ampiezza minima, giorni minimi, su quanti giorni, spostamenti provati
+
+def sec_scale(folder, day, D, L):
+    base = folder.parent
+    arch = base / 'SKY_SERIE_EVENTI.csv'
+    if not arch.exists(): return
+    ev = pd.read_csv(arch); d0 = pd.Timestamp(day)
+    ev['k'] = [(d0 - pd.Timestamp(x)).days for x in ev.day]
+    ev = ev[(ev.k >= 0) & (ev.k <= 12)]
+    # profilo largo della giornata: massimo per mezz'ora (archivio SKY_PROFILO.csv), per vedere i movimenti lenti dei blocchi
+    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
+    R = pd.concat([pd.concat([(lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
+                              for c in 'XY' if c in D[s]], axis=1).max(axis=1).rename(s) for s in eu], axis=1)
+    med = R.median(axis=1)
+    prof = med.groupby((med.index.hour * 60 + med.index.minute) // 30).max()
+    pf = base / 'SKY_PROFILO.csv'
+    po = pd.read_csv(pf) if pf.exists() else pd.DataFrame(columns=['day', 'bin', 'max'])
+    po = pd.concat([po[po.day != day], pd.DataFrame({'day': day, 'bin': prof.index, 'max': prof.round(1).values})], ignore_index=True)
+    po.to_csv(pf, index=False)
+    L.append('\n══ 0d. RICORRENZE A PIÙ SCALE — puntuali (0c, ±4 min) e movimenti più larghi ══')
+    hm_ = lambda m: f'{int(m) // 60 % 24:02d}:{int(m) % 60:02d}'
+    for name, tol, amin, dmin, span, drifts in SCALE:
+        e = ev[(ev.amp >= amin) & (ev.k <= span)]
+        byk = {k: g for k, g in e.groupby('k')}
+        def tracks(k0):
+            """tracce ancorate agli eventi del giorno k0 (0 = oggi), cercate all'indietro e in avanti fino a oggi"""
+            found = []
+            if k0 not in byk: return found
+            for _, x in byk[k0].iterrows():
+                best = None
+                for dr in drifts:
+                    hits = []
+                    for k in range(0, span + 1):
+                        g = byk.get(k)
+                        if g is None: continue
+                        dm = ((g.m - (x.m - dr * (k - k0)) + 720) % 1440 - 720).abs()
+                        if (dm <= tol).any():
+                            j = dm.idxmin(); hits.append((k, int(g.loc[j, 'm']), float(g.loc[j, 'amp'])))
+                    if len(hits) >= dmin:
+                        sp = sum(abs(((m - (x.m - dr * (k - k0))) + 720) % 1440 - 720) for k, m, a in hits)
+                        key = (len(hits), -sp, -abs(dr))
+                        if best is None or key > best[0]: best = (key, dr, hits)
+                if best: found.append((int(x.m), best[1], best[2]))
+            found.sort(key=lambda f: (-len(f[2]), f[0])); kept = []
+            for f in found:
+                if all(abs((f[0] - g[0] + 720) % 1440 - 720) > 2 * tol for g in kept): kept.append(f)
+            return kept
+        def line(pref, hits, dr):
+            trac = ' → '.join(f"{(d0 - pd.Timedelta(days=k)).strftime('%d/%m')} {hm_(mm)} ({a:.0f}×)" for k, mm, a in sorted(hits, reverse=True))
+            first = (d0 - pd.Timedelta(days=max(k for k, _, _ in hits))).strftime('%d/%m')
+            return f'  {pref} scala {name} (±{tol} min): entrata {first}, {len(hits)} giorni, spostamento {(-dr) + 0.0:+.1f} min/g | {trac}'
+        today = tracks(0)
+        if not today: L.append(f'  scala {name} (±{tol} min, eventi ≥{amin:.0f}×): nessun movimento che arrivi a oggi su almeno {dmin} giorni')
+        for m, dr, hits in sorted(today): L.append(line('●', hits, dr))
+        # uscite: tracce di almeno 4 giorni che arrivavano a 2 giorni fa e mancano ieri e oggi (durata e poi scomparsa = non è caso)
+        for m, dr, hits in sorted(tracks(2)):
+            ks = [k for k, _, _ in hits]
+            if len(hits) >= 4 and min(ks) == 2:
+                L.append(line('✖ uscita (assente da 2 giorni)', hits, dr))
+        for m, dr, hits in sorted(tracks(1)):
+            ks = [k for k, _, _ in hits]
+            if len(hits) >= 4 and min(ks) == 1:
+                L.append(line('⏸ in pausa oggi', hits, dr))
+    # il profilo a mezz'ore: le fasce orarie più forti di oggi e nei giorni prima (movimento dei blocchi)
+    L.append('  Fasce di mezz\'ora più forti, giorno per giorno (ora UT e massimo):')
+    for dd in sorted(po.day.unique())[-6:]:
+        g = po[po.day == dd].sort_values('max', ascending=False).head(4).sort_values('bin')
+        L.append(f"    {dd[5:]}: " + '  '.join(f"{int(b) // 2:02d}:{'30' if int(b) % 2 else '00'} {v:.0f}×" for b, v in zip(g.bin, g['max'])))
+    # sciami in arrivo o appena passati: ampiezza ai quattro momenti, ultimi 7 giorni, tolleranza ±12 min
+    try:
+        import sky_d, sky_catalog as CAT, datetime as _dt
+        dd0 = _dt.datetime.fromisoformat(day); _, sun = sky_d.get_planets(dd0 + _dt.timedelta(hours=12))
+        yf = dd0.year + (dd0.timetuple().tm_yday - 1) / 365.25
+        near = {sh['name']: sh['dist_peak'] for sh in CAT.active_showers(sun, yf) if abs(sh.get('dist_peak', 99)) <= 12}
+    except Exception:
+        near = {}
+    if near:
+        L.append('\n══ 0e. SCIAMI ENTRO 12° DAL PICCO — ampiezza ai loro momenti, ultimi 7 giorni (±12 min; "·" = sotto 4×) ══')
+        allev = pd.read_csv(arch)
+        days = [(d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d') for k in range(6, -1, -1)]
+        L.append('  ' + ' ' * 44 + '  '.join(x[8:] + '/' + x[5:7] for x in days))
+        for nm, dist in sorted(near.items(), key=lambda kv: abs(kv[1])):
+            for kind in ['culmina', 'passaggio inferiore', 'sorge', 'tramonta']:
+                cells, n_ok = [], 0
+                for x in days:
+                    mk = _moments_min(x, base).get(('☄ ' + nm, kind)); g = allev[allev.day == x]
+                    if mk is None or g.empty: cells.append('  –  '); continue
+                    w = g[((g.m - mk + 720) % 1440 - 720).abs() <= 12]
+                    if w.empty: cells.append('  ·  ')
+                    else: cells.append(f'{w.amp.max():4.0f}×'); n_ok += 1
+                if n_ok >= 2:
+                    mk0 = _moments_min(day, base).get(('☄ ' + nm, kind))
+                    lab = f"{nm} {kind} ({hm_(mk0) if mk0 is not None else '—'})"
+                    flag = '  ◀ in crescita' if n_ok >= 3 and cells[-1].strip() not in ('·', '–') else ''
+                    L.append(f"  {lab[:44]:44s}" + '  '.join(cells) + f'  | Δpicco {dist:.1f}°' + flag)
+
 def main():
     if len(sys.argv) < 2:
         sys.exit('Uso: python3 sky_scan.py <cartella SKY_AAAA-MM-GG>')
@@ -1049,7 +1150,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
-    Ls = []; sec_serie(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
+    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
