@@ -63,7 +63,7 @@ jobs:
       - name: Commit file del giorno e registri in data/
         run: |
           D=${{ steps.d.outputs.day }}
-          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_SINCRONISMI.csv data/days/SKY_SERIE_EVENTI.csv data/days/SKY_MARKER.csv data/days/SKY_MOMENTI.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt data/days/SKY_$D/TUTTE_$D.csv.gz
+          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_SINCRONISMI.csv data/days/SKY_SERIE_EVENTI.csv data/days/SKY_MARKER.csv data/days/SKY_MOMENTI.csv data/days/SKY_PROFILO.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt data/days/SKY_$D/TUTTE_$D.csv.gz
           do
             [ -e "$f" ] && git add "$f"
           done
@@ -73,19 +73,6 @@ jobs:
             git commit -m "SKY giornaliero $D"
             git push || { git pull --rebase --autostash origin main; git push; }
           }
-
-      - name: Messaggio alle 08:30 ora italiana
-        if: success()
-        env:
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-        run: |
-          D=${{ steps.d.outputs.day }}
-          T=$(TZ=Europe/Rome date -d "08:30" +%s)
-          NOW=$(date +%s)
-          AT=""; [ "$T" -gt "$((NOW+60))" ] && AT="$T"
-          curl -sS -H "Title: SKY $D pronto" ${AT:+-H "At: $AT"} \
-            -d "File pronti in data/days/SKY_$D (SCAN, RIEPILOGO, TUTTE)" \
-            "https://ntfy.sh/$NTFY_TOPIC" || true
 
       - name: Avviso immediato se errore
         if: failure()
