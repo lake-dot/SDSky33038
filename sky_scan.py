@@ -1123,18 +1123,8 @@ def sec_scale(folder, day, D, L):
 # ── 0f. firma degli eventi, stop di stazione, ricorrenze aperte (regole 3-4/10/2026) ──
 FIRMA_MIN = 5.0          # eventi elencati con la firma: picco ≥ 5×
 NORD_FERMO = 10.0        # ABK sotto questa soglia (nT/min) = "nord fermo"
-RICORRENZE = [           # (etichetta, radiante, momento, minuto di riserva, deriva min/giorno dal 2/10/2026)
-    ('mezzanotte · Tauridi S culmina',            '☄ Southern Taurids',    'culmina',             6,   -1.0),
-    ('mattino · Orionidi culmina / Draconidi p.i.', '☄ Orionids',          'culmina',             226, -1.0),
-    ('Orionidi tramonta',                         '☄ Orionids',            'tramonta',            650, -1.0),
-    ('pomeriggio · Draconidi culmina / Orionidi p.i.', '☄ Orionids',       'passaggio inferiore', 944, -1.0),
-    ('gradino 18:34 · tau-Cancridi p.i.',         '☄ tau-Cancrids',        'passaggio inferiore', 1106, -0.4),
-    ('sera · Orionidi sorge',                     '☄ Orionids',            'sorge',               1238, -1.0),
-    ('sera · Sestantidi diurne p.i.',             '☄ Daytime Sextantids',  'passaggio inferiore', 1248, -1.0),
-    ('tau-Cancridi sorge (serie 22:07)',          '☄ tau-Cancrids',        'sorge',               1320, -0.4),
-    ('pi6-Orionidi sorge',                        '☄ pi6-Orionids',        'sorge',               1340, -1.5),
-    ('blocco tardo 22:55 (senza nome)',           None,                    None,                  1375, 0.0),
-]
+RIC_MIN_AMP = 5.0        # 0h: ampiezza minima per contare un giorno come presente
+RIC_MIN_DAYS = 4         # 0h: giorni presenti su 8 per entrare in tabella
 
 def sec_firma(folder, day, D, L):
     base = folder.parent
@@ -1219,7 +1209,7 @@ def sec_firma(folder, day, D, L):
     if not arch.exists(): return
     allev = pd.read_csv(arch); d0 = pd.Timestamp(day)
     days = [(d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d') for k in range(7, -1, -1)]
-    L.append('\n══ 0h. RICORRENZE APERTE — ampiezza ogni giorno (±12 min; "·" = sotto 4×; "–" = giorno non in archivio) ══')
+    L.append('\n══ 0h. RICORRENZE AI MOMENTI DEL CIELO — ampiezza ogni giorno (±12 min; "·" = sotto 4×; "–" = giorno non in archivio) ══')
     L.append('  ' + ' ' * 52 + ' '.join(x[8:] + '/' + x[5:7] for x in days) + '   andamento')
     def cell(x, mk):
         g = allev[allev.day == x]
@@ -1239,16 +1229,27 @@ def sec_firma(folder, day, D, L):
         if a >= b * 1.4 and a - b >= 1.5: return '▲ cresce'
         if a <= b * 0.7 and b - a >= 1.5: return '▼ cala'
         return '= stabile'
-    for lab, nm, kind, m_ref, drift in RICORRENZE:
+    # righe costruite dai dati: ogni momento del cielo di oggi (qualsiasi radiante o corpo attivo) seguito
+    # giorno per giorno con il SUO orario; entra in tabella se è presente in almeno RIC_MIN_DAYS giorni su 8
+    today = _moments_min(day, base); rows = {}
+    for (nm, kind), mk0 in today.items():
         vals = []
         for x in days:
-            mk = _moments_min(x, base).get((nm, kind)) if nm else None
-            if mk is None: mk = m_ref + drift * (pd.Timestamp(x) - pd.Timestamp('2026-10-02')).days
-            vals.append(cell(x, mk))
-        mk0 = _moments_min(day, base).get((nm, kind)) if nm else None
-        if mk0 is None: mk0 = m_ref + drift * (d0 - pd.Timestamp('2026-10-02')).days
-        cells = ['  –  ' if v is None else ('  ·  ' if v < 4 else f'{v:4.1f}×') for v in vals]
-        L.append(f"  {(lab + ' ' + hm_(mk0))[:52]:52s}" + ' '.join(cells) + '   ' + trend(vals))
+            mk = _moments_min(x, base).get((nm, kind))
+            vals.append(None if mk is None else cell(x, mk))
+        pres = sum(1 for v in vals if v is not None and v >= RIC_MIN_AMP)
+        if pres < RIC_MIN_DAYS: continue
+        key = tuple(vals)                       # stessi eventi = stessa riga (più nomi sulla stessa riga)
+        rows.setdefault(key, []).append((mk0, f"{nm.replace('☄ ', '')} {kind}".strip()))
+    nmom = len(today)
+    for key, names in sorted(rows.items(), key=lambda kv: min(n[0] for n in kv[1])):
+        names.sort(); mk0 = names[0][0]
+        lab = hm_(mk0) + ' ' + ' / '.join(n[1] for n in names[:2]) + (f' +{len(names) - 2}' if len(names) > 2 else '')
+        cells = ['  –  ' if v is None else ('  ·  ' if v < 4 else f'{v:4.1f}×') for v in key]
+        L.append(f"  {lab[:52]:52s}" + ' '.join(cells) + '   ' + trend(list(key)))
+    if not rows: L.append('  nessun momento del cielo presente in almeno %d giorni su 8.' % RIC_MIN_DAYS)
+    L.append(f'  (righe scelte dai dati fra {nmom} momenti del cielo di oggi: presenti ≥{RIC_MIN_AMP:.0f}× in almeno {RIC_MIN_DAYS} giorni su 8.'
+             ' Le serie senza un momento del cielo sono in 0c e 0d.)')
     # blocco diurno: evento più forte fra le 09 e le 18 UT, giorno per giorno (per vedere lo spostamento)
     cells = []
     for x in days:
