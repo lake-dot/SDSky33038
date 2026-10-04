@@ -709,7 +709,7 @@ def sec_anatomia(folder, day, D, L, reg):
         if ded and (t - ded[-1][0]).total_seconds() < 600: continue
         ded.append((t, lab))
     evs = ded
-    invs = []
+    invs = []; invs5 = []
     for t, lab in evs:
         t0 = t - pd.Timedelta(minutes=40)
         dx = {s: D[s].X.loc[t0:t] - D[s].X.get(t0, np.nan) for s in eu}
@@ -722,6 +722,12 @@ def sec_anatomia(folder, day, D, L, reg):
         dy = {s: (D[s].Y.get(t, np.nan) - D[s].Y.get(t0, np.nan)) for s in eu}
         inv = _y_inversion_lon(dy)
         if inv is not None: invs.append(inv)
+        # stessa misura sui soli 5 minuti dell'evento (senza la curva del giorno)
+        ta, tb = t - pd.Timedelta(minutes=1), t + pd.Timedelta(minutes=4)
+        dy5 = {s: (D[s].Y.get(tb, np.nan) - D[s].Y.get(ta, np.nan)) for s in eu}
+        ok5 = [abs(v) for v in dy5.values() if not np.isnan(v)]
+        inv5 = _y_inversion_lon(dy5) if ok5 and max(ok5) >= 0.5 else None
+        if inv5 is not None: invs5.append((t, inv5))
         order = sorted(onset, key=lambda s: onset[s])
         east = [s for s in eu if COORD[s][1] > 15]; west = [s for s in eu if COORD[s][1] < 13]
         de = [onset[s] for s in east if s in onset]; dw = [onset[s] for s in west if s in onset]
@@ -734,10 +740,15 @@ def sec_anatomia(folder, day, D, L, reg):
         L.append(f"  {t:%H:%M} {lab}: parte prima {order[0] if order else '—'}"
                  + (f"; est in anticipo di {lead:+.0f} min sull'ovest" if not np.isnan(lead) else '')
                  + (f"; inversione di Y a {inv:.1f}°E" if inv is not None else '; Y senza inversione')
+                 + (f" (sui 5 min: {inv5:.1f}°E)" if inv5 is not None else ' (sui 5 min: nessuna)')
                  + (f" | fuori EU (ΔX 40 min): {' '.join(ext)}" if ext else ''))
     if invs:
         L.append(f"  Inversioni di Y oggi: mediana {np.median(invs):.1f}°E (SD = 13.0°E) su {len(invs)} eventi")
         reg['Yinv_lon_med'] = round(float(np.median(invs)), 1)
+    near = [(t, v) for t, v in invs5 if 11 <= v <= 15]
+    L.append(f"  Inversioni di Y sui 5 minuti dell'evento: {len(invs5)}, di cui a 11–15°E (SD = 13.0°E): {len(near)}"
+             + (' — ' + ' '.join(f'{hm(t)}@{v:.0f}°E' for t, v in near) if near else '')
+             + ('   ◀ due o più sulla longitudine di SD' if len(near) >= 2 else ''))
 
 # ─── SOLE, NODI, PERCORSI (D2 + D7 nella stessa tabella) ──────────────────────
 
