@@ -128,8 +128,8 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   DUR: 12:00 Z-2.2 F-1.4✓ 17:41 Z-2.0 F-1.1✓
 
 ══ 3. EVENTI SINCRONI (≥5 stazioni EU: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR) ══
-  X al minuto: 05:21(5) max NGK-1.4 |fuori EU: ABK-3.1 KAK-1.0 FRD+3.0 OTT+2.5 BRD+5.9 ; 05:51(5) max NGK+1.3 |fuori EU: ABK+1.8 KAK+0.8 FRD-0.9 OTT+1.5 BRD-4.1 ; 08:34(6) max BEL-1.8 |fuori EU: ABK-2.9 KAK-1.1 FRD+0.7 ⟵ L1 svolta Bz →nord (arrivo 08:33) ; 13:23(7) max NGK+2.0 |fuori EU: ABK+7.3 KAK+0.4 FRD-0.4 ⟵ L1 svolta Bz →sud (arrivo 13:16) ; 14:36–14:37(6) max NGK+1.7 |fuori EU: ABK+4.9 KAK+0.6 FRD-0.5 ⟵ L1 P+32% (arrivo 14:24) ; 23:10(5) max BEL-2.0 |fuori EU: ABK-21.5 KAK+0.3 FRD+0.4 ; 23:13(7) max NGK-1.6 |fuori EU: ABK-21.5 KAK+0.3 FRD+0.4 ; 23:25–23:27(6) max NGK+1.6 |fuori EU: ABK+9.3 KAK-0.3 FRD-0.5
-  Y al minuto: 05:13(5) max BEL+1.4 |fuori EU: ABK+2.1 KAK+0.4 FRD-1.6 OTT-3.5 BRD+8.6 ; 05:49(7) max BEL+2.1 |fuori EU: ABK-4.1 KAK+0.3 FRD+1.5 OTT+2.6 BRD+2.1 ; 05:52(5) max BEL-1.6 |fuori EU: ABK-4.1 KAK+0.4 FRD+1.4 OTT+3.1 BRD+2.1 ; 06:43(6) max NGK-1.7 |fuori EU: ABK-2.2 KAK+0.3 FRD+0.4 ; 06:49(6) max CLF+1.7 |fuori EU: ABK+3.0 KAK+0.3 FRD+0.5 ; 07:58(7) max CLF-2.9 |fuori EU: ABK-8.6 KAK-0.5 FRD-0.8 ; 08:01(8) max CLF+2.0 |fuori EU: ABK-8.6 KAK-0.5 FRD-0.8 ; 08:39(7) max BEL-2.5 |fuori EU: ABK-7.8 KAK-0.6 FRD+1.0 ⟵ L1 svolta Bz →nord (arrivo 08:33) ; 10:53(8) max BEL-2.3 |fuori EU: ABK-2.8 KAK+0.2 FRD+0.9 ⟵ L1 P-23% (arrivo 10:44) ; 23:26(7) max BEL+2.3 |fuori EU: ABK-6.0 KAK-0.3 FRD+0.3
+  X al minuto: 05:21(5) max NGK-1.4 |fuori EU: ABK-3.1 KAK-1.0 FRD+3.0 OTT+2.5 BRD+5.9 ; 05:51(5) max NGK+1.3 |fuori EU: ABK+1.8 KAK+0.8 FRD-0.9 OTT+1.5 BRD-4.1 ; 08:34(6) max BEL-1.8 |fuori EU: ABK-2.9 KAK-1.1 FRD+0.7 ⟵ L1 svolta Bz →nord (arrivo 08:43) ; 13:23(7) max NGK+2.0 |fuori EU: ABK+7.3 KAK+0.4 FRD-0.4 ⟵ L1 svolta Bz →sud (arrivo 13:26) ; 14:36–14:37(6) max NGK+1.7 |fuori EU: ABK+4.9 KAK+0.6 FRD-0.5 ⟵ L1 P+32% (arrivo 14:35) ; 23:10(5) max BEL-2.0 |fuori EU: ABK-21.5 KAK+0.3 FRD+0.4 ; 23:13(7) max NGK-1.6 |fuori EU: ABK-21.5 KAK+0.3 FRD+0.4 ; 23:25–23:27(6) max NGK+1.6 |fuori EU: ABK+9.3 KAK-0.3 FRD-0.5
+  Y al minuto: 05:13(5) max BEL+1.4 |fuori EU: ABK+2.1 KAK+0.4 FRD-1.6 OTT-3.5 BRD+8.6 ; 05:49(7) max BEL+2.1 |fuori EU: ABK-4.1 KAK+0.3 FRD+1.5 OTT+2.6 BRD+2.1 ; 05:52(5) max BEL-1.6 |fuori EU: ABK-4.1 KAK+0.4 FRD+1.4 OTT+3.1 BRD+2.1 ; 06:43(6) max NGK-1.7 |fuori EU: ABK-2.2 KAK+0.3 FRD+0.4 ; 06:49(6) max CLF+1.7 |fuori EU: ABK+3.0 KAK+0.3 FRD+0.5 ; 07:58(7) max CLF-2.9 |fuori EU: ABK-8.6 KAK-0.5 FRD-0.8 ; 08:01(8) max CLF+2.0 |fuori EU: ABK-8.6 KAK-0.5 FRD-0.8 ; 08:39(7) max BEL-2.5 |fuori EU: ABK-7.8 KAK-0.6 FRD+1.0 ⟵ L1 svolta Bz →nord (arrivo 08:43) ; 10:53(8) max BEL-2.3 |fuori EU: ABK-2.8 KAK+0.2 FRD+0.9 ⟵ L1 P-23% (arrivo 10:53) ; 23:26(7) max BEL+2.3 |fuori EU: ABK-6.0 KAK-0.3 FRD+0.3
   X su 30 min (|Δ|>8.0): 02:27–02:46+
   Y su 30 min (|Δ|>8.0): 11:03–11:39− 12:34–12:35− 12:40–12:40− 12:42–12:43− 12:45–12:51−
 
@@ -152,10 +152,10 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   Z medio: WIC44282.8 LON42828.7 THY43854.2 CLF43311.8 BFO43837.6 NGK46142.6 BEL47143.2 IZN40880.9 DUR39907.0 ABK52486.2 KAK36025.9 FRD45060.7 OTT49975.9 BRD53754.0
 
 ══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
-  sorgente SOLAR1, distanza 1.41 Mkm, velocità 285 km/s, ritardo tipico 83 min
-  Bz < −5 nT per ≥20 min (ora L1): 03/10 05:01–05:30 03/10 06:24–07:12 04/10 05:42–06:25
-  copertura L1 → Terra: 15:55 del 02/10 in poi
-  Discontinuità a L1 (arrivo stimato a Terra): 02:48[P+574%] 08:33[svolta Bz →nord] 09:30[P+32%] 10:44[P-23%] 11:31[svolta Bz →nord] 12:36[svolta Bz →nord] 12:58[svolta Bz →sud] 13:16[svolta Bz →sud] 14:24[P+32%] 21:10[svolta Bz →sud]
+  sorgente SOLAR1, distanza 1.58 Mkm, velocità 288 km/s, ritardo tipico 92 min
+  Bz < −5 nT per ≥20 min (ora L1): 03/10 05:01–05:30 03/10 06:24–07:12 04/10 05:42–06:25 04/10 09:14–09:59 04/10 10:01–10:30
+  copertura L1 → Terra: 16:04 del 02/10 in poi
+  Discontinuità a L1 (arrivo stimato a Terra): 02:59[P+574%] 08:43[svolta Bz →nord] 09:40[P+32%] 10:53[P-23%] 11:41[svolta Bz →nord] 12:46[svolta Bz →nord] 13:08[svolta Bz →sud] 13:26[svolta Bz →sud] 14:35[P+32%] 21:20[svolta Bz →sud]
   (pressione su → X su atteso; pressione giù → X giù)
 
 ══ 9. MOVIMENTI REGIONALI (2–4 stazioni insieme, contro il resto della rete) ══
@@ -302,6 +302,7 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   culminazione tau-Cancrids: 2 coincidenze (attese per caso ≈2.0): 23:10X↔10-02 23:11 (-437 min) 23:13X↔10-02 23:11 (-434 min)
   culminazione Southern Taurids: 3 coincidenze (attese per caso ≈2.0): 23:10X↔10-02 23:11 (-61 min) 23:13X↔10-02 23:11 (-58 min) 10:53Y↔09-26 11:01 (+642 min)
   culminazione chi-Cygnids: 2 coincidenze (attese per caso ≈1.4): 13:23X↔09-30 13:38 (-271 min) 23:10X↔10-02 23:11 (+316 min)
+  culminazione Leonis Minorids: 0 coincidenze (attese per caso ≈0.0)
   culminazione Orionids: 3 coincidenze (attese per caso ≈1.4): 23:10X↔10-02 23:07 (-275 min) 23:10X↔10-02 23:11 (-275 min) 23:13X↔10-02 23:11 (-272 min)
   culminazione September epsilon-Perseids: 3 coincidenze (attese per caso ≈2.0): 23:10X↔10-02 23:07 (-249 min) 23:10X↔10-02 23:11 (-249 min) 23:13X↔10-02 23:11 (-246 min)
   culminazione nu-Eridanids: 3 coincidenze (attese per caso ≈1.4): 23:10X↔10-02 23:07 (-292 min) 23:10X↔10-02 23:11 (-292 min) 23:13X↔10-02 23:11 (-289 min)

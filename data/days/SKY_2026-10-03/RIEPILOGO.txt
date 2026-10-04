@@ -1,6 +1,6 @@
 ══════════════════════════════════════════════════════════════════════
 SKY — RIEPILOGO GIORNATA
-Giornata: 2026-10-03 (UTC) — estrazione 2026-10-04 06:36 UT
+Giornata: 2026-10-03 (UTC) — estrazione 2026-10-04 10:45 UT
 Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
 ══════════════════════════════════════════════════════════════════════
 
