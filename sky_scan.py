@@ -1120,6 +1120,148 @@ def sec_scale(folder, day, D, L):
                     flag = '  ◀ in crescita' if n_ok >= 3 and cells[-1].strip() not in ('·', '–') else ''
                     L.append(f"  {lab[:44]:44s}" + '  '.join(cells) + f'  | Δpicco {dist:.1f}°' + flag)
 
+# ── 0f. firma degli eventi, stop di stazione, ricorrenze aperte (regole 3-4/10/2026) ──
+FIRMA_MIN = 5.0          # eventi elencati con la firma: picco ≥ 5×
+NORD_FERMO = 10.0        # ABK sotto questa soglia (nT/min) = "nord fermo"
+RICORRENZE = [           # (etichetta, radiante, momento, minuto di riserva, deriva min/giorno dal 2/10/2026)
+    ('mezzanotte · Tauridi S culmina',            '☄ Southern Taurids',    'culmina',             6,   -1.0),
+    ('mattino · Orionidi culmina / Draconidi p.i.', '☄ Orionids',          'culmina',             226, -1.0),
+    ('Orionidi tramonta',                         '☄ Orionids',            'tramonta',            650, -1.0),
+    ('pomeriggio · Draconidi culmina / Orionidi p.i.', '☄ Orionids',       'passaggio inferiore', 944, -1.0),
+    ('gradino 18:34 · tau-Cancridi p.i.',         '☄ tau-Cancrids',        'passaggio inferiore', 1106, -0.4),
+    ('sera · Orionidi sorge',                     '☄ Orionids',            'sorge',               1238, -1.0),
+    ('sera · Sestantidi diurne p.i.',             '☄ Daytime Sextantids',  'passaggio inferiore', 1248, -1.0),
+    ('tau-Cancridi sorge (serie 22:07)',          '☄ tau-Cancrids',        'sorge',               1320, -0.4),
+    ('pi6-Orionidi sorge',                        '☄ pi6-Orionids',        'sorge',               1340, -1.5),
+    ('blocco tardo 22:55 (senza nome)',           None,                    None,                  1375, 0.0),
+]
+
+def sec_firma(folder, day, D, L):
+    base = folder.parent
+    hm_ = lambda m: f'{int(m) // 60 % 24:02d}:{int(m) % 60:02d}'
+    loc = lambda m: hm_(m + 120)
+    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
+    if len(eu) < 3: return
+    show = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL', 'IZN', 'ABK'] if s in D]
+    nt = pd.DataFrame({s: D[s][['X', 'Y']].diff().abs().max(axis=1) for s in show})
+    R = pd.concat([pd.concat([(lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
+                              for c in 'XY'], axis=1).max(axis=1).rename(s) for s in eu], axis=1)
+    med = R.median(axis=1); nst = (R >= 3).sum(axis=1)
+    hit = med[(med >= 4) & (nst >= min(5, len(eu)))]
+    # segnale proprio del corridoio: mediana sui riferimenti di (stazione − riferimento), variazione in 5 minuti
+    ref = [s for s in ['BFO', 'NGK', 'BEL', 'CLF'] if s in D]; cor = [s for s in ['LON', 'THY', 'WIC'] if s in D]
+    own, ownx = {}, {}
+    for s in cor:
+        for c in 'XY':
+            if not ref: continue
+            o = pd.concat([(D[s][c] - D[r][c]).diff(5) for r in ref], axis=1).median(axis=1).abs()
+            own[s + c] = o; ownx[s + c] = o / o.rolling(181, center=True, min_periods=60).median().clip(lower=0.1)
+    # eventi: gruppi di minuti a meno di 4 minuti l'uno dall'altro
+    groups, cur = [], None
+    for t in hit.index:
+        if cur and (t - cur[1]).total_seconds() <= 240: cur[1] = t
+        else:
+            cur = [t, t]; groups.append(cur)
+    L.append(f'\n══ 0f. FIRMA DEGLI EVENTI (picco ≥ {FIRMA_MIN:.0f}×) — nT/min per stazione, nord, segnale proprio del corridoio ══')
+    L.append('  ora UT (loc)        picco   ' + ' '.join(f'{s:>4s}' for s in show) + '   nord     corridoio (proprio)')
+    n_all = len(groups); n_show = 0; sync_times = []
+    for a, b in groups:
+        pk = float(med.loc[a:b].max()); sync_times.append((a, b, pk))
+        if pk < FIRMA_MIN: continue
+        n_show += 1
+        w0, w1 = a - pd.Timedelta(minutes=1), b + pd.Timedelta(minutes=1)
+        vals = nt.loc[w0:w1].max()
+        abk = vals.get('ABK', np.nan)
+        nord = '   –   ' if pd.isna(abk) else ('fermo  ' if abk < NORD_FERMO else 'acceso ')
+        pro = []
+        for k in own:
+            x = float(ownx[k].loc[w0:w1 + pd.Timedelta(minutes=4)].max()); v = float(own[k].loc[w0:w1 + pd.Timedelta(minutes=4)].max())
+            if x > 8 and v > 1.5: pro.append(f'{k[:3]} {k[3]} {x:.0f}× {v:.1f}nT')
+        ma, mb = a.hour * 60 + a.minute, b.hour * 60 + b.minute
+        top = [s for s in vals.drop(labels=['ABK'], errors='ignore').sort_values(ascending=False).index[:2]]
+        L.append(f"  {hm_(ma)}–{hm_(mb)} ({loc(ma)})  {pk:5.1f}×  " + ' '.join(f'{vals[s]:4.1f}' if pd.notna(vals[s]) else '   –' for s in show)
+                 + f'   {nord}  ' + ('; '.join(pro) if pro else '·') + f"   [max: {', '.join(top)}]")
+    L.append(f'  eventi della giornata: {n_all}, di cui {n_show} con picco ≥ {FIRMA_MIN:.0f}×. I valori sono nT/min (ampiezza reale), non rapporti.')
+
+    # stop di stazione: buchi di almeno 2 minuti dentro la giornata
+    L.append('\n══ 0g. STOP DI STAZIONE — cosa c\'è attorno (lo stop è un dato) ══')
+    any_stop = False
+    for s in show + [x for x in ['DUR'] if x in D]:
+        miss = D[s]['X'].isna()
+        if miss.all(): continue
+        for a, b, n in runs(miss):
+            if n < 2: continue
+            ma = a.hour * 60 + a.minute
+            abit = (s == 'DUR' and ma >= 17 * 60 + 55 and b == D[s].index[-1])
+            fine = 'fino a fine file' if b == D[s].index[-1] else hm(b)
+            prima = [(a - e).total_seconds() / 60 for st_, e, pk in sync_times if e < a]
+            dopo = [(st_ - a).total_seconds() / 60 for st_, e, pk in sync_times if st_ >= a]
+            pk_p = [pk for st_, e, pk in sync_times if e < a]; pk_d = [pk for st_, e, pk in sync_times if st_ >= a]
+            txt = f"  {s}: {hm(a)}–{fine} UT ({loc(ma)} loc), {n} min"
+            if abit: L.append(txt + ' — chiusura abituale di DUR'); continue
+            any_stop = True
+            if prima: txt += f" | evento sincrono {min(prima):.0f} min prima ({pk_p[int(np.argmin(prima))]:.1f}×)"
+            if dopo: txt += f" | {min(dopo):.0f} min dopo ({pk_d[int(np.argmin(dopo))]:.1f}×)"
+            L.append(txt)
+            # ultimi 3 minuti prima dello stop: la stazione rispetto alla mediana delle altre
+            oth = [x for x in eu if x != s]
+            for c in 'XY':
+                ds = D[s][c].diff().loc[a - pd.Timedelta(minutes=3):a - pd.Timedelta(minutes=1)]
+                do = pd.concat([D[x][c].diff() for x in oth], axis=1).median(axis=1).reindex(ds.index)
+                if ds.notna().any():
+                    contr = ((np.sign(ds) != np.sign(do)) & (ds.abs() >= 0.2)).sum()
+                    L.append(f"      {c} negli ultimi 3 min: {s} " + ' '.join(f'{v:+.1f}' for v in ds) + ' | altre ' + ' '.join(f'{v:+.1f}' for v in do)
+                             + (f'   ◀ {contr} min in verso contrario' if contr else ''))
+    if not any_stop: L.append('  nessuno stop dentro la giornata.')
+
+    # ricorrenze aperte: una riga ciascuna, ultimi 8 giorni, ±12 minuti
+    arch = base / 'SKY_SERIE_EVENTI.csv'
+    if not arch.exists(): return
+    allev = pd.read_csv(arch); d0 = pd.Timestamp(day)
+    days = [(d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d') for k in range(7, -1, -1)]
+    L.append('\n══ 0h. RICORRENZE APERTE — ampiezza ogni giorno (±12 min; "·" = sotto 4×; "–" = giorno non in archivio) ══')
+    L.append('  ' + ' ' * 52 + ' '.join(x[8:] + '/' + x[5:7] for x in days) + '   andamento')
+    def cell(x, mk):
+        g = allev[allev.day == x]
+        if g.empty: return None
+        w = g[((g.m - mk + 720) % 1440 - 720).abs() <= 12]
+        return 0.0 if w.empty else float(w.amp.max())
+    def trend(v):
+        ok = [x for x in v if x is not None]
+        if len(ok) < 5: return 'pochi giorni'
+        a, b = np.mean(ok[-3:]), np.mean(ok[:-3][-3:])
+        vuoti = 0
+        for x in reversed(ok):
+            if x >= 4: break
+            vuoti += 1
+        if vuoti >= 2: return f'assente da {vuoti} giorni'
+        if vuoti == 1: return 'in pausa oggi'
+        if a >= b * 1.4 and a - b >= 1.5: return '▲ cresce'
+        if a <= b * 0.7 and b - a >= 1.5: return '▼ cala'
+        return '= stabile'
+    for lab, nm, kind, m_ref, drift in RICORRENZE:
+        vals = []
+        for x in days:
+            mk = _moments_min(x, base).get((nm, kind)) if nm else None
+            if mk is None: mk = m_ref + drift * (pd.Timestamp(x) - pd.Timestamp('2026-10-02')).days
+            vals.append(cell(x, mk))
+        mk0 = _moments_min(day, base).get((nm, kind)) if nm else None
+        if mk0 is None: mk0 = m_ref + drift * (d0 - pd.Timestamp('2026-10-02')).days
+        cells = ['  –  ' if v is None else ('  ·  ' if v < 4 else f'{v:4.1f}×') for v in vals]
+        L.append(f"  {(lab + ' ' + hm_(mk0))[:52]:52s}" + ' '.join(cells) + '   ' + trend(vals))
+    # blocco diurno: evento più forte fra le 09 e le 18 UT, giorno per giorno (per vedere lo spostamento)
+    cells = []
+    for x in days:
+        g = allev[(allev.day == x) & (allev.m >= 540) & (allev.m < 1020)]
+        cells.append('  –  ' if allev[allev.day == x].empty else ('  ·  ' if g.empty else f"{hm_(g.loc[g.amp.idxmax(), 'm'])}"))
+    L.append(f"  {'evento diurno più forte (09–17 UT): ora':52s}" + ' '.join(cells))
+    cells = []
+    for x in days:
+        g = allev[(allev.day == x) & (allev.m >= 540) & (allev.m < 1020)]
+        cells.append('  –  ' if allev[allev.day == x].empty else ('  ·  ' if g.empty else f'{g.amp.max():4.1f}×'))
+    L.append(f"  {'                                    : ampiezza':52s}" + ' '.join(cells))
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit('Uso: python3 sky_scan.py <cartella SKY_AAAA-MM-GG>')
@@ -1150,7 +1292,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
-    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
+    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_firma(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
