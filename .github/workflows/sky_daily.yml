@@ -63,7 +63,7 @@ jobs:
       - name: Commit file del giorno e registri in data/
         run: |
           D=${{ steps.d.outputs.day }}
-          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_SINCRONISMI.csv data/days/SKY_SERIE_EVENTI.csv data/days/SKY_MARKER.csv data/days/SKY_MOMENTI.csv data/days/SKY_PROFILO.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt data/days/SKY_$D/TUTTE_$D.csv.gz
+          for f in data/days/SKY_REGISTRO.csv data/days/SKY_EVENTI.csv data/days/SKY_SOLE.csv data/days/SKY_SINCRONISMI.csv data/days/SKY_SERIE_EVENTI.csv data/days/SKY_MARKER.csv data/days/SKY_MOMENTI.csv data/days/SKY_PROFILO.csv data/days/SKY_NT.csv data/days/SKY_$D/SCAN_$D.txt data/days/SKY_$D/RIEPILOGO.txt data/days/SKY_$D/TUTTE_$D.csv.gz
           do
             [ -e "$f" ] && git add "$f"
           done
