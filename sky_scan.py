@@ -340,6 +340,12 @@ def sec_noaa(folder, L, reg, day):
     L.append(f'  Discontinuità a L1 (arrivo stimato a Terra): ' +
              (' '.join(f'{hm(t)}[{lab}]' for t, lab in arrivals) if arrivals else 'nessuna netta'))
     L.append('  (pressione su → X su atteso; pressione giù → X giù)')
+    if arrivals:
+        cov = pd.Series(False, index=pd.date_range(d0, d1, freq='1min', inclusive='left'))
+        for t, _ in arrivals: cov.loc[t - pd.Timedelta(minutes=15):t + pd.Timedelta(minutes=15)] = True
+        q = 100 * cov.mean()
+        L.append(f'  {len(arrivals)} variazioni a L1: il {q:.0f}% della giornata sta entro 15 minuti da una di esse'
+                 + (' → oggi L1 NON DISTINGUE: quasi ogni evento ne ha una vicina anche per caso.' if q >= 50 else '.'))
     reg['L1_disc'] = len(arrivals)
     global NOAA_COVER
     NOAA_COVER = (P.index[0] + pd.Timedelta(seconds=float(lag.median())), P.index[-1] + pd.Timedelta(seconds=float(lag.median())))
@@ -843,7 +849,7 @@ def sec_sun(folder, day, L, reg):
         cnt[k] += 1; lines.append(f"{hm(e['t'])}{e['comp']}:{k}")
     L.append('  Percorsi degli eventi sincroni: ' + ', '.join(f'{k} {v}' for k, v in cnt.items()))
     if len(chain): L.append('  (nei 4 giorni prima: eruzioni in giorni con pianeta sul nodo → ' + ', '.join(chain.day.str[5:]) + ')')
-    L.append('  "diretto" = senza causa a L1; "attraverso il Sole" = causa a L1 + eruzione 1–4 giorni prima in giorno con nodo; "standard" = causa a L1 senza quel legame')
+    L.append('  "diretto" = nessuna variazione a L1 vicina; "attraverso il Sole" = variazione a L1 vicina + eruzione 1–4 giorni prima in giorno con nodo; "standard" = variazione a L1 vicina senza quel legame. Vicina non vuol dire causa: è un confronto, come i radianti.')
     reg.update({'sun_MX': len(mx), 'sun_cme': len(cday), 'sun_hss': len(hday), 'sun_f107': f107, 'sun_ssn': ssn,
                 'nodi': len(nodes), 'nodi_elenco': ' | '.join(nodes),
                 'p_diretto': cnt['diretto'], 'p_sole': cnt['attraverso il Sole'], 'p_standard': cnt['standard']})
@@ -918,14 +924,38 @@ def _moments_min(day, cache_dir=None):
         pd.concat([old[old.day != day], new], ignore_index=True).to_csv(cf, index=False)
     return out
 
-def sec_serie(folder, day, D, L):
+NT_KEEP = 0.8            # una serie è "al suo posto in nT" se oggi vale almeno 0.8 volte il suo ultimo giorno
+NT_EMERGE = 2.5          # ed "emerge" se supera di 2.5 volte il fondo dell'ora attorno
+def _nt_archive(base, day, D):
+    """nT/min reali, mediana Europa, minuto per minuto (archivio SKY_NT.csv, ultimi 20 giorni).
+    Serve nei giorni agitati: il rapporto si schiaccia, i nT no (regola 5/10/2026: giorno agitato NON vuol dire non valutabile)."""
+    eu = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
+    if not eu: return pd.DataFrame(columns=['day', 'm', 'nt'])
+    nt = pd.concat([D[st][['X', 'Y']].diff().abs().max(axis=1) for st in eu], axis=1).median(axis=1)
+    new = pd.DataFrame({'day': day, 'm': nt.index.hour * 60 + nt.index.minute, 'nt': nt.round(2).values}).dropna()
+    f = base / 'SKY_NT.csv'
+    old = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=['day', 'm', 'nt'])
+    allv = pd.concat([old[old.day != day], new], ignore_index=True)
+    keep = sorted(allv.day.unique())[-20:]
+    allv = allv[allv.day.isin(keep)]; allv.to_csv(f, index=False)
+    return allv
+
+def sec_serie(folder, day, D, L, _nt_rows=None):
+    L0 = len(L)
     L.append('\n══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══')
     base = folder.parent
     arch = base / 'SKY_SERIE_EVENTI.csv'
     old = pd.read_csv(arch) if arch.exists() else pd.DataFrame(columns=['day', 'm', 'comp', 'amp'])
     old = old[old.day != day]
     today = pd.DataFrame([{'day': day, **e} for e in _day_events(D)])
+    if _nt_rows:                                   # serie ritrovate in nT (vedi più sotto): contano come presenti oggi
+        today = pd.concat([today, pd.DataFrame([{'day': day, 'm': r['m'], 'comp': r['comp'], 'amp': 4.0} for r in _nt_rows])], ignore_index=True)
     allv = pd.concat([old, today], ignore_index=True); allv.to_csv(arch, index=False)
+    NT = _nt_archive(base, day, D)
+    ntd = {x: g.set_index('m').nt for x, g in NT.groupby('day')}
+    meds = [float(v.median()) for x, v in sorted(ntd.items()) if x < day][-5:]
+    bg0 = float(ntd[day].median()) if day in ntd else np.nan
+    agit = bg0 / np.median(meds) if meds and np.median(meds) > 0 else np.nan
     d0 = pd.Timestamp(day)
     allv['k'] = [(d0 - pd.Timestamp(x)).days for x in allv.day]      # 0 = oggi, 1 = ieri …
     allv = allv[(allv.k >= 0) & (allv.k <= REC_DAYS)]
@@ -1011,6 +1041,36 @@ def sec_serie(folder, day, D, L):
     def _cov(m):
         t = pd.Timestamp(day) + pd.Timedelta(minutes=m % 1440)
         return sum(1 for st in eu7 if t in D[st].index and pd.notna(D[st].X.get(t)))
+    def _nt_at(dd, mm, tol):
+        v = ntd.get(dd)
+        if v is None: return None, None
+        w = v[abs(v.index - mm) <= tol]                  # niente giro di mezzanotte: resto dentro la giornata
+        return (float(w.max()), int(w.idxmax())) if len(w) else (None, None)
+    def _nt_check(m, dr, start_k):
+        """la serie è al suo posto in nT oggi? confronto con il suo ultimo giorno presente; emerge dal fondo dell'ora?"""
+        exp = int(round(m + dr * start_k))
+        if exp < 0 or exp > 1439: return None
+        v0, t0 = _nt_at(day, exp, SERIE_TOL)
+        vr, _ = _nt_at((d0 - pd.Timedelta(days=start_k)).strftime('%Y-%m-%d'), int(m), 2)
+        if v0 is None or vr is None or vr <= 0: return None
+        v = ntd[day]; around = v[(abs(v.index - exp) <= 60) & (abs(v.index - exp) > SERIE_TOL)]
+        fondo = float(around.median()) if len(around) else np.nan
+        return {'m': t0, 'nt': v0, 'ref': vr, 'fondo': fondo, 'ok': v0 >= NT_KEEP * vr, 'emerge': bool(fondo > 0 and v0 >= NT_EMERGE * fondo)}
+    if _nt_rows is None:                                    # primo passaggio: cerco in nT le serie che il rapporto dà per assenti
+        rows = []
+        for start_k in (1, SERIE_GAP + 1):
+            for m, n, dr in _series_ending(start_k)[:12]:
+                c = _nt_check(m, dr, start_k)
+                if c and c['ok'] and all(abs((c['m'] - r['m'] + 720) % 1440 - 720) > 6 for r in rows):
+                    rows.append({'m': c['m'], 'comp': 'nT' if c['emerge'] else 'fondo', 'serie': int(m), 'n': n, 'k': start_k, **{x: c[x] for x in ('nt', 'ref', 'fondo', 'emerge')}})
+        if rows:
+            del L[L0:]
+            return sec_serie(folder, day, D, L, _nt_rows=rows)
+    if pd.notna(agit) and agit >= 1.5:
+        L.append(f"  Fondo di oggi {bg0:.2f} nT/min, {agit:.1f} volte quello dei 5 giorni prima: il rapporto si schiaccia, le serie vanno lette in nT.")
+    for r in (_nt_rows or []):
+        L.append(f"  ● al suo posto in nT: serie delle {r['serie'] // 60:02d}:{r['serie'] % 60:02d} ({r['n']} giorni) — oggi {r['nt']:.1f} nT/min alle {r['m'] // 60:02d}:{r['m'] % 60:02d}"
+                 f" (ultimo giorno {r['ref']:.1f}; fondo dell'ora {r['fondo']:.1f}) — " + ('EMERGE dal fondo' if r['emerge'] else 'dentro il fondo: presente, non distinta'))
     for m, n, dr in _series_ending(1)[:8]:                  # attiva fino a ieri, assente oggi → pausa
         cov = _cov(int(round(m + dr)))
         if cov < 5:
@@ -1257,7 +1317,12 @@ def sec_firma(folder, day, D, L):
         names.sort(); mk0 = names[0][0]
         lab = hm_(mk0) + ' ' + ' / '.join(n[1] for n in names[:2]) + (f' +{len(names) - 2}' if len(names) > 2 else '')
         cells = ['  –  ' if v is None else ('  ·  ' if v < 4 else f'{v:4.1f}×') for v in key]
-        L.append(f"  {lab[:52]:52s}" + ' '.join(cells) + '   ' + trend(list(key)))
+        try:
+            ntf = pd.read_csv(base / 'SKY_NT.csv'); v = ntf[ntf.day == day].set_index('m').nt
+            w = v[((v.index - mk0 + 720) % 1440 - 720).__abs__() <= 12]; ntxt = f' | oggi {w.max():.1f} nT/min' if len(w) else ''
+        except Exception:
+            ntxt = ''
+        L.append(f"  {lab[:52]:52s}" + ' '.join(cells) + '   ' + trend(list(key)) + ntxt)
     if not rows: L.append('  nessun momento del cielo presente in almeno %d giorni su 8.' % RIC_MIN_DAYS)
     L.append(f'  (righe scelte dai dati fra {nmom} momenti del cielo di oggi: presenti ≥{RIC_MIN_AMP:.0f}× in almeno {RIC_MIN_DAYS} giorni su 8.'
              ' Le serie senza un momento del cielo sono in 0c e 0d.)')
@@ -1272,6 +1337,31 @@ def sec_firma(folder, day, D, L):
         g = allev[(allev.day == x) & (allev.m >= 540) & (allev.m < 1020)]
         cells.append('  –  ' if allev[allev.day == x].empty else ('  ·  ' if g.empty else f'{g.amp.max():4.1f}×'))
     L.append(f"  {'                                    : ampiezza':52s}" + ' '.join(cells))
+
+
+# ── 0i. stazioni contro il coro (regola 5/10/2026): una stazione che va al contrario di un'Europa concorde ──
+def sec_contro(folder, day, D, L):
+    coro = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
+    if len(coro) < 5: return
+    L.append('\n══ 0i. STAZIONI CONTRO IL CORO — minuti in cui una stazione va al contrario di un\'Europa concorde (≥1 nT/min da entrambe le parti) ══')
+    out = []
+    for st in coro + [x for x in ['IZN', 'DUR'] if x in D]:
+        contr, base_n = None, None
+        for c in 'XY':
+            a = D[st][c].diff(); oth = [x for x in coro if x != st]
+            dd = pd.concat([D[x][c].diff() for x in oth], axis=1); m = dd.median(axis=1)
+            agree = np.sign(dd).eq(np.sign(m), axis=0).mean(axis=1)
+            ok = (m.abs() >= 1.0) & (agree >= 0.85) & a.notna()
+            k = ok & (np.sign(a) != np.sign(m)) & (a.abs() >= 1.0)
+            contr = k if contr is None else (contr | k); base_n = ok if base_n is None else (base_n | ok)
+        out.append((st, int(contr.sum()), int(base_n.sum()), [hm(t) for t in contr[contr].index]))
+    tot = max(n for _, _, n, _ in out)
+    L.append(f'  minuti con Europa concorde oggi: {tot}')
+    for st, n, b, tt in sorted(out, key=lambda x: -x[1]):
+        if n == 0: continue
+        L.append(f"  {st}: {n} minuti contrari" + (f" — {' '.join(tt[:30])}" + (' …' if len(tt) > 30 else '')))
+    if all(n == 0 for _, n, _, _ in out): L.append('  nessuna stazione contraria.')
+    else: L.append('  le altre stazioni: 0.')
 
 
 def main():
@@ -1304,7 +1394,7 @@ def main():
     sec_radiant_station(D, day, L, reg)
     sec_orphans(L, reg)
     sec_recurrence(folder, day, L)
-    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_firma(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
+    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_firma(folder, day, D, Ls); sec_contro(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
     sec_sun(folder, day, L, reg)
     sec_registry(folder, day, reg, L)
     out = folder / f'SCAN_{day}.txt'
