@@ -1,4 +1,4 @@
-SKY SCAN — 2026-10-05 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD
+SKY SCAN — 2026-10-05 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD, OTT, BRD
 Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
 
 ══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══
@@ -146,9 +146,9 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   ★ ☄ chi-Cygnids culmina (scarto +0 min): 09-30 18:04, 09-30 18:04, OGGI 17:47
 
 ══ 0b. ANATOMIA DEGLI EVENTI — ordine di partenza est/ovest, inversione di Y, estensione ══
-  02:06 lento ΔX -13/40min: parte prima CLF; est in anticipo di -1 min sull'ovest; inversione di Y a 28.9°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+205 KAK-8 FRD+6
-  03:55 lento ΔX +25/40min: parte prima CLF; est in anticipo di -1 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-346 KAK-29 FRD+43
-  04:40 lento ΔX -25/40min: parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+437 KAK+41 FRD-28
+  02:06 lento ΔX -13/40min: parte prima CLF; est in anticipo di -1 min sull'ovest; inversione di Y a 28.9°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+205 KAK-8 FRD+6 OTT+7 BRD+2
+  03:55 lento ΔX +25/40min: parte prima CLF; est in anticipo di -1 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-346 KAK-29 FRD+43 OTT+47 BRD-66
+  04:40 lento ΔX -25/40min: parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+437 KAK+41 FRD-28 OTT-21 BRD+20
   07:54 Y(9): parte prima IZN; est in anticipo di +3 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-16 KAK-0 FRD+1
   08:06 X(6): parte prima LON; est in anticipo di +3 min sull'ovest; inversione di Y a 26.9°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+10 KAK-1 FRD-1
   09:36 X(9): parte prima DUR; est in anticipo di -11 min sull'ovest; inversione di Y a 8.4°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-1 KAK-7 FRD-0
@@ -181,6 +181,8 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   ABK: 1440/1440 minuti | F−|B| -0.36±0.47 | risoluzione ~0.1 nT
   KAK: 1440/1440 minuti | F−|B| -1.49±0.52 | risoluzione ~0.01 nT
   FRD: 1440/1440 minuti | F−|B| -1.57±0.04 | risoluzione ~0.01 nT
+  OTT: 360/1440 minuti | buchi 06:00–23:59 | F−|B| -0.44±0.08 | risoluzione ~0.01 nT
+  BRD: 360/1440 minuti | buchi 06:00–23:59 | F−|B| +13.01±0.17 | risoluzione ~0.01 nT
 
 ══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══
   (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)
@@ -213,10 +215,10 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
     ⚠ stazioni EU con segno discorde (rete divisa)
 
 ══ 6. MEDIE GIORNALIERE ══
-  Z medio: WIC44288.7 LON42834.3 THY43859.9 CLF43319.1 BFO43844.2 NGK46147.2 BEL47147.2 IZN40883.5 DUR39911.3 ABK52490.4 KAK36030.2 FRD45067.5
+  Z medio: WIC44288.7 LON42834.3 THY43859.9 CLF43319.1 BFO43844.2 NGK46147.2 BEL47147.2 IZN40883.5 DUR39911.3 ABK52490.4 KAK36030.2 FRD45067.5 OTT49979.4 BRD53776.2
 
 ══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
-  sorgente SOLAR1, distanza 1.58 Mkm, velocità 558 km/s, ritardo tipico 47 min
+  sorgente SOLAR1, distanza 1.58 Mkm, velocità 551 km/s, ritardo tipico 48 min
   Bz < −5 nT per ≥20 min (ora L1): 04/10 11:34–11:53 04/10 17:12–17:41
   copertura L1 → Terra: 12:14 del 04/10 in poi
   Discontinuità a L1 (arrivo stimato a Terra): 00:27[svolta Bz →sud] 01:27[svolta Bz →nord] 01:37[P-43%] 02:00[svolta Bz →sud] 04:15[svolta Bz →nord] 06:24[svolta Bz →sud] 06:40[svolta Bz →nord] 07:53[svolta Bz →sud] 08:10[svolta Bz →nord] 08:31[svolta Bz →sud] 09:57[svolta Bz →sud] 10:15[svolta Bz →nord] 11:03[P+26%] 11:32[P-34%] 13:44[P+42%] 14:51[svolta Bz →nord] 15:13[P-21%] 15:27[svolta Bz →sud] 16:29[svolta Bz →nord] 17:00[P+61%] 17:53[P-28%] 17:55[P-26%] 18:10[P+59%] 18:42[P-38%] 18:58[P+51%] 19:23[P-20%] 19:30[P-27%] 20:01[P+22%] 21:04[svolta Bz →nord] 22:43[P+32%] 23:34[P-26%]
@@ -375,6 +377,7 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   Classe massima: M1.0
   CME del giorno: 0
   Arrivo di flusso veloce (buco coronale) a Terra: no
+  Flusso radio F10.7: 100 — macchie solari: 58
   Percorsi degli eventi sincroni: diretto 1, attraverso il Sole 0, standard 9, non valutabile 0
   "diretto" = nessuna variazione a L1 vicina; "attraverso il Sole" = variazione a L1 vicina + eruzione 1–4 giorni prima in giorno con nodo; "standard" = variazione a L1 vicina senza quel legame. Vicina non vuol dire causa: è un confronto, come i radianti.
 

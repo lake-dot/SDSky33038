@@ -1,6 +1,6 @@
 ══════════════════════════════════════════════════════════════════════
 SKY — RIEPILOGO GIORNATA
-Giornata: 2026-10-05 (UTC) — estrazione 2026-10-06 04:44 UT
+Giornata: 2026-10-05 (UTC) — estrazione 2026-10-06 12:00 UT
 Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
 ══════════════════════════════════════════════════════════════════════
 
@@ -157,9 +157,17 @@ FRD — Fredericksburg, USA
   F: 50018.2 … 50050.2  (Δ31.9)
 
 OTT — Ottawa, Canada
-  NESSUN DATO DISPONIBILE per questa giornata
+  record 360/1440 (25%) — id ott/best-avail
+  X: 18291.2 … 18353.7  (Δ62.4)
+  Y: -4224.5 … -4118.9  (Δ105.6)
+  Z: 49941.7 … 50001.0  (Δ59.3)  mean=49979.4
+  F: 53358.1 … 53416.3  (Δ58.2)
 
 BRD — Brandon, Canada
-  NESSUN DATO DISPONIBILE per questa giornata
+  record 360/1440 (25%) — id brd/best-avail
+  X: 15365.8 … 15447.2  (Δ81.4)
+  Y: 1221.5 … 1410.7  (Δ189.2)
+  Z: 53704.6 … 53858.2  (Δ153.6)  mean=53776.2
+  F: 55892.6 … 56046.1  (Δ153.5)
 
 In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)
