@@ -1,6 +1,6 @@
 ══════════════════════════════════════════════════════════════════════
 SKY — RIEPILOGO GIORNATA
-Giornata: 2026-09-24 (UTC) — estrazione 2026-09-25 07:36 UT
+Giornata: 2026-09-24 (UTC) — estrazione 2026-10-07 07:10 UT
 Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
 ══════════════════════════════════════════════════════════════════════
 
@@ -33,10 +33,38 @@ Posizioni geocentriche in longitudine eclittica — matematica pura (±0.3°)
 ⚡ ASPETTI (Δ≤2.0°):
   ☉ Sole ☍ ♆ Nettuno  Δ=1.56° (≈)
 
-☄️ SCIAMI ATTIVI (catalogo IMO 2026, λ☉ alla data):
-☄️ Sextantidi diurne  λ=159°  AR=156° Dec=-2°  V=32 km/s  Δpicco=6.9°  picco λ☉=188.4°
-☄️ Lincidi di settembre  λ=105°  AR=112° Dec=+56°  V=60 km/s  Δpicco=11.1°  picco λ☉=170.4°
-☄️ Tauridi Sud  λ=54°  AR=52° Dec=+15°  V=27 km/s  Δpicco=41.9°  picco λ☉=223.4°
+☄️ SCIAMI ATTIVI (catalogo IAU 2026, λ☉ alla data):
+☄️ Daytime kappa-Leonids  λ=158°  AR=162° Dec=+15°  V=43.59 km/s  Δpicco=1.9°  picco λ☉=183.4°
+☄️ Daytime Sextantids  λ=157°  AR=154° Dec=-1°  V=31.84 km/s  Δpicco=5.0°  picco λ☉=186.5°
+☄️ Northern iota-Aquariids  λ=10°  AR=8° Dec=+8°  V=28.6 km/s  Δpicco=6.3°  picco λ☉=175.2°  (1 soluz. discordanti separate)
+    → ♄ Saturno Δ=1.94°
+☄️ chi-Cygnids  λ=314°  AR=300° Dec=+32°  V=14.9 km/s  Δpicco=8.9°  picco λ☉=172.6°
+☄️ October Camelopardalids  λ=115°  AR=169° Dec=+79°  V=45.9 km/s  Δpicco=11.4°  picco λ☉=192.9°  (fuori finestra -8°; radiante fermo al bordo della finestra misurata)
+☄️ September epsilon-Perseids  λ=58°  AR=49° Dec=+39°  V=64.3 km/s  Δpicco=13.1°  picco λ☉=168.4°
+☄️ nu-Eridanids  λ=66°  AR=67° Dec=+1°  V=66.1 km/s  Δpicco=14.2°  picco λ☉=167.3°
+    → ♅ Urano Δ=0.17° (+-)
+☄️ Northern delta-Piscids  λ=4°  AR=2° Dec=+6°  V=27.4 km/s  Δpicco=18.8°  picco λ☉=162.7°
+    → ♆ Nettuno Δ=1.04°
+☄️ pi6-Orionids  λ=68°  AR=69° Dec=-1°  V=66.1 km/s  Δpicco=19.1°  picco λ☉=162.4°
+☄️ Aurigids  λ=92°  AR=92° Dec=+39°  V=65.7 km/s  Δpicco=22.2°  picco λ☉=159.3°  (fuori finestra +4°)
+☄️ xi-Draconids  λ=117°  AR=161° Dec=+76°  V=35.8 km/s  Δpicco=23.6°  picco λ☉=205.1°
+    → ♂ Marte Δ=0.64°
+☄️ epsilon-Geminids  λ=100°  AR=101° Dec=+28°  V=69.4 km/s  Δpicco=24.1°  picco λ☉=205.6°  (fuori finestra -6°; radiante fermo al bordo della finestra misurata)
+☄️ tau-Cancrids  λ=131°  AR=137° Dec=+30°  V=67.2 km/s  Δpicco=25.2°  picco λ☉=206.7°
+☄️ Southern Taurids  λ=41°  AR=40° Dec=+11°  V=27.8 km/s  Δpicco=25.9°  picco λ☉=207.4°  (1 soluz. discordanti separate)
+☄️ Orionids  λ=96°  AR=96° Dec=+16°  V=66.3 km/s  Δpicco=28.4°  picco λ☉=209.9°
+☄️ omicron-Geminids  λ=98°  AR=99° Dec=+43°  V=58.1 km/s  Δpicco=32.2°  picco λ☉=149.3°  (fuori finestra +1°)
+☄️ Northern iota-Aquariids [variante 1973-mm λ148]  λ=328°  AR=328° Dec=-6°  V=31.2 km/s  Δpicco=33.4°  picco λ☉=148.1°  (fuori finestra +3°; soluzione separata: picco o radiante diversi dal consenso)
+    → ☊ Nodo Nord Δ=0.98° (+-)
+☄️ Northern delta-Aquariids  λ=354°  AR=352° Dec=+4°  V=38.4 km/s  Δpicco=35.7°  picco λ☉=145.8°  (fuori finestra +1°)
+☄️ kappa-Cygnids  λ=305°  AR=286° Dec=+51°  V=22.36 km/s  Δpicco=40.3°  picco λ☉=141.2°
+☄️ chi-Taurids  λ=67°  AR=64° Dec=+26°  V=41.1 km/s  Δpicco=40.9°  picco λ☉=222.4°  (fuori finestra -5°)
+    → ♅ Urano Δ=1.18° (+-)
+☄️ Perseids  λ=63°  AR=48° Dec=+58°  V=59.1 km/s  Δpicco=41.0°  picco λ☉=140.5°  (fuori finestra +6°; radiante fermo al bordo della finestra misurata)
+☄️ Northern Taurids  λ=60°  AR=57° Dec=+22°  V=28.1 km/s  Δpicco=46.2°  picco λ☉=227.7°
+☄️ eta-Eridanids  λ=35°  AR=41° Dec=-13°  V=64.4 km/s  Δpicco=46.7°  picco λ☉=134.8°  (fuori finestra +7°; radiante fermo al bordo della finestra misurata)
+☄️ omicron-Eridanids  λ=54°  AR=56° Dec=-2°  V=27.8 km/s  Δpicco=47.0°  picco λ☉=228.5°  (fuori finestra -5°)
+☄️ sigma-Hydrids  λ=128°  AR=126° Dec=+2°  V=58.9 km/s  Δpicco=75.5°  picco λ☉=257.0°  (fuori finestra -7°; radiante fermo al bordo della finestra misurata)
 
 ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · (≈) al bordo soglia · (+-) incertezza elevata
 
@@ -45,7 +73,11 @@ DATI STAZIONI
 ──────────────────────────────────────────────────────────────────────
 
 WIC — Conrad, Austria (220km)
-  NESSUN DATO DISPONIBILE per questa giornata
+  record 1440/1440 (100%) — id wic/best-avail
+  X: 20972.9 … 21049.4  (Δ76.5)
+  Y: 1861.8 … 1931.4  (Δ69.6)
+  Z: 44266.7 … 44297.1  (Δ30.4)  mean=44285.6
+  F: 49031.5 … 49066.9  (Δ35.4)
 
 LON — Lonjsko Polje, Croatia (290km)
   record 1440/1440 (100%) — id lon/best-avail
@@ -97,16 +129,16 @@ IZN — Iznik, Turchia (~1500km)
   F: 48026.9 … 48066.7  (Δ39.8)
 
 DUR — Duronia, Italia (~520km)
-  record 1080/1440 (75%) — id dur/best-avail
+  record 1440/1440 (100%) — id dur/best-avail
   X: 24846.8 … 24921.6  (Δ74.8)
   Y: -7.5 … 58.9  (Δ66.3)
-  Z: 39899.1 … 39920.0  (Δ20.9)  mean=39909.2
+  Z: 39899.1 … 39920.0  (Δ20.9)  mean=39911.3
   F: 47052.3 … 47094.3  (Δ42.0)
 
 ABK — Abisko, Svezia (aurorale ~68°N)
   record 1440/1440 (100%) — id abk/best-avail
-  X: 10651.1 … 11349.0  (Δ697.9)
-  Y: 2099.3 … 2337.7  (Δ238.4)
+  X: 10650.9 … 11348.8  (Δ697.9)
+  Y: 2099.4 … 2337.8  (Δ238.4)
   Z: 52378.6 … 52756.5  (Δ377.9)  mean=52501.1
   F: 53581.6 … 53877.0  (Δ295.4)
 
@@ -128,17 +160,17 @@ FRD — Fredericksburg, USA
   F: 50004.2 … 50054.6  (Δ50.4)
 
 OTT — Ottawa, Canada
-  record 360/1440 (25%) — id ott/best-avail
-  X: 18351.4 … 18371.6  (Δ20.1)
-  Y: -4221.9 … -4198.9  (Δ23.0)
-  Z: 49972.6 … 49981.2  (Δ8.6)  mean=49977.1
-  F: 53402.2 … 53416.3  (Δ14.1)
+  record 1440/1440 (100%) — id ott/best-avail
+  X: 18281.0 … 18386.2  (Δ105.2)
+  Y: -4249.5 … -4148.0  (Δ101.5)
+  Z: 49935.9 … 50001.2  (Δ65.3)  mean=49976.1
+  F: 53365.4 … 53427.7  (Δ62.3)
 
 BRD — Brandon, Canada
-  record 360/1440 (25%) — id brd/best-avail
-  X: 15445.5 … 15476.0  (Δ30.5)
-  Y: 1249.7 … 1273.4  (Δ23.7)
-  Z: 53749.7 … 53760.9  (Δ11.2)  mean=53755.7
-  F: 55953.5 … 55968.5  (Δ14.9)
+  record 1440/1440 (100%) — id brd/best-avail
+  X: 15279.1 … 15476.0  (Δ197.0)
+  Y: 1187.0 … 1333.2  (Δ146.2)
+  Z: 53537.1 … 53783.9  (Δ246.8)  mean=53745.4
+  F: 55704.1 … 55982.8  (Δ278.6)
 
 In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)
