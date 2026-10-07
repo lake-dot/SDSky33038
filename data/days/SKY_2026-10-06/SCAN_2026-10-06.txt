@@ -1,4 +1,4 @@
-SKY SCAN — 2026-10-06 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD
+SKY SCAN — 2026-10-06 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD, OTT, BRD
 Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
 
 ══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══
@@ -152,9 +152,9 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   ★ ☄ chi-Taurids passaggio inferiore (scarto +5 min): 09-29 12:42, OGGI 12:37
 
 ══ 0b. ANATOMIA DEGLI EVENTI — ordine di partenza est/ovest, inversione di Y, estensione ══
-  00:03 Y(7): parte prima —; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+22 KAK+1 FRD-1
-  01:10 lento ΔX -21/40min: parte prima THY; est in anticipo di +0 min sull'ovest; inversione di Y a 23.8°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+231 KAK-3 FRD+2
-  06:23 Y(7): parte prima CLF; est in anticipo di -2 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+28 KAK+11 FRD+2
+  00:03 Y(7): parte prima —; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+22 KAK+1 FRD-1 OTT-4 BRD+1
+  01:10 lento ΔX -21/40min: parte prima THY; est in anticipo di +0 min sull'ovest; inversione di Y a 23.8°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+231 KAK-3 FRD+2 OTT+2 BRD-6
+  06:23 Y(7): parte prima CLF; est in anticipo di -2 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+28 KAK+11 FRD+2 OTT+nan BRD+nan
   07:54 Y(9): parte prima BEL; est in anticipo di -22 min sull'ovest; inversione di Y a 26.9°E (sui 5 min: 9.0°E) | fuori EU (ΔX 40 min): ABK+31 KAK-1 FRD-0
   09:06 X(7): parte prima THY; est in anticipo di -2 min sull'ovest; inversione di Y a 12.9°E (sui 5 min: 27.9°E) | fuori EU (ΔX 40 min): ABK+15 KAK+16 FRD-1
   11:45 Y(9): parte prima THY; est in anticipo di +2 min sull'ovest; inversione di Y a 26.9°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+50 KAK+7 FRD-9
@@ -184,6 +184,8 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   ABK: 1440/1440 minuti | F−|B| -0.22±0.16 | risoluzione ~0.1 nT
   KAK: 1440/1440 minuti | Z piatto 9 min fino alle 16:57 | F−|B| -1.43±0.05 | risoluzione ~0.01 nT
   FRD: 1440/1440 minuti | F−|B| -1.53±0.03 | risoluzione ~0.01 nT
+  OTT: 360/1440 minuti | buchi 06:00–23:59 | F−|B| -0.43±0.20 | risoluzione ~0.01 nT
+  BRD: 360/1440 minuti | buchi 06:00–23:59 | F−|B| +12.95±0.10 | risoluzione ~0.01 nT
 
 ══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══
   (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)
@@ -193,7 +195,7 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
 
 ══ 3. EVENTI SINCRONI (≥5 stazioni EU: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR) ══
   X al minuto: 09:06(7) max BEL-2.7 |fuori EU: ABK+10.8 KAK+1.9 FRD-1.3 ; 11:52(8) max BEL-4.4 |fuori EU: ABK+20.1 KAK-0.8 FRD-1.2 ⟵ L1 svolta Bz →sud (arrivo 11:48) ; 12:47(6) max NGK+2.7 |fuori EU: ABK-9.8 KAK+1.7 FRD-1.2 ; 20:16(6) max NGK+2.8 |fuori EU: ABK-70.5 KAK-0.5 FRD-0.9 ; 22:25–22:31(8) max BEL+4.4 |fuori EU: ABK+78.8 KAK-0.8 FRD-1.7
-  Y al minuto: 00:03(7) max NGK+3.1 |fuori EU: ABK-9.7 KAK-2.6 FRD-1.5 ⟵ L1 svolta Bz →sud (arrivo 00:14) ; 00:06(7) max NGK+3.2 |fuori EU: ABK-13.2 KAK-2.6 FRD+1.1 ⟵ L1 svolta Bz →sud (arrivo 00:14) ; 06:23(7) max BEL+3.3 |fuori EU: ABK-19.7 KAK+0.4 FRD-0.6 ; 07:54(9) max CLF+4.2 |fuori EU: ABK+14.9 KAK+0.4 FRD+0.7 ⟵ L1 P+51% (arrivo 07:56) ; 11:45–11:46(9) max BEL-3.7 |fuori EU: ABK-29.2 KAK+0.7 FRD+1.5 ⟵ L1 svolta Bz →sud (arrivo 11:48) ; 12:19(5) max CLF+2.4 |fuori EU: ABK+5.5 KAK-0.3 FRD-1.0 ; 12:37(9) max NGK+3.5 |fuori EU: ABK+11.9 KAK+0.5 FRD+1.9 ; 12:44–12:45(9) max CLF+4.1 |fuori EU: ABK-9.3 KAK+1.2 FRD-2.6 ; 12:55(7) max BEL-3.5 |fuori EU: ABK-5.9 KAK+0.4 FRD+1.4
+  Y al minuto: 00:03(7) max NGK+3.1 |fuori EU: ABK-9.7 KAK-2.6 FRD-1.5 OTT-2.6 BRD+4.9 ⟵ L1 svolta Bz →sud (arrivo 00:14) ; 00:06(7) max NGK+3.2 |fuori EU: ABK-13.2 KAK-2.6 FRD+1.1 OTT-2.6 BRD+4.9 ⟵ L1 svolta Bz →sud (arrivo 00:14) ; 06:23(7) max BEL+3.3 |fuori EU: ABK-19.7 KAK+0.4 FRD-0.6 ; 07:54(9) max CLF+4.2 |fuori EU: ABK+14.9 KAK+0.4 FRD+0.7 ⟵ L1 P+51% (arrivo 07:56) ; 11:45–11:46(9) max BEL-3.7 |fuori EU: ABK-29.2 KAK+0.7 FRD+1.5 ⟵ L1 svolta Bz →sud (arrivo 11:48) ; 12:19(5) max CLF+2.4 |fuori EU: ABK+5.5 KAK-0.3 FRD-1.0 ; 12:37(9) max NGK+3.5 |fuori EU: ABK+11.9 KAK+0.5 FRD+1.9 ; 12:44–12:45(9) max CLF+4.1 |fuori EU: ABK-9.3 KAK+1.2 FRD-2.6 ; 12:55(7) max BEL-3.5 |fuori EU: ABK-5.9 KAK+0.4 FRD+1.4
   X su 30 min (|Δ|>8.0): 00:42–01:15− 05:06–05:18− 05:23–05:23− 08:34–08:35− 08:39–08:40− 08:47–08:56− 09:00–09:04− 09:06–09:11− 09:13–09:13− 11:45–11:45+ 11:49–11:51+ 12:20–12:20− 16:33–16:34+ 18:46–18:50+ 19:54–20:30+ 20:52–21:15− 22:25–22:54+ 23:04–23:22− 23:27–23:56−
   Y su 30 min (|Δ|>8.0): 00:30–00:56+ 01:07–01:32− 03:59–04:11− 04:13–04:14− 06:17–06:36+ 09:00–09:01− 09:40–09:48− 09:51–09:53− 10:00–10:01− 10:05–10:42− 10:53–11:01− 11:06–11:07− 11:53–12:05− 12:09–12:14− 12:32–13:00+ 15:44–15:44+ 15:46–15:59+ 16:04–16:10+ 20:25–20:34− 20:59–21:11+ 22:44–22:47− 23:13–23:21+
 
@@ -214,10 +216,10 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
     per stazione: WIC+20.3 LON+18.1 THY+21.0 CLF+15.6 BFO+18.1 NGK+27.5 BEL+27.1 IZN+19.2 ABK-172.7 KAK-10.4 FRD-7.0
 
 ══ 6. MEDIE GIORNALIERE ══
-  Z medio: WIC44292.2 LON42837.9 THY43863.3 CLF43321.4 BFO43847.8 NGK46151.7 BEL47151.9 IZN40884.5 DUR39915.3 ABK52490.3 KAK36031.0 FRD45065.8
+  Z medio: WIC44292.2 LON42837.9 THY43863.3 CLF43321.4 BFO43847.8 NGK46151.7 BEL47151.9 IZN40884.5 DUR39915.3 ABK52490.3 KAK36031.0 FRD45065.8 OTT49980.5 BRD53758.3
 
 ══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
-  sorgente SOLAR1, distanza 1.58 Mkm, velocità 500 km/s, ritardo tipico 53 min
+  sorgente SOLAR1, distanza 1.58 Mkm, velocità 498 km/s, ritardo tipico 53 min
   copertura L1 → Terra: 12:19 del 05/10 in poi
   Discontinuità a L1 (arrivo stimato a Terra): 00:14[svolta Bz →sud] 02:12[svolta Bz →sud] 03:03[P+23%] 04:05[P+37%] 04:06[P+26%] 04:41[P-32%] 07:56[P+51%] 10:32[P+21%] 11:21[P-27%] 11:48[svolta Bz →sud] 15:08[svolta Bz →nord] 17:11[svolta Bz →sud] 18:13[P-31%] 18:44[P+40%] 20:33[svolta Bz →nord] 21:22[P+21%]
   (pressione su → X su atteso; pressione giù → X giù)
