@@ -1,0 +1,434 @@
+SKY SCAN — 2026-10-10 — stazioni: WIC, LON, THY, CLF, NGK, IZN, DUR, ABK, FRD
+Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
+
+══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══
+  00:07 fondo: 9 giorni dal 30/09, spostamento +0.0 min/g, ampiezze 4 9 5 5 4 4 5 5 4 (max 9 il 01/10) | cielo: nessun momento che la segua tutti i giorni
+  00:20 X: 6 giorni dal 03/10, spostamento -4.0 min/g, ampiezze 4 4 4 5 5 4 (max 5 il 07/10) | cielo: nessun momento che la segua tutti i giorni
+  11:33 Y: 6 giorni dal 04/10, spostamento -4.0 min/g, ampiezze 5 4 4 6 7 4 (max 7 il 09/10) | cielo: nessun momento che la segua tutti i giorni
+  11:52 Y: 3 giorni dal 08/10, spostamento -5.5 min/g, ampiezze 6 8 5 (max 8 il 09/10) | cielo: nessun momento che la segua tutti i giorni
+  14:07 fondo: 7 giorni dal 30/09, spostamento +0.0 min/g, ampiezze 4 5 4 4 4 5 4 (max 5 il 02/10) | cielo: nessun momento che la segua tutti i giorni
+  15:04 fondo: 6 giorni dal 02/10, spostamento +6.0 min/g, ampiezze 8 6 6 5 4 4 (max 8 il 02/10) | cielo: nessun momento che la segua tutti i giorni
+  15:14 X: 5 giorni dal 04/10, spostamento +3.5 min/g, ampiezze 6 6 5 4 25 (max 25 il 10/10) | cielo: nessun momento che la segua tutti i giorni
+  18:20 Y: 6 giorni dal 03/10, spostamento -3.5 min/g, ampiezze 5 4 5 7 7 5 (max 7 il 08/10) | cielo: nessun momento che la segua tutti i giorni
+  18:34 fondo: 6 giorni dal 03/10, spostamento +2.5 min/g, ampiezze 5 6 5 4 5 4 (max 6 il 05/10) | cielo: nessun momento che la segua tutti i giorni
+  19:03 Y: 5 giorni dal 03/10, spostamento -5.0 min/g, ampiezze 5 7 5 5 4 (max 7 il 04/10) | cielo: nessun momento che la segua tutti i giorni
+  20:25 X: 4 giorni dal 06/10, spostamento +1.0 min/g, ampiezze 5 4 5 5 (max 5 il 10/10) | cielo: nessun momento che la segua tutti i giorni
+  20:37 Y: 4 giorni dal 06/10, spostamento -2.0 min/g, ampiezze 5 4 4 4 (max 5 il 06/10) | cielo: nessun momento che la segua tutti i giorni
+  23:56 X: 3 giorni dal 07/10, spostamento +4.0 min/g, ampiezze 5 5 8 (max 8 il 10/10) | cielo: ☄ Southern Taurids culmina (scarti -1 +2 -4)
+  Fondo di oggi 0.74 nT/min, 2.1 volte quello dei 5 giorni prima: il rapporto si schiaccia, le serie vanno lette in nT.
+  ● al suo posto in nT: serie delle 18:25 (4 giorni) — oggi 3.4 nT/min alle 18:34 (ultimo giorno 0.9; fondo dell'ora 3.0) — dentro il fondo: presente, non distinta
+  ● al suo posto in nT: serie delle 00:08 (7 giorni) — oggi 0.7 nT/min alle 00:07 (ultimo giorno 0.6; fondo dell'ora 0.3) — dentro il fondo: presente, non distinta
+  ● al suo posto in nT: serie delle 14:10 (6 giorni) — oggi 1.6 nT/min alle 14:07 (ultimo giorno 1.2; fondo dell'ora 1.0) — dentro il fondo: presente, non distinta
+  ● al suo posto in nT: serie delle 15:17 (5 giorni) — oggi 1.8 nT/min alle 15:04 (ultimo giorno 0.7; fondo dell'ora 2.0) — dentro il fondo: presente, non distinta
+  ⏸ in pausa oggi: serie delle 01:19 (4 giorni fino a ieri) — 1° giorno di assenza
+  ⏸ in pausa oggi: serie delle 10:09 (5 giorni fino a ieri) — 1° giorno di assenza
+
+══ 0d. RICORRENZE A PIÙ SCALE — puntuali (0c, ±4 min) e movimenti più larghi ══
+  ● scala media (±10 min): entrata 01/10, 3 giorni, spostamento +0.5 min/g | 01/10 02:31 (5×) → 04/10 02:31 (7×) → 10/10 02:29 (7×)
+  ● scala media (±10 min): entrata 02/10, 5 giorni, spostamento +5.0 min/g | 02/10 03:55 (6×) → 03/10 04:01 (5×) → 04/10 03:56 (6×) → 06/10 03:35 (5×) → 10/10 03:22 (5×)
+  ● scala media (±10 min): entrata 03/10, 4 giorni, spostamento +2.5 min/g | 03/10 13:19 (5×) → 06/10 13:10 (6×) → 09/10 13:06 (5×) → 10/10 13:00 (5×)
+  ● scala media (±10 min): entrata 04/10, 3 giorni, spostamento +5.0 min/g | 04/10 15:10 (5×) → 05/10 15:03 (5×) → 10/10 14:38 (5×)
+  ● scala media (±10 min): entrata 02/10, 5 giorni, spostamento +5.0 min/g | 02/10 15:54 (8×) → 04/10 15:39 (6×) → 05/10 15:32 (6×) → 06/10 15:42 (9×) → 10/10 15:14 (25×)
+  ● scala media (±10 min): entrata 04/10, 4 giorni, spostamento -0.5 min/g | 04/10 15:39 (6×) → 05/10 15:32 (6×) → 06/10 15:42 (9×) → 10/10 15:43 (6×)
+  ● scala media (±10 min): entrata 03/10, 4 giorni, spostamento +5.5 min/g | 03/10 17:59 (5×) → 05/10 17:44 (6×) → 07/10 17:44 (13×) → 10/10 17:19 (8×)
+  ● scala media (±10 min): entrata 03/10, 5 giorni, spostamento +6.0 min/g | 03/10 18:29 (5×) → 04/10 18:33 (7×) → 07/10 18:11 (7×) → 08/10 18:10 (12×) → 10/10 17:53 (6×)
+  ● scala media (±10 min): entrata 03/10, 6 giorni, spostamento +4.0 min/g | 03/10 18:50 (5×) → 04/10 18:42 (14×) → 05/10 18:49 (6×) → 07/10 18:26 (5×) → 09/10 18:25 (6×) → 10/10 18:20 (5×)
+  ● scala media (±10 min): entrata 01/10, 4 giorni, spostamento +5.0 min/g | 01/10 21:23 (5×) → 02/10 21:19 (8×) → 07/10 21:02 (5×) → 10/10 20:39 (8×)
+  ● scala media (±10 min): entrata 01/10, 5 giorni, spostamento -3.5 min/g | 01/10 20:42 (16×) → 02/10 20:46 (11×) → 07/10 21:02 (5×) → 09/10 21:18 (11×) → 10/10 21:14 (6×)
+  ● scala media (±10 min): entrata 01/10, 5 giorni, spostamento -6.0 min/g | 01/10 21:23 (5×) → 02/10 21:24 (5×) → 04/10 21:33 (6×) → 05/10 21:35 (6×) → 10/10 22:11 (6×)
+  ● scala media (±10 min): entrata 02/10, 5 giorni, spostamento +1.5 min/g | 02/10 22:57 (9×) → 03/10 23:10 (6×) → 05/10 23:11 (6×) → 06/10 22:51 (6×) → 10/10 22:54 (5×)
+  ● scala media (±10 min): entrata 01/10, 4 giorni, spostamento +2.0 min/g | 01/10 00:12 (6×) → 03/10 00:09 (6×) → 07/10 00:06 (5×) → 10/10 23:56 (8×)
+  ✖ uscita (assente da 2 giorni) scala media (±10 min): entrata 03/10, 4 giorni, spostamento -6.0 min/g | 03/10 08:39 (6×) → 04/10 08:43 (5×) → 06/10 09:06 (6×) → 08/10 09:09 (6×)
+  ✖ uscita (assente da 2 giorni) scala media (±10 min): entrata 01/10, 4 giorni, spostamento +4.0 min/g | 01/10 11:15 (6×) → 03/10 10:52 (6×) → 04/10 11:03 (5×) → 08/10 10:40 (5×)
+  ✖ uscita (assente da 2 giorni) scala media (±10 min): entrata 03/10, 4 giorni, spostamento -2.0 min/g | 03/10 18:41 (7×) → 04/10 18:42 (14×) → 05/10 18:49 (6×) → 08/10 18:51 (5×)
+  ⏸ in pausa oggi scala media (±10 min): entrata 03/10, 5 giorni, spostamento -6.0 min/g | 03/10 10:52 (6×) → 04/10 11:03 (5×) → 07/10 11:16 (6×) → 08/10 11:29 (6×) → 09/10 11:33 (7×)
+  ⏸ in pausa oggi scala media (±10 min): entrata 01/10, 5 giorni, spostamento -5.0 min/g | 01/10 11:15 (6×) → 04/10 11:29 (5×) → 06/10 11:45 (6×) → 08/10 11:41 (6×) → 09/10 11:55 (5×)
+  ⏸ in pausa oggi scala media (±10 min): entrata 02/10, 4 giorni, spostamento -2.0 min/g | 02/10 19:11 (6×) → 03/10 19:15 (8×) → 08/10 19:18 (6×) → 09/10 19:27 (6×)
+  ⏸ in pausa oggi scala media (±10 min): entrata 01/10, 4 giorni, spostamento +4.0 min/g | 01/10 20:42 (16×) → 02/10 20:40 (5×) → 06/10 20:16 (6×) → 09/10 20:11 (7×)
+  ● scala larga (±25 min): entrata 29/09, 5 giorni, spostamento -24.0 min/g | 29/09 23:05 (9×) → 30/09 23:38 (8×) → 01/10 00:06 (9×) → 04/10 00:59 (8×) → 10/10 03:28 (10×)
+  ● scala larga (±25 min): entrata 28/09, 4 giorni, spostamento +36.0 min/g | 28/09 20:23 (10×) → 29/09 19:32 (7×) → 06/10 15:42 (9×) → 10/10 13:17 (14×)
+  ● scala larga (±25 min): entrata 29/09, 5 giorni, spostamento +42.0 min/g | 29/09 23:05 (9×) → 30/09 22:11 (9×) → 02/10 20:46 (11×) → 07/10 17:44 (13×) → 10/10 15:14 (25×)
+  ● scala larga (±25 min): entrata 28/09, 7 giorni, spostamento +12.0 min/g | 28/09 20:23 (10×) → 29/09 19:32 (7×) → 03/10 19:15 (8×) → 04/10 18:42 (14×) → 07/10 18:11 (7×) → 08/10 18:10 (12×) → 10/10 17:37 (8×)
+  ● scala larga (±25 min): entrata 01/10, 5 giorni, spostamento +24.0 min/g | 01/10 00:06 (9×) → 03/10 23:26 (8×) → 06/10 22:24 (9×) → 09/10 21:18 (11×) → 10/10 20:39 (8×)
+  ● scala larga (±25 min): entrata 28/09, 6 giorni, spostamento -18.0 min/g | 28/09 20:23 (10×) → 01/10 20:56 (8×) → 02/10 21:19 (8×) → 03/10 21:48 (9×) → 06/10 22:34 (8×) → 10/10 23:56 (8×)
+  ✖ uscita (assente da 2 giorni) scala larga (±25 min): entrata 29/09, 4 giorni, spostamento -42.0 min/g | 29/09 23:05 (9×) → 30/09 23:38 (8×) → 01/10 00:06 (9×) → 08/10 05:17 (9×)
+  ⏸ in pausa oggi scala larga (±25 min): entrata 29/09, 4 giorni, spostamento +42.0 min/g | 29/09 18:59 (7×) → 30/09 18:03 (14×) → 01/10 17:08 (10×) → 09/10 11:48 (8×)
+  Fasce di mezz'ora più forti, giorno per giorno (ora UT e massimo):
+    10-05: 07:30 10×  09:30 6×  16:00 6×  17:30 6×
+    10-06: 07:30 8×  12:30 9×  15:30 9×  22:00 9×
+    10-07: 03:00 6×  11:00 6×  17:30 13×  18:00 8×
+    10-08: 05:00 9×  09:00 9×  10:00 8×  18:00 12×
+    10-09: 11:30 8×  20:00 7×  21:00 12×  21:30 7×
+    10-10: 13:00 14×  15:00 25×  15:30 16×  17:30 10×
+
+══ 0e. SCIAMI ENTRO 12° DAL PICCO — ampiezza ai loro momenti, ultimi 7 giorni (±12 min; "·" = sotto 4×) ══
+                                              04/10  05/10  06/10  07/10  08/10  09/10  10/10
+  October Draconids culmina (15:24)              6×     6×     9×    ·      ·      ·      25×  | Δpicco 1.4°  ◀ in crescita
+  October Draconids passaggio inferiore (03:26   7×     5×     5×    ·      ·      ·      10×  | Δpicco 1.4°  ◀ in crescita
+  October Camelopardalids culmina (09:18)        5×     6×    ·      ·       9×     5×    ·    | Δpicco 4.3°
+  October Camelopardalids passaggio inferiore    6×     6×    ·      ·      ·      12×     6×  | Δpicco 4.3°  ◀ in crescita
+  October Ursae Majorids passaggio inferiore (  14×    ·       5×     4×     5×    ·       4×  | Δpicco 5.6°  ◀ in crescita
+  xi-Draconids culmina (07:51)                   5×    10×     8×     5×    ·      ·      ·    | Δpicco 7.9°
+  epsilon-Geminids culmina (04:09)               7×     5×     4×    ·      ·       4×    ·    | Δpicco 8.4°
+  epsilon-Geminids passaggio inferiore (16:07)   4×     6×    ·      ·      ·       5×     7×  | Δpicco 8.4°  ◀ in crescita
+  epsilon-Geminids tramonta (12:27)             ·      ·       9×    ·      ·       5×     4×  | Δpicco 8.4°  ◀ in crescita
+  tau-Cancrids culmina (06:25)                  ·      ·       6×     4×    ·      ·      ·    | Δpicco 9.5°
+  tau-Cancrids passaggio inferiore (18:23)      11×    ·      ·       5×    ·       6×     5×  | Δpicco 9.5°  ◀ in crescita
+  tau-Cancrids tramonta (14:50)                 ·       5×    ·      ·      ·      ·       5×  | Δpicco 9.5°
+  Southern Taurids culmina (00:00)              ·       4×     4×     5×     5×    ·       9×  | Δpicco 10.2°  ◀ in crescita
+  Southern Taurids passaggio inferiore (12:02)   5×    ·      ·      ·      ·       5×     5×  | Δpicco 10.2°  ◀ in crescita
+  Southern Taurids sorge (17:23)                ·       6×     4×    ·      ·      ·       8×  | Δpicco 10.2°  ◀ in crescita
+  Southern Taurids tramonta (06:41)              7×    ·      ·      ·      ·       4×    ·    | Δpicco 10.2°
+  Daytime Sextantids culmina (08:40)             5×    ·       5×    ·       4×    ·      ·    | Δpicco 10.7°
+  Daytime Sextantids passaggio inferiore (20:3  ·      ·      ·       4×    ·       4×     8×  | Δpicco 10.7°  ◀ in crescita
+  Daytime Sextantids sorge (03:09)              ·      ·       4×     6×    ·      ·       4×  | Δpicco 10.7°  ◀ in crescita
+  Daytime Sextantids tramonta (14:11)           ·      ·      ·       5×     5×    ·       4×  | Δpicco 10.7°  ◀ in crescita
+
+══ 0f. FIRMA DEGLI EVENTI (picco ≥ 5×) — nT/min per stazione, nord, segnale proprio del corridoio ══
+  ora UT (loc)        picco    WIC  LON  THY  CLF  NGK  IZN  ABK   nord     corridoio (proprio)
+  02:29–02:30 (04:29)    6.7×   1.1  1.0  1.4  1.2  1.5  1.2 25.8   acceso   ·   [max: NGK, THY]
+  02:45–02:46 (04:45)    5.7×   1.1  1.0  1.1  1.0  1.4  0.9 21.6   acceso   ·   [max: NGK, THY]
+  03:22–03:31 (05:22)    9.6×   3.7  3.2  3.8  4.1  5.0  2.4 53.1   acceso   ·   [max: NGK, CLF]
+  13:00–13:00 (15:00)    5.0×   1.9  1.8  2.1  1.3  2.4  1.5  3.1   fermo    ·   [max: NGK, THY]
+  13:11–13:11 (15:11)    5.8×   1.3  1.3  1.5  1.9  2.1  1.4  7.4   fermo    ·   [max: NGK, CLF]
+  13:17–13:24 (15:17)   13.7×   6.2  5.5  7.0  5.9  9.2  4.5 43.3   acceso   ·   [max: NGK, THY]
+  14:38–14:42 (16:38)    5.1×   5.0  4.6  5.7  4.9  6.4  5.2 35.5   acceso   ·   [max: NGK, THY]
+  15:14–15:20 (17:14)   24.9×  23.4 22.4 26.5 19.3 29.4 29.1 87.5   acceso   LON Y 11× 12.5nT; THY X 8× 9.9nT; THY Y 11× 10.5nT; WIC Y 12× 12.6nT   [max: NGK, IZN]
+  15:25–15:36 (17:25)   16.1×  17.0 15.4 18.6 16.8 22.9 14.4 70.8   acceso   LON Y 9× 11.6nT; THY Y 15× 15.4nT; WIC Y 10× 10.8nT   [max: NGK, THY]
+  15:43–15:44 (17:43)    6.1×   6.8  6.0  7.3  8.3  9.1  4.5 33.2   acceso   ·   [max: NGK, CLF]
+  15:49–15:49 (17:49)    6.8×   8.0  6.1  8.2  8.7 11.1  6.7 24.3   acceso   ·   [max: NGK, CLF]
+  15:55–16:00 (17:55)    6.9×  10.4  9.4 10.6 10.0 15.7  5.4 55.1   acceso   ·   [max: NGK, THY]
+  17:11–17:11 (19:11)    5.6×  11.3  9.9 11.5 11.2 16.9  8.6 28.1   acceso   ·   [max: NGK, THY]
+  17:19–17:20 (19:19)    7.5×  15.0 13.4 16.9 12.6 21.5 11.9 46.8   acceso   ·   [max: NGK, THY]
+  17:33–17:53 (19:33)    9.9×  17.1 13.2 16.5 15.7 22.7 15.6 194.7   acceso   ·   [max: NGK, WIC]
+  18:20–18:20 (20:20)    5.4×   8.9  7.5  9.1 11.3 13.4  4.5 156.3   acceso   ·   [max: NGK, CLF]
+  20:25–20:25 (22:25)    5.4×  10.6 10.5 14.0  9.8  9.0 16.2 34.7   acceso   ·   [max: IZN, THY]
+  20:35–20:39 (22:35)    7.8×  15.8 15.4 18.0 11.9 17.2 14.0 57.9   acceso   ·   [max: THY, NGK]
+  21:14–21:19 (23:14)    6.5×  13.4 13.7 14.9 12.6 14.9 15.2 57.7   acceso   ·   [max: IZN, THY]
+  22:11–22:15 (00:11)    6.0×  10.2  9.8 11.6  7.8 14.0 10.7 54.3   acceso   ·   [max: NGK, THY]
+  22:54–22:54 (00:54)    5.4×   8.3  8.6  9.8  7.9  9.0  9.1 81.5   acceso   ·   [max: THY, IZN]
+  23:09–23:09 (01:09)    6.4×   9.9  9.2 11.2  8.8 12.7  7.6 42.3   acceso   ·   [max: NGK, THY]
+  23:56–23:58 (01:56)    9.0×  10.3  8.9 13.1 11.7 13.1 11.2 140.0   acceso   ·   [max: NGK, THY]
+  eventi della giornata: 44, di cui 23 con picco ≥ 5×. I valori sono nT/min (ampiezza reale), non rapporti.
+
+══ 0g. STOP DI STAZIONE — cosa c'è attorno (lo stop è un dato) ══
+  DUR: 18:00–fino a fine file UT (20:00 loc), 360 min — chiusura abituale di DUR
+  nessuno stop dentro la giornata.
+
+══ 0h. RICORRENZE AI MOMENTI DEL CIELO — ampiezza ogni giorno (±12 min; "·" = sotto 4×; "–" = giorno non in archivio) ══
+                                                      03/10 04/10 05/10 06/10 07/10 08/10 09/10 10/10   andamento
+  10:49 Luna culmina                                   4.5×  9.2×   ·    8.4×   ·    9.1×  5.0×  4.0×   ▲ cresce | oggi 1.1 nT/min
+  15:24 October Draconids culmina                       ·    5.7×  5.6×  9.2×   ·     ·     ·   24.9×   ▲ cresce | oggi 23.4 nT/min
+  15:37 Orionids passaggio inferiore                    ·    5.7×  5.6×  9.2×   ·     ·     ·   16.1×   = stabile | oggi 17.0 nT/min
+  17:36 Sole −12° sera                                 5.0×   ·    6.5×  4.1× 13.0×   ·     ·    9.9×   ▼ cala | oggi 16.5 nT/min
+  17:49 Leonis Minorids tramonta                       5.0× 11.3×  4.5×  4.8×  8.2× 12.1×   ·    9.9×   = stabile | oggi 16.5 nT/min
+  18:15 omicron-Eridanids sorge                        5.0× 11.3×   ·     ·    7.0× 12.1×  6.5×  5.4×   ▲ cresce | oggi 9.1 nT/min
+  18:23 tau-Cancrids passaggio inferiore               5.0× 11.3×   ·     ·    5.4×   ·    6.5×  5.4×   ▲ cresce | oggi 9.1 nT/min
+  18:29 Marte passaggio inferiore                      7.0× 14.5×  5.9×  4.8×  5.4×  4.7×  6.5×  5.4×   = stabile | oggi 9.1 nT/min
+  18:29 Urano sorge                                    5.3× 14.5×  5.9×  4.8×  4.0×  4.7×  6.5×  5.4×   = stabile | oggi 9.1 nT/min
+  21:16 October Camelopardalids passaggio inferiore     ·    5.8×  6.0×   ·     ·     ·   11.7×  6.5×   ▲ cresce | oggi 13.7 nT/min
+  (righe scelte dai dati fra 112 momenti del cielo di oggi: presenti ≥5× in almeno 4 giorni su 8. Le serie senza un momento del cielo sono in 0c e 0d.)
+  evento diurno più forte (09–17 UT): ora             13:23 10:16 09:36 12:44 11:16 09:26 11:48 15:14
+                                      : ampiezza       6.0×  6.3×  6.1×  9.2×  6.1×  9.1×  8.4× 24.9×
+
+══ 0i. STAZIONI CONTRO IL CORO — minuti in cui una stazione va al contrario di un'Europa concorde (≥1 nT/min da entrambe le parti) ══
+  minuti con Europa concorde oggi: 591
+  IZN: 27 minuti contrari — 13:23 15:13 15:16 15:26 15:36 15:45 15:59 16:05 16:06 16:07 17:29 17:44 17:51 18:03 20:40 20:52 21:15 21:18 21:57 22:15 22:57 23:10 23:26 23:54 23:56 23:57 23:59
+  CLF: 16 minuti contrari — 15:47 16:17 17:36 18:09 18:27 18:29 18:35 18:36 18:38 18:39 18:41 18:52 19:05 20:28 21:52 21:53
+  NGK: 5 minuti contrari — 17:55 17:57 18:29 18:30 18:31
+  LON: 1 minuti contrari — 17:18
+  DUR: 1 minuti contrari — 15:13
+  le altre stazioni: 0.
+
+══ 0. SINCRONISMI — eventi del giorno e momenti del cielo visti da SD (±10 min) ══
+  15:14 X(7) NGK+29.4: ☄ October Draconids culmina 15:24 (-10); ☄ September epsilon-Perseids passaggio inferiore 15:22 (-8)
+  15:16 Y(5) NGK+11.9: ☄ October Draconids culmina 15:24 (-8); ☄ September epsilon-Perseids passaggio inferiore 15:22 (-6)
+  15:35 X(6) NGK-22.9: ☄ Orionids passaggio inferiore 15:37 (-2)
+  16:14 minimo Y: Luna tramonta 16:22 (-8); Saturno sorge 16:13 (+1); ☄ epsilon-Geminids passaggio inferiore 16:07 (+7); ☄ Northern delta-Piscids sorge 16:19 (-5)
+  17:19 X(7) NGK-21.5: Mercurio tramonta 17:23 (-4); Venere tramonta 17:11 (+8); ☄ Southern Taurids sorge 17:23 (-4)
+  17:19 Z(5) NGK+6.6: Mercurio tramonta 17:23 (-4); Venere tramonta 17:11 (+8); ☄ Southern Taurids sorge 17:23 (-4)
+  17:33 X(7) NGK-14.3: Mercurio tramonta 17:23 (+10); ☄ Southern Taurids sorge 17:23 (+10)
+  17:37 X(6) NGK+15.2: —
+  17:37 Y(6) NGK+16.6: —
+  17:41 X(7) NGK-18.1: ☄ Leonis Minorids tramonta 17:49 (-8)
+  17:45 Y(7) NGK+22.7: ☄ Leonis Minorids tramonta 17:49 (-4)
+  17:53 X(5) THY+15.3: ☄ Leonis Minorids tramonta 17:49 (+4)
+  17:55 massimo Y: ☄ Leonis Minorids tramonta 17:49 (+6)
+  18:20 Y(5) NGK+13.4: Marte passaggio inferiore 18:29 (-9); Urano sorge 18:29 (-9); ☄ tau-Cancrids passaggio inferiore 18:23 (-3); ☄ omicron-Eridanids sorge 18:15 (+5)
+  20:39 X(6) THY+18.0: ☄ Daytime Sextantids passaggio inferiore 20:38 (+1); ☄ Orionids sorge 20:30 (+9)
+  21:19 X(6) IZN-15.2: ☄ October Camelopardalids passaggio inferiore 21:16 (+3); ☄ Leonis Minorids sorge 21:27 (-8); ☄ Daytime kappa-Leonids passaggio inferiore 21:14 (+5)
+  23:56 Y(6) NGK+13.1: ☄ Southern Taurids culmina 00:00 (-4); ☄ Northern Taurids culmina 23:55 (+1)
+  (per confronto: in media cadono 1.5 momenti del cielo in una finestra di ±10 min)
+  RICORRENZE (ultimi 30 giorni: stesso corpo e momento, stesso scarto ±4 min — l'orario può slittare con il corpo):
+  ★ ☄ Orionids passaggio inferiore (scarto -2 min): 09-24 15:45, 09-24 15:48, OGGI 15:35
+  ★ Mercurio tramonta (scarto -4 min): 09-28 17:33, 10-01 17:25, OGGI 17:19
+  ★ Venere tramonta (scarto +8 min): 09-30 17:59, 09-30 17:59, OGGI 17:19
+  ★ ☄ Southern Taurids sorge (scarto -4 min): 09-28 17:36, 09-28 17:37, 09-28 17:39, OGGI 17:19
+  ★ Mercurio tramonta (scarto -4 min): 09-28 17:33, 10-01 17:25, OGGI 17:19
+  ★ Venere tramonta (scarto +8 min): 09-30 17:59, 09-30 17:59, OGGI 17:19
+  ★ ☄ Southern Taurids sorge (scarto -4 min): 09-28 17:36, 09-28 17:37, 09-28 17:39, OGGI 17:19
+  ★ ☄ Southern Taurids sorge (scarto +10 min): 09-30 17:50, OGGI 17:33
+  ★ ☄ Leonis Minorids tramonta (scarto -8 min): 10-07 17:53, OGGI 17:41
+  ★ ☄ Leonis Minorids tramonta (scarto -4 min): 10-07 18:03, OGGI 17:45
+  ★ ☄ Leonis Minorids tramonta (scarto +4 min): 10-04 18:17, 10-04 18:20, 10-07 18:03, OGGI 17:53
+  ★ ☄ Leonis Minorids tramonta (scarto +6 min): 10-04 18:17, 10-04 18:20, OGGI 17:55
+  ★ Marte passaggio inferiore (scarto -9 min): 10-04 18:30, 10-04 18:33, OGGI 18:20
+  ★ Urano sorge (scarto -9 min): 10-04 18:44, OGGI 18:20
+  ★ ☄ tau-Cancrids passaggio inferiore (scarto -3 min): 10-04 18:20, OGGI 18:20
+  ★ ☄ omicron-Eridanids sorge (scarto +5 min): 10-04 18:30, OGGI 18:20
+  ★ ☄ Daytime Sextantids passaggio inferiore (scarto +1 min): 10-01 20:50, 10-01 20:52, 10-01 20:54, 10-02 20:46, 10-02 20:49, 10-02 20:50, OGGI 20:39
+  ★ ☄ Orionids sorge (scarto +9 min): 10-02 20:46, OGGI 20:39
+  ★ ☄ October Camelopardalids passaggio inferiore (scarto +3 min): 10-09 21:20, 10-09 21:20, OGGI 21:19
+  ★ ☄ Daytime kappa-Leonids passaggio inferiore (scarto +5 min): 10-09 21:20, 10-09 21:20, OGGI 21:19
+  ★ ☄ Southern Taurids culmina (scarto -4 min): 10-01 00:07, 10-06 00:03, 10-06 00:06, OGGI 23:56
+  ★ ☄ Northern Taurids culmina (scarto +1 min): 09-27 00:06, 09-27 00:06, 10-01 00:07, 10-06 00:03, 10-06 00:06, OGGI 23:56
+
+══ 0b. ANATOMIA DEGLI EVENTI — ordine di partenza est/ovest, inversione di Y, estensione ══
+  14:19 lento ΔX -12/40min: parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: 13.6°E) | fuori EU (ΔX 40 min): ABK+91 FRD-15
+  14:40 lento ΔX +13/40min: parte prima IZN; est in anticipo di +8 min sull'ovest; Y senza inversione (sui 5 min: 23.8°E) | fuori EU (ΔX 40 min): ABK+69 FRD-5
+  15:04 lento ΔX -15/40min: parte prima IZN; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+68 FRD-2
+  15:14 X(7): parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: 23.3°E) | fuori EU (ΔX 40 min): ABK-5 FRD+19
+  15:35 X(6): parte prima LON; est in anticipo di +1 min sull'ovest; Y senza inversione (sui 5 min: 17.3°E) | fuori EU (ΔX 40 min): ABK+5 FRD-13
+  15:56 lento ΔX -42/40min: parte prima NGK; est in anticipo di -4 min sull'ovest; Y senza inversione (sui 5 min: 16.3°E) | fuori EU (ΔX 40 min): ABK+8 FRD+19
+  16:15 lento ΔX +28/40min: parte prima IZN; est in anticipo di +4 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-49 FRD+55
+  16:45 lento ΔX +15/40min: parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+7 FRD+15
+  16:57 lento ΔX +19/40min: parte prima IZN; est in anticipo di +2 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-41 FRD+11
+  17:17 lento ΔX +47/40min: parte prima NGK; est in anticipo di +8 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-79 FRD+29
+  17:33 X(7): parte prima CLF; est in anticipo di -1 min sull'ovest; inversione di Y a 22.5°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-106 FRD-21
+  17:45 Y(7): parte prima NGK; est in anticipo di -1 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-470 FRD-49
+  17:58 lento ΔX -89/40min: parte prima THY; est in anticipo di +2 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-677 FRD-151
+  18:19 lento ΔX -23/40min: parte prima IZN; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-593 FRD-111
+  18:31 lento ΔX +48/40min: parte prima IZN; est in anticipo di +9 min sull'ovest; inversione di Y a 16.2°E (sui 5 min: 17.6°E) | fuori EU (ΔX 40 min): ABK+174 FRD-24
+  19:13 lento ΔX -20/40min: parte prima NGK; est in anticipo di -28 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+338 FRD+33
+  19:37 lento ΔX -21/40min: parte prima CLF; est in anticipo di -2 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+433 FRD-13
+  19:57 lento ΔX +37/40min: parte prima NGK; est in anticipo di -6 min sull'ovest; inversione di Y a 12.0°E (sui 5 min: 17.8°E) | fuori EU (ΔX 40 min): ABK-55 FRD+46
+  20:22 lento ΔX +17/40min: parte prima WIC; est in anticipo di +0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-366 FRD-8
+  20:37 lento ΔX -24/40min: parte prima NGK; est in anticipo di +1 min sull'ovest; Y senza inversione (sui 5 min: 28.5°E) | fuori EU (ΔX 40 min): ABK-169 FRD-72
+  20:54 lento ΔX +19/40min: parte prima IZN; est in anticipo di +0 min sull'ovest; inversione di Y a 18.4°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+41 FRD+25
+  21:07 lento ΔX -13/40min: parte prima CLF; est in anticipo di -7 min sull'ovest; inversione di Y a 11.1°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+66 FRD+2
+  21:19 X(6): parte prima CLF; est in anticipo di -0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-76 FRD-21
+  21:34 lento ΔX -12/40min: parte prima NGK; est in anticipo di -3 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+91 FRD-16
+  21:48 lento ΔX +17/40min: parte prima THY; est in anticipo di +6 min sull'ovest; Y senza inversione (sui 5 min: 27.1°E) | fuori EU (ΔX 40 min): ABK-13 FRD+19
+  22:09 lento ΔX +39/40min: parte prima CLF; est in anticipo di -0 min sull'ovest; inversione di Y a 9.9°E (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+7 FRD+23
+  22:25 lento ΔX +16/40min: parte prima CLF; est in anticipo di -2 min sull'ovest; Y senza inversione (sui 5 min: 8.7°E) | fuori EU (ΔX 40 min): ABK-85 FRD-6
+  22:52 lento ΔX +21/40min: parte prima IZN; est in anticipo di +8 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK-377 FRD+11
+  23:10 lento ΔX -21/40min: parte prima NGK; est in anticipo di -2 min sull'ovest; inversione di Y a 17.8°E (sui 5 min: 12.7°E) | fuori EU (ΔX 40 min): ABK-123 FRD-6
+  23:31 lento ΔX -21/40min: parte prima LON; est in anticipo di +1 min sull'ovest; Y senza inversione (sui 5 min: 5.9°E) | fuori EU (ΔX 40 min): ABK+131 FRD-15
+  23:43 lento ΔX -28/40min: parte prima NGK; est in anticipo di -0 min sull'ovest; Y senza inversione (sui 5 min: nessuna) | fuori EU (ΔX 40 min): ABK+56 FRD+5
+  23:54 lento ΔX -15/40min: parte prima NGK; est in anticipo di -2 min sull'ovest; inversione di Y a 26.5°E (sui 5 min: 26.1°E) | fuori EU (ΔX 40 min): ABK+107 FRD+3
+  Inversioni di Y oggi: mediana 17.0°E (SD = 13.0°E) su 8 eventi
+  Inversioni di Y sui 5 minuti dell'evento: 13, di cui a 11–15°E (SD = 13.0°E): 2 — 14:19@14°E 23:10@13°E   ◀ due o più sulla longitudine di SD
+
+══ 1. INTEGRITÀ DEI DATI ══
+  WIC: 1440/1440 minuti | F−|B| -0.26±0.04 | risoluzione ~0.01 nT
+  LON: 1440/1440 minuti | risoluzione ~0.1 nT
+  THY: 1440/1440 minuti | risoluzione ~0.01 nT
+  CLF: 1440/1440 minuti | F−|B| -0.52±0.20 | risoluzione ~0.1 nT
+  NGK: 1440/1440 minuti | F−|B| +0.05±0.08 | risoluzione ~0.01 nT
+  IZN: 1439/1440 minuti | Z piatto 12 min fino alle 00:55 | F−|B| -0.00±0.04 ← F probabilmente CALCOLATO (scarto troppo perfetto) | risoluzione ~0.01 nT
+  DUR: 1080/1440 minuti | buchi 18:00–23:59 | F−|B| +43.65±0.09 | risoluzione ~0.01 nT
+  ABK: 1440/1440 minuti | F−|B| -0.31±0.54 | risoluzione ~0.1 nT
+  FRD: 1440/1440 minuti | F−|B| -1.15±0.05 | risoluzione ~0.01 nT
+
+══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══
+  (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)
+  WIC: 16:00 Z-1.6 F-5.5✓ 17:52 Z+2.1 F+5.8✓ 18:00 Z+2.1 F+4.5✓ 18:01 Z+1.6 F+1.7✓ 20:37 Z-2.4 F-3.4✓ 20:42 Z-1.8 F-4.0✓ 23:59 Z-1.8 F-0.9✗
+  LON: 17:27 Z+1.6
+  CLF: 19:04 X+4.6 F+2.0✗ 20:26 X+4.5 F+2.2✗ 17:44 Y-7.0 F-1.7✗ 18:34 Y-6.7 F+0.1✗ 18:35 Y-6.2 F-1.5✗ 20:24 Y+9.8 F-3.7✗ 20:42 Y+5.4 F-2.0✗
+  NGK: 18:19 X+5.6 F+1.0✗ 18:20 X+6.4 F+0.7✗ 18:21 X+8.6 F+1.0✗ 18:26 Y-5.3 F+0.9✗ 21:53 Y+5.4 F+0.3✗ 22:17 Y+5.5 F+1.3✗ 13:22 Z+2.0 F-1.6✓ 14:43 Z+2.2 F+0.2✗ 15:24 Z+2.1 F+0.4✗ 15:25 Z+3.2 F+0.3✗ 15:27 Z+2.3 F-0.2✗ 15:29 Z+1.9 F+0.2✗ 15:30 Z+2.3 F+1.0✗ 15:31 Z+2.3 F-0.7✗ 15:32 Z+3.1 F+0.1✗ …
+  IZN: 15:58 X+4.8 (F derivato) 16:05 X+5.3 (F derivato) 17:23 X-4.7 (F derivato) 17:36 X+11.2 (F derivato) 17:54 X-4.7 (F derivato) 20:13 X+5.0 (F derivato) 20:19 X+5.2 (F derivato) 20:32 X-5.8 (F derivato) 20:34 X+7.2 (F derivato) 21:13 X-5.6 (F derivato) 21:18 X-6.9 (F derivato) 22:53 X-5.9 (F derivato) 23:11 X+4.2 (F derivato) 23:33 X-6.4 (F derivato) 23:59 X+4.6 (F derivato) …
+  DUR: 17:49 Z-3.6 F-6.5✓
+
+══ 3. EVENTI SINCRONI (≥5 stazioni EU: WIC, LON, THY, CLF, NGK, IZN, DUR) ══
+  X al minuto: 15:14–15:15(7) max NGK+29.4 |fuori EU: ABK+75.0 FRD+17.7 ⟵ L1 Bt+3.4 (arrivo 15:24) ; 15:35(6) max NGK-22.9 |fuori EU: ABK+57.4 FRD-13.7 ⟵ L1 Bt+14.6 (arrivo 15:45) ; 17:19(7) max NGK-21.5 |fuori EU: ABK+46.8 FRD-11.6 ⟵ L1 P+56% (arrivo 17:33) ; 17:33(7) max NGK-14.3 |fuori EU: ABK-21.8 FRD-10.8 ⟵ L1 P+84% (arrivo 17:47) ; 17:37(6) max NGK+15.2 |fuori EU: ABK-28.3 FRD+14.8 ⟵ L1 P+84% (arrivo 17:47) ; 17:41–17:43(7) max NGK-18.1 |fuori EU: ABK-51.5 FRD-16.7 ⟵ L1 P+84% (arrivo 17:47) ; 17:53(5) max THY+15.3 |fuori EU: ABK-194.7 FRD+19.5 ⟵ L1 Bt-3.5 (arrivo 18:05) ; 20:39(6) max THY+18.0 |fuori EU: ABK+31.2 FRD+25.5 ⟵ L1 Bt+2.7 (arrivo 20:47) ; 21:19(6) max IZN-15.2 |fuori EU: ABK+57.7 FRD-17.8 ⟵ L1 P-53% (arrivo 21:17)
+  Y al minuto: 15:16(5) max NGK+11.9 |fuori EU: ABK+69.7 FRD+17.2 ⟵ L1 Bt+3.4 (arrivo 15:24) ; 17:37(6) max NGK+16.6 |fuori EU: ABK-41.7 FRD-9.4 ⟵ L1 P+84% (arrivo 17:47) ; 17:45–17:51(7) max NGK+22.7 |fuori EU: ABK+85.4 FRD-12.8 ⟵ L1 Bt-4.0 (arrivo 17:57) ; 18:20(5) max NGK+13.4 |fuori EU: ABK+106.8 FRD+9.6 ⟵ L1 Bt-3.5 (arrivo 18:05) ; 23:56–23:58(6) max NGK+13.1 |fuori EU: ABK-61.2 FRD-11.5 ⟵ L1 Bt+2.8 (arrivo 23:52)
+  Z al minuto: 17:19(5) max NGK+6.6 |fuori EU: ABK-10.7 FRD+2.8 ⟵ L1 P+56% (arrivo 17:33)
+  X su 30 min (|Δ|>8.0): 05:09–05:31+ 07:44–07:47− 08:28–08:28− 09:52–10:16+ 13:49–13:51− 14:07–14:11− 14:15–14:16− 14:27–14:30− 14:32–14:33− 14:38–14:41+ 14:56–15:13− 15:15–15:35+ 15:38–15:43+ 15:45–15:58− 16:00–16:00− 16:05–16:15+ 16:47–17:00+ 17:06–17:06− 17:12–17:19+ 17:24–18:13− 18:17–18:43+ 18:48–18:48+ 19:10–19:38− 19:43–20:04+ 20:12–20:20− 20:25–20:30− 20:33–20:34− 20:38–20:43+ 20:52–20:53− 20:58–20:59+ 21:08–21:11− 21:17–21:18+ 21:20–21:20− 21:33–22:13+ 22:17–22:27+ 22:30–22:32+ 22:38–22:39− 22:50–22:51+ 22:55–22:56− 23:09–23:11− 23:18–23:24− 23:34–23:38− 23:42–23:44− 23:58–23:59−
+  Y su 30 min (|Δ|>8.0): 03:11–03:15+ 03:31–03:36+ 03:52–03:57+ 04:08–04:15− 06:46–06:47+ 08:51–09:27− 09:31–09:33− 09:40–09:44− 09:58–10:00− 10:10–10:27− 10:36–10:38− 10:57–11:05− 11:09–11:10− 13:21–13:21− 14:43–14:44− 14:48–14:50− 14:59–15:41+ 15:46–15:46− 15:48–16:28− 16:30–16:30− 16:38–17:03+ 17:20–17:29− 17:36–18:18+ 18:25–18:27− 18:48–18:49+ 18:57–19:32− 19:37–19:47+ 19:55–20:03− 20:12–20:49+ 21:02–21:05+ 21:12–21:20− 21:23–21:23− 21:30–21:47− 21:49–21:52− 22:12–22:44+ 23:20–23:23+ 23:32–23:38+ 23:43–23:44+ 23:54–23:59−
+  Z su 30 min (|Δ|>8.0): 17:24–17:26+ 17:35–17:36+ 17:41–17:51+ 17:59–18:06+ 18:11–18:15+ 18:17–18:17+ 18:26–18:48+
+
+══ 4. CURVA DIURNA ══
+  Ampiezza Y: WIC159 LON141 THY165 CLF138 NGK191 IZN139 DUR128
+  Min Y: WIC16:14 LON16:14 THY16:14 CLF16:14 NGK16:14 IZN16:14 DUR16:14
+  Max Y: WIC17:55 LON17:55 THY17:55 NGK17:55 IZN17:55 DUR17:55 CLF22:57
+  ⚠ massimo di Y fuori dal mattino: WIC, LON, THY, CLF, NGK, IZN, DUR
+  Gruppi (≥3 stazioni entro 2 min): 16:14 WIC,LON,THY,CLF,NGK,IZN,DUR
+  Min Z: IZN10:12 WIC10:29 THY10:43 LON10:44 NGK10:51 CLF11:50 DUR17:53
+  IZN minimo Z rispetto alla mediana: -0.5 h
+
+══ 5. NOTTE, OSCILLAZIONI, FASCIA 22 UT ══
+  Agitazione notte (std Y 00–03): WIC2.9 LON2.6 THY2.8 CLF3.5 NGK3.5 IZN2.0 DUR2.6
+  Potenza oscillazioni NGK per ora: 0.52 0.63 1.08 12.45 2.06 1.36 0.57 0.49 0.45 0.20 0.45 0.59 0.39 1.21 4.76 30.19 15.83 161.25 75.13 126.72 103.24 23.57 44.72 20.18
+  Ora più "vibrante": 17 UT (161.25)
+  Fascia 22 UT, picco X (criterio fisso): mediana EU +30.6 → segno +
+    per stazione: WIC+30.6 LON+29.4 THY+30.5 CLF+25.3 NGK+36.8 IZN+31.0 ABK+163.9 FRD-12.6
+
+══ 6. MEDIE GIORNALIERE ══
+  Z medio: WIC44296.5 LON42841.9 THY43867.6 CLF43328.4 NGK46159.9 IZN40889.4 DUR39916.5 ABK52495.7 FRD45063.2
+
+══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
+  sorgente SOLAR1, distanza 1.58 Mkm, velocità 410 km/s, ritardo tipico 64 min
+  Bz < −5 nT per ≥20 min (ora L1): 10/10 16:23–17:51 10/10 18:00–18:25
+  copertura L1 → Terra: 12:30 del 09/10 in poi
+  Discontinuità a L1 (arrivo stimato a Terra): 00:49[Bt-2.5] 02:32[Bt+3.5] 02:59[Bt+3.5] 03:08[P-37%] 03:21[P+103%] 03:38[svolta Bz →sud] 04:16[svolta Bz →sud] 04:27[svolta Bz →nord] 04:51[svolta Bz →nord] 05:08[svolta Bz →sud] 05:21[svolta Bz →nord] 05:41[Bt+3.1] 06:09[svolta Bz →sud] 07:25[P-32%] 11:26[P+24%] 13:10[P+22%] 13:51[P-42%] 14:10[svolta Bz →nord] 14:34[P+62%] 14:44[Bt-4.4] 15:24[Bt+3.4] 15:31[Bt+3.2] 15:36[P+1958%] 15:39[P-23%] 15:45[Bt+14.6] 15:52[P-27%] 15:58[P-25%] 16:04[P+44%] 16:13[P-31%] 16:18[Bt+13.5] 16:24[Bt-3.7] 16:40[Bt-3.9] 16:50[P+55%] 16:51[P+22%] 16:58[P-44%] 17:06[P-42%] 17:19[P-37%] 17:33[P+56%] 17:43[P+108%] 17:47[P+84%] 17:57[Bt-4.0] 18:05[Bt-3.5] 19:05[Bt-3.3] 19:16[P-22%] 19:25[Bt-3.4] 19:31[Bt-2.6] 20:17[Bt-6.0] 20:29[P-23%] 20:40[P-32%] 20:47[Bt+2.7] 21:02[svolta Bz →nord] 21:17[P-53%] 21:34[P+57%] 22:11[P+25%] 23:06[P+34%] 23:09[P+39%] 23:22[P+38%] 23:31[P-50%] 23:37[Bt+3.4] 23:42[P+41%] 23:52[Bt+2.8]
+  (pressione su → X su atteso; pressione giù → X giù)
+  61 variazioni a L1: il 62% della giornata sta entro 15 minuti da una di esse → oggi L1 NON DISTINGUE: quasi ogni evento ne ha una vicina anche per caso.
+
+══ 9. MOVIMENTI REGIONALI (2–4 stazioni insieme, contro il resto della rete) ══
+  X: 13:22 THY,NGK− ; 15:19 WIC,LON,NGK+ ; 15:20 WIC,NGK+ ; 15:25 THY,NGK− ; 15:33 WIC,NGK− ; 15:45 LON,IZN− ; 16:51 WIC,NGK+ ; 17:12 THY,NGK+ ; 17:18 LON,IZN− ; 17:19 WIC,THY,NGK− ; 17:20 THY,NGK− ; 17:21 WIC,THY,NGK− ; 17:42 WIC,THY,NGK− ; 17:48 THY,CLF− ; 17:55 WIC,NGK+ ; 17:58 CLF,NGK+ ; 18:01 THY,NGK+ ; 18:21 WIC,NGK+ ; 18:36 CLF,NGK− ; 20:13 NGK,IZN+ …
+  Y: 15:19 CLF,NGK+ ; 15:46 CLF,DUR+ ; 15:47 CLF,DUR+ ; 15:48 CLF,DUR+ ; 16:08 LON,IZN+ ; 16:16 LON,IZN− ; 17:21 WIC,NGK− ; 17:28 WIC,THY,NGK+ ; 17:33 WIC,LON− ; 17:43 WIC,LON− ; 17:49 WIC,THY,NGK+ ; 17:55 CLF,NGK+ ; 18:27 CLF,NGK− ; 18:29 CLF,IZN− ; 18:38 WIC,NGK+ ; 18:39 WIC,NGK+ ; 18:51 THY,NGK− ; 20:08 THY,NGK+ ; 20:23 CLF,NGK+ ; 20:42 THY,CLF+ …
+  Z: 15:32 THY,NGK+ ; 15:36 THY,NGK+ ; 16:57 LON,IZN− ; 17:12 THY,NGK− ; 17:20 THY,NGK+ ; 17:21 THY,NGK+ ; 17:34 THY,NGK+ ; 17:36 LON,THY+ ; 17:43 THY,NGK+ ; 17:49 WIC,DUR− ; 17:50 LON,THY+ ; 17:51 LON,CLF+ ; 17:54 THY,NGK− ; 17:59 LON,IZN− ; 18:48 WIC,NGK− ; 20:25 WIC,LON− ; 20:36 LON,IZN+ ; 20:40 THY,NGK− ; 20:42 WIC,LON− ; 20:54 THY,NGK− …
+
+══ 10. DIREZIONE APPARENTE DEGLI EVENTI SINCRONI (ritardi fra stazioni) ══
+  ritardo fisso per stazione rispetto a THY (mediana sugli eventi, s): WIC-1 LON-3 THY+0 CLF-2 NGK-1 IZN-32 DUR-1
+  (un ritardo fisso non è propagazione: orologio o convenzione del minuto — viene sottratto qui sotto)
+  15:14X: simultaneo entro ±9 s (dopo correzione)
+  15:35X: simultaneo entro ±8 s (dopo correzione)
+  17:19X: simultaneo entro ±3 s (dopo correzione)
+  17:33X: simultaneo entro ±5 s (dopo correzione)
+  17:37X: simultaneo entro ±6 s (dopo correzione)
+  17:41X: simultaneo entro ±2 s (dopo correzione)
+  17:53X: simultaneo entro ±1 s (dopo correzione)
+  20:39X: simultaneo entro ±6 s (dopo correzione)
+  21:19X: simultaneo entro ±5 s (dopo correzione)
+  15:16Y: simultaneo entro ±2 s (dopo correzione)
+  17:37Y: simultaneo entro ±5 s (dopo correzione)
+  17:45Y: simultaneo entro ±1 s (dopo correzione)
+  18:20Y: verso 263°, velocità apparente 89 km/s (escursione ritardi 23 s)
+  23:56Y: simultaneo entro ±8 s (dopo correzione)
+
+══ 11. GEOMETRIA DEGLI SCIAMI ATTIVI (altezza del radiante) ══
+  October Draconids (AR 263.2°, Dec +56.0°) su SD: sorge —, culmina 15:24 (80°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+80° 15:35:+80° 17:19:+70° 17:33:+68° 17:37:+67° 17:41:+67° 17:53:+65° 20:39:+42° 21:19:+37° 15:16:+80° 17:37:+67° 17:45:+66° 18:20:+61° 23:56:+21° 17:19:+70°
+    eventi con radiante sopra l'orizzonte: 15/15 (atteso per caso: 15.0)
+  October Camelopardalids (AR 171.3°, Dec +76.5°) su SD: sorge —, culmina 09:17 (60°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+45° 15:35:+43° 17:19:+38° 17:33:+38° 17:37:+37° 17:41:+37° 17:53:+37° 20:39:+33° 21:19:+33° 15:16:+45° 17:37:+37° 17:45:+37° 18:20:+36° 23:56:+35° 17:19:+38°
+    eventi con radiante sopra l'orizzonte: 15/15 (atteso per caso: 15.0)
+  October Ursae Majorids (AR 135.3°, Dec +67.6°) su SD: sorge —, culmina 06:53 (69°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+31° 15:35:+30° 17:19:+25° 17:33:+25° 17:37:+25° 17:41:+24° 17:53:+24° 20:39:+26° 21:19:+27° 15:16:+31° 17:37:+25° 17:45:+24° 18:20:+24° 23:56:+37° 17:19:+25°
+    eventi con radiante sopra l'orizzonte: 15/15 (atteso per caso: 15.0)
+  xi-Draconids (AR 149.4°, Dec +78.2°) su SD: sorge —, culmina 07:50 (58°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+41° 15:35:+40° 17:19:+36° 17:33:+36° 17:37:+36° 17:41:+36° 17:53:+36° 20:39:+35° 21:19:+35° 15:16:+41° 17:37:+36° 17:45:+36° 18:20:+35° 23:56:+40° 17:19:+36°
+    eventi con radiante sopra l'orizzonte: 15/15 (atteso per caso: 15.0)
+  epsilon-Geminids (AR 94.0°, Dec +28.7°) su SD: sorge 19:47, culmina 04:09 (73°), tramonta 12:27 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-14° 15:35:-15° 17:19:-13° 17:33:-13° 17:37:-12° 17:41:-12° 17:53:-11° 20:39:+7° 21:19:+13° 15:16:-14° 17:37:-12° 17:45:-12° 18:20:-9° 23:56:+39° 17:19:-13°
+    eventi con radiante sopra l'orizzonte: 3/15 (atteso per caso: 10.4)
+  tau-Cancrids (AR 128.1°, Dec +29.7°) su SD: sorge 21:57, culmina 06:25 (74°), tramonta 14:50 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-3° 15:35:-5° 17:19:-13° 17:33:-13° 17:37:-13° 17:41:-14° 17:53:-14° 20:39:-8° 21:19:-4° 15:16:-3° 17:37:-13° 17:45:-14° 18:20:-14° 23:56:+17° 17:19:-13°
+    eventi con radiante sopra l'orizzonte: 1/15 (atteso per caso: 10.6)
+  Southern Taurids (AR 32.6°, Dec +9.1°) su SD: sorge 17:23, culmina 00:04 (53°), tramonta 06:41 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-20° 15:35:-17° 17:19:-1° 17:33:+2° 17:37:+2° 17:41:+3° 17:53:+5° 20:39:+33° 21:19:+39° 15:16:-20° 17:37:+2° 17:45:+4° 18:20:+10° 23:56:+53° 17:19:-1°
+    eventi con radiante sopra l'orizzonte: 10/15 (atteso per caso: 8.3)
+  Daytime Sextantids (AR 161.9°, Dec -6.7°) su SD: sorge 03:09, culmina 08:40 (37°), tramonta 14:11 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-11° 15:35:-15° 17:19:-32° 17:33:-34° 17:37:-35° 17:41:-35° 17:53:-37° 20:39:-51° 21:19:-50° 15:16:-11° 17:37:-35° 17:45:-36° 18:20:-41° 23:56:-32° 17:19:-32°
+    eventi con radiante sopra l'orizzonte: 0/15 (atteso per caso: 6.9)
+  Leonis Minorids (AR 146.7°, Dec +40.5°) su SD: sorge 21:27, culmina 07:39 (84°), tramonta 17:49 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+15° 15:35:+12° 17:19:+2° 17:33:+1° 17:37:+1° 17:41:+0° 17:53:-0° 20:39:-2° 21:19:-0° 15:16:+14° 17:37:+1° 17:45:+0° 18:20:-2° 23:56:+14° 17:19:+2°
+    eventi con radiante sopra l'orizzonte: 11/15 (atteso per caso: 12.7)
+  Orionids (AR 86.4°, Dec +15.3°) su SD: sorge 20:30, culmina 03:39 (59°), tramonta 10:44 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-28° 15:35:-29° 17:19:-24° 17:33:-23° 17:37:-23° 17:41:-22° 17:53:-21° 20:39:+2° 21:19:+8° 15:16:-28° 17:37:-23° 17:45:-22° 18:20:-18° 23:56:+35° 17:19:-24°
+    eventi con radiante sopra l'orizzonte: 3/15 (atteso per caso: 8.9)
+  Daytime kappa-Leonids (AR 170.9°, Dec +10.8°) su SD: sorge 02:31, culmina 09:15 (55°), tramonta 16:01 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+8° 15:35:+4° 17:19:-13° 17:33:-15° 17:37:-15° 17:41:-16° 17:53:-17° 20:39:-33° 21:19:-33° 15:16:+7° 17:37:-15° 17:45:-16° 18:20:-21° 23:56:-22° 17:19:-13°
+    eventi con radiante sopra l'orizzonte: 3/15 (atteso per caso: 8.4)
+  Northern iota-Aquariids (AR 23.8°, Dec +13.9°) su SD: sorge 16:27, culmina 23:25 (58°), tramonta 06:28 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-11° 15:35:-8° 17:19:+9° 17:33:+11° 17:37:+12° 17:41:+13° 17:53:+15° 20:39:+43° 21:19:+48° 15:16:-11° 17:37:+12° 17:45:+13° 18:20:+19° 23:56:+57° 17:19:+9°
+    eventi con radiante sopra l'orizzonte: 12/15 (atteso per caso: 8.8)
+  chi-Taurids (AR 39.8°, Dec +23.3°) su SD: sorge 16:44, culmina 00:33 (67°), tramonta 08:18 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-11° 15:35:-9° 17:19:+5° 17:33:+7° 17:37:+8° 17:41:+9° 17:53:+11° 20:39:+39° 21:19:+46° 15:16:-11° 17:37:+8° 17:45:+9° 18:20:+15° 23:56:+66° 17:19:+5°
+    eventi con radiante sopra l'orizzonte: 12/15 (atteso per caso: 9.7)
+  September epsilon-Perseids (AR 82.6°, Dec +40.8°) su SD: sorge 17:05, culmina 03:23 (85°), tramonta 13:39 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-3° 15:35:-3° 17:19:+1° 17:33:+2° 17:37:+2° 17:41:+2° 17:53:+3° 20:39:+22° 21:19:+28° 15:16:-3° 17:37:+2° 17:45:+3° 18:20:+6° 23:56:+53° 17:19:+1°
+    eventi con radiante sopra l'orizzonte: 12/15 (atteso per caso: 12.9)
+  nu-Eridanids (AR 90.7°, Dec +11.8°) su SD: sorge 21:03, culmina 03:56 (56°), tramonta 10:45 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-31° 15:35:-32° 17:19:-29° 17:33:-28° 17:37:-28° 17:41:-27° 17:53:-26° 20:39:-4° 21:19:+3° 15:16:-31° 17:37:-28° 17:45:-27° 18:20:-23° 23:56:+30° 17:19:-29°
+    eventi con radiante sopra l'orizzonte: 2/15 (atteso per caso: 8.6)
+  Northern Taurids (AR 31.3°, Dec +16.2°) su SD: sorge 16:46, culmina 23:55 (60°), tramonta 07:09 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-13° 15:35:-11° 17:19:+5° 17:33:+8° 17:37:+8° 17:41:+9° 17:53:+11° 20:39:+40° 21:19:+46° 15:16:-13° 17:37:+8° 17:45:+10° 18:20:+16° 23:56:+60° 17:19:+5°
+    eventi con radiante sopra l'orizzonte: 12/15 (atteso per caso: 9.0)
+  omicron-Eridanids (AR 37.3°, Dec +1.2°) su SD: sorge 18:15, culmina 00:23 (45°), tramonta 06:27 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-29° 15:35:-26° 17:19:-10° 17:33:-7° 17:37:-7° 17:41:-6° 17:53:-4° 20:39:+24° 21:19:+30° 15:16:-29° 17:37:-7° 17:45:-5° 18:20:+1° 23:56:+45° 17:19:-10°
+    eventi con radiante sopra l'orizzonte: 4/15 (atteso per caso: 7.6)
+  Northern delta-Piscids (AR 27.3°, Dec +18.6°) su SD: sorge 16:19, culmina 23:39 (62°), tramonta 07:04 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-9° 15:35:-6° 17:19:+10° 17:33:+12° 17:37:+13° 17:41:+13° 17:53:+15° 20:39:+44° 21:19:+50° 15:16:-9° 17:37:+13° 17:45:+14° 18:20:+20° 23:56:+62° 17:19:+10°
+    eventi con radiante sopra l'orizzonte: 12/15 (atteso per caso: 9.2)
+  kappa-Cygnids (AR 319.2°, Dec +95.7°) su SD: sorge —, culmina 07:09 (52°), tramonta — UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:+43° 15:35:+43° 17:19:+41° 17:33:+41° 17:37:+41° 17:41:+41° 17:53:+41° 20:39:+41° 21:19:+41° 15:16:+43° 17:37:+41° 17:45:+41° 18:20:+41° 23:56:+44° 17:19:+41°
+    eventi con radiante sopra l'orizzonte: 15/15 (atteso per caso: 15.0)
+  sigma-Hydrids (AR 74.8°, Dec +19.7°) su SD: sorge 19:22, culmina 02:52 (64°), tramonta 10:19 UT
+    altezza del radiante su SD agli eventi sincroni: 15:14:-24° 15:35:-23° 17:19:-16° 17:33:-14° 17:37:-14° 17:41:-14° 17:53:-12° 20:39:+12° 21:19:+19° 15:16:-24° 17:37:-14° 17:45:-13° 18:20:-9° 23:56:+46° 17:19:-16°
+    eventi con radiante sopra l'orizzonte: 3/15 (atteso per caso: 9.3)
+
+══ 15. RADIANTE SOPRA OGNI STAZIONE vs SCARTO DALLA RETE (esplorativo) ══
+  (valori esplorativi, non verifiche: correlazione fra stazioni ora per ora; + = scarta di più dove il radiante è più alto)
+  Sole (controllo): correlazione media +0.05 su 19 ore; ore con correlazione > 0.5: 1
+  Longitudine (controllo): correlazione media -0.48 su 19 ore; ore con correlazione > 0.5: 0
+  Latitudine (controllo): correlazione media +0.16 su 19 ore; ore con correlazione > 0.5: 0
+  October Draconids: correlazione media -0.10 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 0
+  October Camelopardalids: correlazione media +0.00 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 0
+  October Ursae Majorids: correlazione media +0.08 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 0
+  xi-Draconids: correlazione media +0.04 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 0
+  epsilon-Geminids: correlazione media +0.06 su 13 ore (radiante sopra l'orizzonte in 18 ore); ore con correlazione > 0.5: 1
+  tau-Cancrids: correlazione media +0.05 su 16 ore (radiante sopra l'orizzonte in 19 ore); ore con correlazione > 0.5: 2
+  Southern Taurids: correlazione media -0.05 su 10 ore (radiante sopra l'orizzonte in 15 ore); ore con correlazione > 0.5: 1
+  Daytime Sextantids: correlazione media +0.12 su 13 ore (radiante sopra l'orizzonte in 13 ore); ore con correlazione > 0.5: 4
+  Leonis Minorids: correlazione media +0.04 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 2
+  Orionids: correlazione media +0.08 su 12 ore (radiante sopra l'orizzonte in 16 ore); ore con correlazione > 0.5: 2
+  Daytime kappa-Leonids: correlazione media +0.11 su 15 ore (radiante sopra l'orizzonte in 15 ore); ore con correlazione > 0.5: 5
+  Northern iota-Aquariids: correlazione media +0.02 su 10 ore (radiante sopra l'orizzonte in 15 ore); ore con correlazione > 0.5: 1
+  chi-Taurids: correlazione media +0.05 su 12 ore (radiante sopra l'orizzonte in 17 ore); ore con correlazione > 0.5: 1
+  September epsilon-Perseids: correlazione media +0.08 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 1
+  nu-Eridanids: correlazione media +0.09 su 12 ore (radiante sopra l'orizzonte in 16 ore); ore con correlazione > 0.5: 2
+  Northern Taurids: correlazione media +0.04 su 11 ore (radiante sopra l'orizzonte in 16 ore); ore con correlazione > 0.5: 1
+  omicron-Eridanids: correlazione media -0.08 su 9 ore (radiante sopra l'orizzonte in 14 ore); ore con correlazione > 0.5: 1
+  Northern delta-Piscids: correlazione media +0.03 su 12 ore (radiante sopra l'orizzonte in 17 ore); ore con correlazione > 0.5: 1
+  kappa-Cygnids: correlazione media +0.09 su 19 ore (radiante sopra l'orizzonte in 24 ore); ore con correlazione > 0.5: 0
+  sigma-Hydrids: correlazione media +0.06 su 11 ore (radiante sopra l'orizzonte in 16 ore); ore con correlazione > 0.5: 1
+
+══ 12. EVENTI "ORFANI" (sincroni, senza discontinuità a L1 entro 15 min) ══
+  nessuno
+  (se i file NOAA mancano o non coprono l'orario, tutti risultano orfani: controllare la sezione 7)
+
+══ 13. RICORRENZE CON I GIORNI PRECEDENTI (SKY_EVENTI.csv, tolleranza ±3 min) ══
+  stesso orario UT: 8 coincidenze (attese per caso ≈3.0): 17:41X↔10-07 17:44 17:53X↔10-07 17:53 21:19X↔10-02 21:19 21:19X↔10-09 21:20 17:45Y↔10-05 17:47 17:45Y↔10-07 17:44 18:20Y↔10-04 18:17 18:20Y↔10-04 18:20
+  deriva siderale: 6 coincidenze (attese per caso ≈3.0): 17:19X↔09-30 17:59 17:33X↔10-07 17:44 17:41X↔10-05 18:00 17:41X↔10-07 17:53 21:19X↔10-09 21:20 18:20Y↔10-04 18:44
+  deriva lunare: 2 coincidenze (attese per caso ≈3.0): 15:14X↔10-04 10:14 15:14X↔10-06 11:52
+  culminazione October Draconids: 9 coincidenze (attese per caso ≈3.0): 17:33X↔09-30 17:59 (+129 min) 17:33X↔09-30 18:04 (+129 min) 17:33X↔10-07 17:44 (+129 min) 17:37X↔09-30 18:04 (+133 min) 17:37X↔10-07 17:44 (+133 min) 21:19X↔10-09 21:20 (+355 min) 17:37Y↔09-30 18:04 (+133 min) 17:37Y↔10-07 17:44 (+133 min) 23:56Y↔10-06 00:06 (+512 min)
+  culminazione October Camelopardalids: 15 coincidenze (attese per caso ≈3.0): 17:37X↔09-30 17:59 (+500 min) 17:37X↔10-07 17:44 (+500 min) 17:41X↔09-30 17:59 (+504 min) 17:41X↔10-07 17:44 (+504 min) 17:53X↔10-05 18:00 (+516 min) 20:39X↔10-01 20:56 (+682 min) 20:39X↔10-02 20:54 (+682 min) 21:19X↔10-09 21:20 (-718 min) 17:37Y↔09-30 17:59 (+500 min) 17:37Y↔10-05 17:47 (+500 min)
+  culminazione October Ursae Majorids: 4 coincidenze (attese per caso ≈3.0): 17:41X↔10-01 17:25 (+648 min) 17:53X↔10-07 17:44 (+660 min) 18:20Y↔09-30 18:04 (+687 min) 18:20Y↔10-08 18:11 (+687 min)
+  culminazione xi-Draconids: 5 coincidenze (attese per caso ≈3.0): 17:41X↔10-01 17:25 (+591 min) 17:53X↔10-07 17:44 (+603 min) 21:19X↔10-09 21:20 (-631 min) 18:20Y↔09-30 17:59 (+630 min) 18:20Y↔09-30 18:04 (+630 min)
+  culminazione epsilon-Geminids: 10 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-650 min) 17:41X↔10-07 17:44 (-628 min) 17:53X↔09-30 17:59 (-616 min) 17:53X↔10-07 17:53 (-616 min) 20:39X↔10-02 20:46 (-450 min) 21:19X↔10-09 21:20 (-410 min) 17:45Y↔09-30 17:50 (-624 min) 17:45Y↔10-05 17:47 (-624 min) 17:45Y↔10-07 17:44 (-624 min) 18:20Y↔10-04 18:20 (-589 min)
+  culminazione tau-Cancrids: 10 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (+654 min) 17:41X↔10-07 17:44 (+676 min) 17:53X↔09-30 17:59 (+688 min) 17:53X↔10-07 17:53 (+688 min) 21:19X↔10-02 21:19 (-546 min) 21:19X↔10-09 21:20 (-546 min) 17:45Y↔09-30 17:50 (+680 min) 17:45Y↔10-05 17:47 (+680 min) 17:45Y↔10-07 17:44 (+680 min) 18:20Y↔10-04 18:20 (+715 min)
+  culminazione Southern Taurids: 11 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-405 min) 17:41X↔10-07 17:44 (-383 min) 17:53X↔09-30 18:04 (-371 min) 17:53X↔10-05 18:00 (-371 min) 17:53X↔10-07 17:53 (-371 min) 20:39X↔10-02 20:46 (-205 min) 20:39X↔10-02 20:50 (-205 min) 21:19X↔10-09 21:20 (-165 min) 17:37Y↔09-30 17:50 (-387 min) 17:45Y↔10-05 17:47 (-379 min)
+  culminazione Daytime Sextantids: 11 coincidenze (attese per caso ≈3.0): 17:41X↔10-07 17:44 (+541 min) 17:53X↔09-30 18:04 (+553 min) 17:53X↔10-05 18:00 (+553 min) 17:53X↔10-07 17:53 (+553 min) 20:39X↔10-02 20:46 (+719 min) 21:19X↔10-09 21:20 (-681 min) 17:37Y↔09-30 17:50 (+537 min) 17:45Y↔09-30 17:59 (+545 min) 17:45Y↔10-05 17:47 (+545 min) 18:20Y↔10-04 18:30 (+580 min)
+  culminazione Leonis Minorids: 6 coincidenze (attese per caso ≈2.1): 17:53X↔10-05 18:00 (+614 min) 17:53X↔10-07 17:53 (+614 min) 21:19X↔10-09 21:20 (-620 min) 17:37Y↔10-05 17:47 (+598 min) 17:45Y↔10-07 17:44 (+606 min) 18:20Y↔10-04 18:30 (+641 min)
+  culminazione Orionids: 11 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-620 min) 17:41X↔10-07 17:44 (-598 min) 17:53X↔09-30 17:59 (-586 min) 17:53X↔09-30 18:04 (-586 min) 17:53X↔10-05 18:00 (-586 min) 17:53X↔10-07 17:53 (-586 min) 20:39X↔10-02 20:46 (-420 min) 21:19X↔10-09 21:20 (-380 min) 17:45Y↔09-30 17:50 (-594 min) 17:45Y↔10-05 17:47 (-594 min)
+  culminazione Daytime kappa-Leonids: 15 coincidenze (attese per caso ≈3.0): 17:37X↔10-07 17:44 (+502 min) 17:41X↔09-30 17:59 (+506 min) 17:41X↔10-07 17:44 (+506 min) 17:53X↔10-05 18:00 (+518 min) 20:39X↔10-01 20:52 (+684 min) 20:39X↔10-01 20:56 (+684 min) 20:39X↔10-02 20:50 (+684 min) 20:39X↔10-02 20:54 (+684 min) 21:19X↔10-09 21:20 (-716 min) 17:37Y↔09-30 17:50 (+502 min)
+  culminazione Northern iota-Aquariids: 11 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-366 min) 17:41X↔10-07 17:44 (-344 min) 17:53X↔09-30 18:04 (-332 min) 17:53X↔10-05 18:00 (-332 min) 17:53X↔10-07 17:53 (-332 min) 20:39X↔10-02 20:46 (-166 min) 20:39X↔10-02 20:50 (-166 min) 21:19X↔10-09 21:20 (-126 min) 17:37Y↔09-30 17:50 (-348 min) 17:45Y↔10-05 17:47 (-340 min)
+  culminazione chi-Taurids: 8 coincidenze (attese per caso ≈3.0): 17:41X↔10-07 17:44 (-412 min) 17:53X↔10-07 17:53 (-400 min) 21:19X↔10-02 21:19 (-194 min) 21:19X↔10-09 21:20 (-194 min) 17:45Y↔09-30 17:50 (-408 min) 17:45Y↔10-05 17:47 (-408 min) 17:45Y↔10-07 17:44 (-408 min) 18:20Y↔10-04 18:20 (-373 min)
+  culminazione September epsilon-Perseids: 5 coincidenze (attese per caso ≈3.0): 17:33X↔10-01 17:25 (-590 min) 17:53X↔10-07 17:53 (-570 min) 21:19X↔10-09 21:20 (-364 min) 17:45Y↔10-07 17:44 (-578 min) 18:20Y↔10-04 18:17 (-543 min)
+  culminazione nu-Eridanids: 11 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-637 min) 17:41X↔10-07 17:44 (-615 min) 17:53X↔09-30 17:59 (-603 min) 17:53X↔09-30 18:04 (-603 min) 17:53X↔10-05 18:00 (-603 min) 17:53X↔10-07 17:53 (-603 min) 20:39X↔10-02 20:46 (-437 min) 21:19X↔10-09 21:20 (-397 min) 17:45Y↔09-30 17:50 (-611 min) 17:45Y↔10-05 17:47 (-611 min)
+  culminazione Northern Taurids: 12 coincidenze (attese per caso ≈3.0): 17:41X↔10-07 17:44 (-374 min) 17:53X↔09-30 18:04 (-362 min) 17:53X↔10-05 18:00 (-362 min) 17:53X↔10-07 17:53 (-362 min) 20:39X↔10-01 20:52 (-196 min) 20:39X↔10-02 20:46 (-196 min) 20:39X↔10-02 20:50 (-196 min) 21:19X↔10-09 21:20 (-156 min) 17:37Y↔09-30 17:50 (-378 min) 17:37Y↔10-05 17:47 (-378 min)
+  culminazione omicron-Eridanids: 16 coincidenze (attese per caso ≈3.0): 17:37X↔10-07 17:44 (-406 min) 17:41X↔09-30 17:59 (-402 min) 17:41X↔10-07 17:44 (-402 min) 17:53X↔10-05 18:00 (-390 min) 20:39X↔10-01 20:52 (-224 min) 20:39X↔10-01 20:56 (-224 min) 20:39X↔10-02 20:50 (-224 min) 20:39X↔10-02 20:54 (-224 min) 21:19X↔10-09 21:20 (-184 min) 17:37Y↔09-30 17:50 (-406 min)
+  culminazione Northern delta-Piscids: 15 coincidenze (attese per caso ≈3.0): 17:33X↔10-07 17:44 (-366 min) 17:37X↔10-07 17:44 (-362 min) 17:53X↔09-30 18:04 (-346 min) 17:53X↔10-05 18:00 (-346 min) 20:39X↔10-01 20:52 (-180 min) 20:39X↔10-02 20:50 (-180 min) 20:39X↔10-02 20:54 (-180 min) 21:19X↔10-09 21:20 (-140 min) 17:37Y↔09-30 17:50 (-362 min) 17:37Y↔10-05 17:47 (-362 min)
+  culminazione kappa-Cygnids: 8 coincidenze (attese per caso ≈3.0): 17:37X↔10-07 17:44 (+628 min) 17:41X↔10-07 17:44 (+632 min) 17:53X↔10-05 18:00 (+644 min) 21:19X↔10-09 21:20 (-590 min) 17:37Y↔10-05 17:47 (+628 min) 17:37Y↔10-07 17:44 (+628 min) 18:20Y↔10-04 18:30 (+671 min) 23:56Y↔10-06 00:03 (-433 min)
+  culminazione sigma-Hydrids: 9 coincidenze (attese per caso ≈3.0): 17:19X↔10-01 17:25 (-573 min) 17:41X↔10-07 17:44 (-551 min) 17:53X↔09-30 17:59 (-539 min) 17:53X↔10-07 17:53 (-539 min) 20:39X↔10-02 20:46 (-373 min) 21:19X↔10-09 21:20 (-333 min) 17:45Y↔09-30 17:50 (-547 min) 17:45Y↔10-05 17:47 (-547 min) 17:45Y↔10-07 17:44 (-547 min)
+
+══ 16. SOLE, NODI E PERCORSI (D2 + D7) ══
+  Pianeti/Luna sul nodo di uno sciame attivo (≤2°): Saturno@Northern iota-Aquariids 0.7°; Urano@chi-Taurids 1.5°; Urano@nu-Eridanids 0.4°; Nettuno@Northern delta-Piscids 1.5°; Marte@sigma-Hydrids 0.6°
+  Brillamenti del giorno: 9 (M/X: 2) — M1.2@14:12 M6.4@15:10
+  Classe massima: M6.4
+  CME del giorno: 0
+  Arrivo di flusso veloce (buco coronale) a Terra: no
+  Percorsi degli eventi sincroni: diretto 0, attraverso il Sole 15, standard 0, non valutabile 0
+  (nei 4 giorni prima: eruzioni in giorni con pianeta sul nodo → 10-06, 10-08, 10-09)
+  "diretto" = nessuna variazione a L1 vicina; "attraverso il Sole" = variazione a L1 vicina + eruzione 1–4 giorni prima in giorno con nodo; "standard" = variazione a L1 vicina senza quel legame. Vicina non vuol dire causa: è un confronto, come i radianti.
+
+══ 14. CONFRONTO CON I GIORNI PRECEDENTI (SKY_REGISTRO.csv) ══
+  Segno fascia 22 UT (ultimi giorni → oggi): − + + + − + + + + − +
+  Alternanza rispetto a ieri: SÌ
+  THY_Zmean: 43859.9 → 43863.3 → 43860.1 → 43861.8 → 43860.1 → OGGI 43867.6
+  Yamp_max: 100.6 → 66.0 → 75.6 → 56.2 → 65.8 → OGGI 190.5
+  night_std_med: 8.79 → 6.36 → 1.04 → 1.16 → 6.24 → OGGI 2.8
+  sync_1min: 10 → 14 → 3 → 14 → 12 → OGGI 15
+  IZN_Zlead_h: 5.8 → -1.1 → -2.4 → -0.1 → -0.4 → OGGI -0.5
