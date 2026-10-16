@@ -3,10 +3,13 @@
 SKY — Monitor geomagnetico corridoio San Daniele (GitHub Actions)
 Stazioni: WIC (AT), LON (HR), THY (HU), CLF (FR)
 
-Modello dati (empirico): il feed INTERMAGNET/BGS pubblica a LOTTI irregolari,
-tipicamente con ~3h di ritardo. Strategia:
-  - fetch: si prova SEMPRE prima la finestra fino ad 'adesso'; se il server
-    rifiuta ('time outside valid range'), la finestra retrocede a passi.
+Modello dati: il servizio INTERMAGNET/BGS (HAPI) dichiara per ogni stazione
+l'ultimo minuto disponibile ('stopDate' in /info), di solito pochi minuti fa.
+Strategia (16/10/2026):
+  - fetch: si chiede la finestra fino allo stopDate della stazione, NON fino ad
+    'adesso' (chiedere oltre lo stopDate fa rifiutare la richiesta e prima
+    costringeva a retrocedere di 3h, buttando via le ultime 3h di dati).
+    La retrocessione a passi resta solo come riserva se /info non risponde.
   - freeze: una stazione è STALE se il suo ultimo dato è >= STALE_GAP_MIN più
     vecchio di quello della stazione più aggiornata della rete (auto-calibrato).
 
@@ -59,7 +62,7 @@ OBS_ID = {
 CHECK_STEP_MIN = 15                  # frequenza del cron
 STALE_GAP_MIN  = 90                  # stazione STALE se >=90' indietro rispetto
                                      # alla stazione più aggiornata della rete
-BACK_STEPS_H   = (0, 3, 6, 12, 24)   # retrocessione finestra fetch (mai il futuro)
+BACK_STEPS_H   = (0, 3, 6, 12, 24)   # retrocessione finestra fetch (solo riserva)
 EVENT_FILE     = '.sky_event'
 
 UPDATE_MIN_GAP_MIN    = 180          # max un aggiornamento ogni 3h (e solo escalation)
@@ -412,9 +415,25 @@ def save_event_state(state):
 
 # ─── FETCH INTERMAGNET ────────────────────────────────────────────────────────
 
+def stop_date(obs_code):
+    """Ultimo minuto disponibile sul servizio per questa stazione ('stopDate' in /info)."""
+    try:
+        r = requests.get(f"{BASE}/info?id={OBS_ID[obs_code]}",
+                         headers=HEADERS, timeout=20)
+        s = r.json().get('stopDate')
+        return datetime.datetime.fromisoformat(s.replace('Z', '+00:00')) if s else None
+    except Exception:
+        return None
+
 def fetch_range(obs_code, start_dt, end_dt, back_steps=BACK_STEPS_H):
-    """Prova PRIMA la finestra ideale fino ad 'adesso'; se il server rifiuta
-    ('time outside valid range'), retrocede TUTTA la finestra a passi."""
+    """Chiede i dati fino all'ultimo minuto disponibile (stopDate), non fino ad 'adesso'.
+    Se lo stopDate è prima di end_dt, tutta la finestra si sposta indietro solo
+    di quanto serve (pochi minuti), non di 3 ore. La retrocessione a passi
+    resta come riserva se il server rifiuta comunque o /info non risponde."""
+    sd = stop_date(obs_code)
+    if sd is not None and sd < end_dt:
+        shift = end_dt - sd
+        start_dt, end_dt = start_dt - shift, sd
     last_err = ""
     for off_h in back_steps:
         off = datetime.timedelta(hours=off_h)
