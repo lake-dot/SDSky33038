@@ -1,4 +1,4 @@
-SKY SCAN — 2026-10-16 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD
+SKY SCAN — 2026-10-16 — stazioni: WIC, LON, THY, CLF, BFO, NGK, BEL, IZN, DUR, ABK, KAK, FRD, OTT, BRD
 Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
 
 ══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══
@@ -207,6 +207,8 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
   ABK: 1440/1440 minuti | F−|B| +0.05±0.21 | risoluzione ~0.1 nT
   KAK: 1440/1440 minuti | F−|B| -1.31±0.05 | risoluzione ~0.01 nT
   FRD: 1440/1440 minuti | F−|B| -1.49±0.03 | risoluzione ~0.01 nT
+  OTT: 360/1440 minuti | buchi 06:00–23:59 | F−|B| -0.24±0.18 | risoluzione ~0.01 nT
+  BRD: 360/1440 minuti | buchi 06:00–23:59 | F−|B| +13.44±0.11 | risoluzione ~0.01 nT
 
 ══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══
   (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)
@@ -238,10 +240,10 @@ Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.
     per stazione: WIC-7.6 LON-6.8 THY-7.7 CLF-3.6 BFO-4.6 NGK-8.0 BEL-10.3 ABK+149.7 KAK+2.7 FRD+13.4
 
 ══ 6. MEDIE GIORNALIERE ══
-  Z medio: WIC44291.8 LON42837.8 THY43863.0 CLF43321.2 BFO43847.8 NGK46151.5 BEL47151.4 IZN40884.7 DUR39916.5 ABK52475.5 KAK36027.9 FRD45060.1
+  Z medio: WIC44291.8 LON42837.8 THY43863.0 CLF43321.2 BFO43847.8 NGK46151.5 BEL47151.4 IZN40884.7 DUR39916.5 ABK52475.5 KAK36027.9 FRD45060.1 OTT49976.8 BRD53761.6
 
 ══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══
-  sorgente SOLAR1, distanza 1.56 Mkm, velocità 449 km/s, ritardo tipico 58 min
+  sorgente SOLAR1, distanza 1.56 Mkm, velocità 448 km/s, ritardo tipico 58 min
   copertura L1 → Terra: 16:18 del 15/10 in poi
   Discontinuità a L1 (arrivo stimato a Terra): 01:13[P+71%] 01:43[P-22%] 07:18[P+59%] 07:42[P-38%] 08:20[svolta Bz →nord] 09:22[svolta Bz →nord] 09:41[svolta Bz →sud] 10:11[P+24%] 11:33[svolta Bz →sud] 11:48[svolta Bz →nord] 13:01[P-20%] 14:20[svolta Bz →sud] 14:45[P-22%] 15:42[P+28%] 18:45[P+27%] 19:44[svolta Bz →sud] 21:29[P-31%] 22:29[P+29%]
   (pressione su → X su atteso; pressione giù → X giù)
