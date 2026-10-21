@@ -1,1415 +1,828 @@
 #!/usr/bin/env python3
 """
-sky_scan.py — pre-analisi automatica di una giornata SKY
+SKY-DUMP — Estrazione dati geomagnetici di una giornata intera + effemeridi
+(ossatura di sky.py: stessi OBS_ID, stesso fetch GIN, stesso parsing)
+(Astronomia: matematica pura, identica alla versione GitHub Actions — nessuna dipendenza)
 
-Uso:  python3 sky_scan.py ~/Desktop/SKY_2026-09-23
-Legge: TUTTE_<data>.csv (+ NOAA_*.json se presenti)
-Scrive nella cartella: SCAN_<data>.txt  (report da incollare all'AI)
-Aggiorna nella cartella madre: SKY_REGISTRO.csv (una riga per giorno)
+Output — cartella ~/Desktop/SKY_YYYY-MM-GG/:
+  • un TXT per stazione: risoluzione 1 minuto, X Y Z F — archivio completo
+  • RIEPILOGO.TXT: UNICO file di sintesi — effemeridi complete della giornata
+    + statistiche stazione per stazione
+  • INCROCIO_<step>min.TXT: tutte le stazioni allineate sulla stessa timeline,
+    scarti dalla mediana del giorno — il file pensato per essere letto
+    INTEGRALMENTE da un'AI in un messaggio
 
-Regola: il report elenca OSSERVAZIONI e SEGNALAZIONI, mai verdetti.
+Uso:
+    python3 sky_d.py                  → ieri, passo 10 min
+    python3 sky_d.py 2026-09-15       → giorno specifico
+    python3 sky_d.py 2026-09-15 5     → giorno specifico, passo 5 min
+
+Sola lettura: nessun alert, nessun log, nessuna notifica, non tocca sky.py.
 """
-import sys, json, glob, math, pathlib
+
+import sys
+import os
+import time
+import math
+import requests
 import numpy as np
-import pandas as pd
+import datetime
+import pathlib
 
-EU      = ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL', 'IZN', 'DUR']
-AURORAL = ['ABK', 'TRO']
-GLOBAL  = ['KAK', 'FRD', 'OTT', 'BRD']
+# ─── CONFIGURAZIONE ───────────────────────────────────────────────────────────
+
+OBSERVATORIES = {
+    # — Corridoio primario —
+    'wic': 'Conrad, Austria (220km)',
+    'lon': 'Lonjsko Polje, Croatia (290km)',
+    'thy': 'Tihany, Hungary (370km)',
+    # — 2ª linea: ovest —
+    'clf': 'Chambon-la-Forêt, France (~830km)',
+    'bfo': 'Black Forest, Germania (~430km)',
+    # — 2ª linea: nord (meridiano ~13°E, allineata con SD) —
+    'ngk': 'Niemegk, Germania (~660km)',
+    # — 2ª linea: est —
+    'bel': 'Belsk, Polonia (~850km)',
+    'izn': 'Iznik, Turchia (~1500km)',
+    # — 2ª linea: sud —
+    'dur': 'Duronia, Italia (~520km)',
+    # — Aurorali (test sottotempeste) —
+    'abk': 'Abisko, Svezia (aurorale ~68°N)',
+    'tro': 'Tromsø, Norvegia (aurorale ~70°N)',
+    # — Extra-europee (test globale/regionale) —
+    'kak': 'Kakioka, Giappone',
+    'frd': 'Fredericksburg, USA',
+    'ott': 'Ottawa, Canada',
+    'brd': 'Brandon, Canada',
+}
+
+OBS_ID = {
+    'wic': 'wic/best-avail/PT1M/xyzf',
+    'lon': 'lon/best-avail/PT1M/xyzf',
+    'thy': 'thy/best-avail/PT1M/xyzf',
+    'clf': 'clf/best-avail/PT1M/xyzf',
+    'bfo': 'bfo/best-avail/PT1M/xyzf',
+    'ngk': 'ngk/best-avail/PT1M/xyzf',
+    'bel': 'bel/best-avail/PT1M/xyzf',
+    'izn': 'izn/best-avail/PT1M/xyzf',
+    'dur': 'dur/best-avail/PT1M/xyzf',
+    'abk': 'abk/best-avail/PT1M/xyzf',
+    'tro': 'tro/best-avail/PT1M/xyzf',
+    'kak': 'kak/best-avail/PT1M/xyzf',
+    'frd': 'frd/best-avail/PT1M/xyzf',
+    'ott': 'ott/best-avail/PT1M/xyzf',
+    'brd': 'brd/best-avail/PT1M/xyzf',
+}
+
+# DUR pubblica in un sistema ruotato: declinazione IGRF 2026 ≈ 4.36°, dai dati ≈ 0.09°
+# → nel file unico si aggiungono anche DURg_X / DURg_Y ruotate nel sistema geografico.
 DUR_ROT_DEG = 4.27
-# stazioni che pubblicano in un sistema ruotato (verificato con IGRF 2026): angolo da applicare
-ROT = {'DUR': 4.27, 'FRD': -10.49}
-SYNC_MIN_ST = 5          # stazioni EU per un evento "sincrono"
-ROC_THR     = 8.0        # nT/30min (come sky.py)
-WIN22 = ('21:45', '21:55', '22:05', '22:30')   # baseline / finestra fascia 22 UT
-L1_DEFAULT_KM = 1.5e6
-DERIVED_F = set()
-NOAA_COVER = None
-DRIFT_EST = set()
-ACTIVE_SH = {}
-CULM = {}
-REG_LAGS = {}
-SYNC_LOG = []          # eventi sincroni della giornata (per registro eventi e analisi aggiuntive)
 
-# coordinate (lat, lon) — SD = punto di osservazione
-COORD = {'SD': (46.155, 13.005), 'WIC': (47.93, 15.87), 'LON': (45.41, 16.66), 'THY': (46.90, 17.89),
-         'CLF': (48.02, 2.26), 'BFO': (48.33, 8.33), 'NGK': (52.07, 12.68), 'BEL': (51.84, 20.79),
-         'IZN': (40.50, 29.73), 'DUR': (41.65, 14.47), 'ABK': (68.36, 18.82), 'TRO': (69.66, 18.94),
-         'KAK': (36.23, 140.19), 'FRD': (38.20, -77.37), 'OTT': (45.40, -75.55), 'BRD': (49.87, -99.97)}
+# File unico con tutte le stazioni al minuto (CSV, colonne STAZ_X, STAZ_Y, STAZ_Z, STAZ_F)
+WRITE_ALL_CSV       = True
+WRITE_STATION_FILES = os.environ.get('SKY_STATION_FILES', '1') == '1'   # TXT per stazione (0 = solo file unico)
 
-# radianti (AR, Dec in gradi) per nome come compare nel RIEPILOGO
-RADIANTS = {'Perseidi': (48, 58), 'Eps Perseidi': (48, 40), 'Alpha Aurigidi': (91, 39),
-            'Kappa Cignidi': (286, 59), 'Delta Aquaridi': (340, -16), 'Alpha Capric.': (307, -10),
-            'Sextantidi': (152, 0), 'Draconidi': (262, 54), 'Orionidi': (95, 16),
-            'Tauridi Sud': (32, 9), 'Tauridi Nord': (58, 22), 'Leonidi': (152, 22),
-            'Geminidi': (112, 33), 'Quadrantidi': (230, 49), 'Liridi': (271, 34), 'Eta Aquaridi': (338, -1)}
-SIDEREAL_SHIFT_MIN = -3.93    # min/giorno in UT per un fenomeno legato alle stelle
-LUNAR_SHIFT_MIN    = 50.5     # min/giorno in UT per un fenomeno legato alla Luna
+# Vento solare NOAA (ultime 24h, sorgenti SOLAR1/IMAP/ACE) — salvato solo se si estrae ieri/oggi
+NOAA_RTSW = {
+    'wind': 'https://services.swpc.noaa.gov/json/rtsw/rtsw_wind_1m.json',
+    'mag':  'https://services.swpc.noaa.gov/json/rtsw/rtsw_mag_1m.json',
+    'eph':  'https://services.swpc.noaa.gov/json/rtsw/rtsw_ephemerides_1h.json',
+}
 
-# ─────────────────────────────────────────────────────────────────────────────
-def load_all(folder):
-    f = sorted(glob.glob(str(folder / 'TUTTE_*.csv')))
-    if not f:
-        sys.exit('TUTTE_*.csv non trovato nella cartella')
-    df = pd.read_csv(f[0], comment='#')
-    df['t'] = pd.to_datetime(df.time_UT)
-    df = df.set_index('t').drop(columns='time_UT')
-    day = df.index[0].strftime('%Y-%m-%d')
-    D = {}
-    for col in df.columns:
-        st, comp = col.split('_')
-        if st == 'DURg':
+# Fallback su codice alternativo se quello ufficiale non risponde.
+# VUOTO di proposito: un alias silenzioso può sostituire una stazione
+# con un'altra a centinaia di km di distanza.
+ALIASES = {}
+
+BASE        = "https://imag-data.bgs.ac.uk/GIN_V1/hapi"
+CHUNK_HOURS = 6        # giornata scaricata a blocchi di 6h (4 richieste/stazione)
+PAUSE_S     = 0.4      # pausa cortese tra le richieste
+FILL        = 99999.0  # valore fill INTERMAGNET → campo vuoto nel txt
+
+USE_LOCAL_DAY = False  # False = giornata UT (00:00–23:59 UTC, come i dati grezzi)
+LOCAL_UTC_OFFSET = datetime.timedelta(hours=2)   # usata solo se USE_LOCAL_DAY = True
+
+import os
+OUT_ROOT = pathlib.Path(os.environ.get('SKY_OUT', pathlib.Path.home() / "Desktop"))   # Cartella output (Desktop del Mac)
+
+CROSS_STEP_DEFAULT = 10          # minuti tra le righe dell'INCROCIO
+CROSS_COMPS = ['X', 'Y', 'Z']    # F resta nei file per stazione
+
+# Effemeridi: matematica pura (nessuna dipendenza esterna)
+INCLUDE_EPHEMERIDES  = True   # sezione effemeridi nel RIEPILOGO.txt
+EPHEMERIDES_REF_HOUR = 12     # ora UT di riferimento del giorno per le posizioni
+
+SD_LON            = 13.0
+ASPECT_TIGHT      = 2.0
+SHOWER_PEAK_THRESH   = 20.0
+SHOWER_PLANET_THRESH = 8.0
+
+# ─── ASTRONOMIA: MATEMATICA PURA (identica al monitor GitHub Actions) ─────────
+
+DEG = math.pi / 180.0
+AU_LIGHT_DAYS = 0.0057755183
+
+UNCERT = {
+    'Sole': 0.02, 'Luna': 0.20, 'Mercurio': 0.30,
+    'Venere': 0.30, 'Marte': 0.30, 'Giove': 0.30,
+    'Saturno': 0.30, 'Urano': 0.30, 'Nettuno': 0.40,
+    'Nodo Nord': 0.50,
+}
+
+SYMBOLS = {
+    'Sole': '☉ Sole', 'Luna': '☽ Luna', 'Mercurio': '☿ Mercurio',
+    'Venere': '♀ Venere', 'Marte': '♂ Marte', 'Giove': '♃ Giove',
+    'Saturno': '♄ Saturno', 'Urano': '♅ Urano', 'Nettuno': '♆ Nettuno',
+    'Nodo Nord': '☊ Nodo Nord',
+}
+
+SIGN_NAMES = ['Ariete','Toro','Gemelli','Cancro','Leone','Vergine',
+              'Bilancia','Scorpione','Sagittario','Capricorno','Acquario','Pesci']
+
+GIORNI_ITA = ['lunedì','martedì','mercoledì','giovedì','venerdì','sabato','domenica']
+MESI_ITA   = ['','gennaio','febbraio','marzo','aprile','maggio','giugno',
+              'luglio','agosto','settembre','ottobre','novembre','dicembre']
+
+METEOR_SHOWERS = {
+    'Perseidi':       {'lambda': 46.0,  'peak_sun': 140.0, 'active': (100, 160), 'peak_date': '12 ago'},
+    'Kappa Cignidi':  {'lambda': 321.4, 'peak_sun': 145.0, 'active': (135, 155), 'peak_date': '17 ago'},
+    'Tauridi Sud':    {'lambda': 50.0,  'peak_sun': 220.0, 'active': (170, 270), 'peak_date': '5 nov'},
+    'Tauridi Nord':   {'lambda': 58.0,  'peak_sun': 230.0, 'active': (185, 285), 'peak_date': '12 nov'},
+    'June Tauridi S': {'lambda': 271.0, 'peak_sun':  80.0, 'active': (60,  120), 'peak_date': '27 giu'},
+    'June Tauridi N': {'lambda': 279.0, 'peak_sun':  85.0, 'active': (60,  120), 'peak_date': '1 lug'},
+    'Delta Aquaridi': {'lambda': 333.0, 'peak_sun': 125.0, 'active': (95,  155), 'peak_date': '30 lug'},
+    'Alpha Capric.':  {'lambda': 307.0, 'peak_sun': 127.0, 'active': (95,  165), 'peak_date': '2 ago'},
+    'Leonidi inv.':   {'lambda': 152.0, 'peak_sun': 235.0, 'active': (100, 160), 'peak_date': '17 nov'},
+    'Alpha Aurigidi': {'lambda': 90.8,  'peak_sun': 158.6, 'active': (148, 168), 'peak_date': '1 set'},
+    'Eps Perseidi':   {'lambda': 56.6,  'peak_sun': 166.7, 'active': (160, 176), 'peak_date': '9 set'},
+    'Encke nodo':     {'lambda': 334.0, 'peak_sun':   0.0, 'active': (0,   360), 'peak_date': '—'},
+}
+
+def norm360(x):
+    return x % 360.0
+
+def wrap180(x):
+    return ((x + 180.0) % 360.0) - 180.0
+
+def precession_deg(jd):
+    T = (jd - 2451545.0) / 36525.0
+    return (5029.0966 * T + 1.11113 * T * T) / 3600.0
+
+def julian_day(dt):
+    y, m = dt.year, dt.month
+    d = dt.day + (dt.hour + dt.minute / 60.0 + dt.second / 3600.0) / 24.0
+    if m <= 2:
+        y -= 1
+        m += 12
+    A = y // 100
+    B = 2 - A + A // 4
+    return int(365.25 * (y + 4716)) + int(30.6001 * (m + 1)) + d + B - 1524.5
+
+def sun_lon(jd):
+    n = jd - 2451545.0
+    L = norm360(280.460 + 0.9856474 * n)
+    g = (357.528 + 0.9856003 * n) * DEG
+    return norm360(L + 1.915 * math.sin(g) + 0.020 * math.sin(2 * g))
+
+def moon_lon(jd):
+    T = (jd - 2451545.0) / 36525.0
+    Lp = 218.3164477 + 481267.88123421 * T
+    D = 297.8501921 + 445267.1114034 * T
+    M = 357.5291092 + 35999.0502909 * T
+    Mp = 134.9633964 + 477198.8675055 * T
+    F = 93.2720950 + 483202.0175233 * T
+    lon = (Lp
+           + 6.288774 * math.sin(Mp * DEG)
+           + 1.274027 * math.sin((2 * D - Mp) * DEG)
+           + 0.658314 * math.sin(2 * D * DEG)
+           + 0.213618 * math.sin(2 * Mp * DEG)
+           - 0.185116 * math.sin(M * DEG)
+           - 0.114332 * math.sin(2 * F * DEG)
+           + 0.058793 * math.sin((2 * D - 2 * Mp) * DEG)
+           + 0.057066 * math.sin((2 * D - M - Mp) * DEG)
+           + 0.053322 * math.sin((2 * D + Mp) * DEG)
+           + 0.045758 * math.sin((2 * D - M) * DEG)
+           - 0.040923 * math.sin((M - Mp) * DEG)
+           - 0.034720 * math.sin(D * DEG)
+           - 0.030383 * math.sin((M + Mp) * DEG)
+           + 0.015327 * math.sin((2 * D - 2 * F) * DEG)
+           - 0.012528 * math.sin((Mp - 2 * F) * DEG))
+    return norm360(lon)
+
+def moon_node_lon(jd):
+    T = (jd - 2451545.0) / 36525.0
+    D = 297.8501921 + 445267.1114034 * T
+    mean_node = 125.04452 - 1934.136261 * T + 0.0020708 * T * T
+    return norm360(mean_node - 1.4979 * math.sin(2 * D * DEG))
+
+PLANET_ELEMS = {
+    'Mercurio': dict(a=0.38709927, adot=0.00000037, e=0.20563593, edot=0.00001906,
+                     I=7.00497902, Idot=-0.00594749, L=252.25032350, Ldot=149472.67411175,
+                     w=77.45779628, wdot=0.16047689, O=48.33076593, Odot=-0.12534081),
+    'Venere':   dict(a=0.72333566, adot=0.00000390, e=0.00677672, edot=-0.00004107,
+                     I=3.39467605, Idot=-0.00078890, L=181.97909950, Ldot=58517.81538729,
+                     w=131.60246718, wdot=0.00268329, O=76.67984255, Odot=-0.27769418),
+    'terra':    dict(a=1.00000261, adot=0.00000562, e=0.01671123, edot=-0.00004392,
+                     I=-0.00001531, Idot=-0.01294668, L=100.46457166, Ldot=35999.37244981,
+                     w=102.93768193, wdot=0.32327364, O=0.0, Odot=0.0),
+    'Marte':    dict(a=1.52371034, adot=0.00001847, e=0.09339410, edot=0.00007882,
+                     I=1.84969142, Idot=-0.00813131, L=-4.55343205, Ldot=19140.30268499,
+                     w=-23.94362959, wdot=0.44441088, O=49.55953891, Odot=-0.29257343),
+    'Giove':    dict(a=5.20288700, adot=-0.00011607, e=0.04838624, edot=-0.00013253,
+                     I=1.30439695, Idot=-0.00183714, L=34.39644051, Ldot=3034.74612775,
+                     w=14.72847983, wdot=0.21252668, O=100.47390909, Odot=0.20469106),
+    'Saturno':  dict(a=9.53667594, adot=-0.00125060, e=0.05386179, edot=-0.00050991,
+                     I=2.48599187, Idot=0.00193609, L=49.95424423, Ldot=1222.49362201,
+                     w=92.59887831, wdot=-0.41897216, O=113.66242448, Odot=-0.28867794),
+    'Urano':    dict(a=19.18916464, adot=-0.00196176, e=0.04725744, edot=-0.00004397,
+                     I=0.77263783, Idot=-0.00242939, L=313.23810451, Ldot=428.48202785,
+                     w=170.95427630, wdot=0.40805281, O=74.01692503, Odot=0.04240589),
+    'Nettuno':  dict(a=30.06992276, adot=0.00026291, e=0.00859048, edot=0.00005105,
+                     I=1.77004347, Idot=0.00035372, L=-55.12002969, Ldot=218.45945325,
+                     w=44.96476227, wdot=-0.32241464, O=131.78422574, Odot=-0.00508664),
+}
+
+def kepler_solve(M_rad, e):
+    E = M_rad + e * math.sin(M_rad)
+    for _ in range(10):
+        dE = (E - e * math.sin(E) - M_rad) / (1.0 - e * math.cos(E))
+        E -= dE
+        if abs(dE) < 1e-9:
+            break
+    return E
+
+def helio_ecl(el, jd):
+    T = (jd - 2451545.0) / 36525.0
+    a = el['a'] + el['adot'] * T
+    e = el['e'] + el['edot'] * T
+    I = (el['I'] + el['Idot'] * T) * DEG
+    L = el['L'] + el['Ldot'] * T
+    w = el['w'] + el['wdot'] * T
+    O = el['O'] + el['Odot'] * T
+    M = norm360(L - w) * DEG
+    om = (w - O) * DEG
+    Om = O * DEG
+    E = kepler_solve(M, e)
+    xp = a * (math.cos(E) - e)
+    yp = a * math.sqrt(1.0 - e * e) * math.sin(E)
+    co, so = math.cos(om), math.sin(om)
+    ci, si = math.cos(Om), math.sin(Om)
+    cI, sI = math.cos(I), math.sin(I)
+    x = (co * ci - so * si * cI) * xp + (-so * ci - co * si * cI) * yp
+    y = (co * si + so * ci * cI) * xp + (-so * si + co * ci * cI) * yp
+    z = (so * sI) * xp + (co * sI) * yp
+    return x, y, z
+
+def planet_geo_lon(name, jd, with_precession=True):
+    el = PLANET_ELEMS[name]
+    tx, ty, tz = helio_ecl(PLANET_ELEMS['terra'], jd)
+    px, py, pz = helio_ecl(el, jd)
+    gx, gy, gz = px - tx, py - ty, pz - tz
+    dist = math.sqrt(gx * gx + gy * gy + gz * gz)
+    for _ in range(2):
+        jd2 = jd - dist * AU_LIGHT_DAYS
+        px, py, pz = helio_ecl(el, jd2)
+        gx, gy, gz = px - tx, py - ty, pz - tz
+        dist = math.sqrt(gx * gx + gy * gy + gz * gz)
+    lon = norm360(math.degrees(math.atan2(gy, gx)))
+    if with_precession:
+        lon = norm360(lon + precession_deg(jd))
+    return lon
+
+def body_lon(name, jd):
+    if name == 'Sole':
+        return sun_lon(jd)
+    if name == 'Luna':
+        return moon_lon(jd)
+    if name == 'Nodo Nord':
+        return moon_node_lon(jd)
+    return planet_geo_lon(name, jd)
+
+def get_planets(dt):
+    jd = julian_day(dt)
+    planets = {}
+    bodies = ['Sole', 'Luna', 'Mercurio', 'Venere', 'Marte',
+              'Giove', 'Saturno', 'Urano', 'Nettuno', 'Nodo Nord']
+    for name in bodies:
+        lon = body_lon(name, jd)
+        unc = UNCERT.get(name, 0.5)
+        speed = None
+        if name != 'Nodo Nord':
+            l1 = body_lon(name, jd - 1.5)
+            l2 = body_lon(name, jd + 1.5)
+            speed = wrap180(l2 - l1) / 3.0
+        retro = (speed is not None and speed < -0.02)
+        stationary = (speed is not None and abs(speed) <= 0.02)
+        deg = lon % 30.0
+        border = (deg < 2 * unc) or (deg > 30.0 - 2 * unc)
+        planets[SYMBOLS[name]] = {'lon': round(lon, 2),
+                                  'sign': SIGN_NAMES[int(lon // 30) % 12],
+                                  'deg': round(deg, 2),
+                                  'retro': retro,
+                                  'stationary': stationary,
+                                  'speed': speed,
+                                  'border': border}
+    return planets, planets['☉ Sole']['lon']
+
+def flag_mark(planets, *names):
+    for n in names:
+        p = planets.get(n)
+        if p and (p.get('border') or p.get('stationary')):
+            return ' (+-)'
+    return ''
+
+def lon_delta(a, b):
+    d = abs(a - b) % 360
+    return d if d <= 180 else 360 - d
+
+def active_showers_probable(sun_lon_val, planets):
+    result = []
+    for sname, shower in METEOR_SHOWERS.items():
+        a_min, a_max = shower['active']
+        is_active = (a_min <= sun_lon_val <= a_max) if a_max > a_min else \
+                    (sun_lon_val >= a_min or sun_lon_val <= a_max)
+        if not is_active:
             continue
-        D.setdefault(st, pd.DataFrame(index=df.index))[comp] = df[col]
-    for st, ang in ROT.items():                 # riporto nel sistema geografico
-        if st in D:
-            th = math.radians(ang); x, y = D[st].X.copy(), D[st].Y.copy()
-            D[st]['X'] = x * math.cos(th) - y * math.sin(th); D[st]['Y'] = x * math.sin(th) + y * math.cos(th)
-    D = {k: v for k, v in D.items() if v[['X', 'Y', 'Z']].notna().sum().sum() > 0}
-    return day, D
+        dist_peak = lon_delta(sun_lon_val, shower['peak_sun'])
+        planet_hit = any(lon_delta(pl['lon'], shower['lambda']) <= SHOWER_PLANET_THRESH
+                         for pl in planets.values())
+        if dist_peak <= SHOWER_PEAK_THRESH or planet_hit:
+            result.append((sname, shower, dist_peak))
+    return result
 
-def runs(mask):
-    """lista (start, end, lunghezza) dei tratti True consecutivi"""
-    out, s, prev, n = [], None, None, 0
-    for t, v in mask.items():
-        if v:
-            if s is None: s, n = t, 0
-            n += 1
-        elif s is not None:
-            out.append((s, prev, n)); s = None
-        prev = t
-    if s is not None: out.append((s, prev, n))
-    return out
+def data_italiana(dt):
+    return f"{GIORNI_ITA[dt.weekday()]} {dt.day} {MESI_ITA[dt.month]} {dt.year}"
 
-def hm(t): return t.strftime('%H:%M')
+def fase_lunare(d_moon):
+    """d_moon = wrap180(Luna − Sole): >0 crescente, <0 calante."""
+    e = abs(d_moon)
+    crescente = d_moon > 0
+    if e <= 22.5:  return 'novilunio'
+    if e <= 67.5:  return 'falce crescente' if crescente else 'falce calante'
+    if e <= 112.5: return 'primo quarto'    if crescente else 'ultimo quarto'
+    if e <= 157.5: return 'gibbosa crescente' if crescente else 'gibbosa calante'
+    return 'plenilunio'
 
-# ─────────────────────────────────────────────────────────────────────────────
-def sec_integrity(D, L, reg):
-    L.append('\n══ 1. INTEGRITÀ DEI DATI ══')
-    for s, d in D.items():
-        n = int(d.X.notna().sum()); nan = len(d) - n
-        msg = [f'{s}: {n}/{len(d)} minuti']
-        gaps = [r for r in runs(d.X.isna()) if r[2] >= 3]
-        if gaps: msg.append('buchi ' + ' '.join(f'{hm(a)}–{hm(b)}' for a, b, _ in gaps[:6]))
-        # outlier grossolani
-        for c in 'XYZF':
-            if c in d and d[c].notna().any():
-                bad = (d[c] - d[c].median()).abs() > (3000 if s in AURORAL else 500)
-                if bad.any(): msg.append(f'⚠ {c} fuori scala in {int(bad.sum())} min ({hm(d[c][bad].index[0])})')
-        # risoluzione e tratti piatti
-        frac = ((d.Y.dropna() * 100) % 10).round().astype(int)
-        res = 0.1 if frac.nunique() <= 2 else 0.01
-        for c in 'XYZ':
-            fl = [r for r in runs(d[c].diff() == 0) if r[2] + 1 >= (20 if res == 0.1 else 8)]
-            if fl:
-                a, b, k = max(fl, key=lambda r: r[2])
-                msg.append(f'{c} piatto {k+1} min fino alle {hm(b)}')
-        # F misurato o derivato
-        if 'F' in d and d.F.notna().sum() > 100:
-            dF = d.F - np.sqrt(d.X**2 + d.Y**2 + d.Z**2)
-            m, sd = dF.mean(), dF.std()
-            tag = ' ← F probabilmente CALCOLATO (scarto troppo perfetto)' if sd < 0.06 and abs(m) < 0.05 else ''
-            msg.append(f'F−|B| {m:+.2f}±{sd:.2f}{tag}')
-            reg[f'{s}_dF'] = round(m, 2)
-            if tag: DERIVED_F.add(s)
-        msg.append(f'risoluzione ~{res} nT')
-        L.append('  ' + ' | '.join(msg))
+# ─── EFFEMERIDI DELLA GIORNATA (sezione del RIEPILOGO) ────────────────────────
 
-def sec_jumps(D, L, reg):
-    L.append('\n══ 2. SALTI SU SINGOLA STAZIONE (1 min, con controllo su F) ══')
-    L.append('  (F segue = variazione reale vicino al sensore; F fermo = strumentale; F derivato = test non valido)')
-    for s, d in D.items():
-        if s not in EU: continue     # aurorali ed extra-EU: salti propri attesi, non 'locali'
-        hits = []
-        for c in 'XYZ':
-            d1 = d[c].diff()
-            mad = np.nanmedian(np.abs(d1 - np.nanmedian(d1))) * 1.4826
-            thr = max(6 * mad, 1.5)
-            for t, v in d1[d1.abs() > thr].items():
-                others = [o for o in D if o != s and o in EU and abs(D[o][c].diff().get(t, 0) or 0) > thr * 0.5]
-                if len(others) >= 2:
-                    continue                      # è un evento di rete, non locale
-                fv = d.F.diff().get(t, np.nan) if 'F' in d else np.nan
-                ftag = '' if np.isnan(fv) else (f' F{fv:+.1f}' + ('✓' if abs(fv) > 0.5 * abs(v) else '✗'))
-                if s in DERIVED_F: ftag = ' (F derivato)'
-                hits.append(f'{hm(t)} {c}{v:+.1f}{ftag}')
-        if hits:
-            L.append(f'  {s}: ' + ' '.join(hits[:15]) + (' …' if len(hits) > 15 else ''))
-        reg[f'{s}_jumps'] = len(hits)
+def build_ephemeridi(dt):
+    """Sezione effemeridi: posizioni, retrogradi, nodo SD, aspetti, sciami."""
+    date_ita = data_italiana(dt)
+    planets, sun_val = get_planets(dt)
+    moon = planets['☽ Luna']
+    d_moon = wrap180(moon['lon'] - sun_val)
+    elong = abs(d_moon)
+    illum = (1.0 - math.cos(elong * DEG)) / 2.0 * 100.0
 
-def sync_events(D, stations, comp, kind):
-    idx = D[stations[0]].index
-    if kind == '1min':
-        M = pd.concat([(D[s][comp].diff().abs() > D[s][comp].diff().abs().quantile(.99)).astype(int)
-                       for s in stations], axis=1).fillna(0)
-        n = M.sum(axis=1)
-        return [(t, int(v)) for t, v in n[n >= SYNC_MIN_ST].items()]
-    out = []
-    R = {s: D[s][comp].diff(30).reindex(idx) for s in stations}
-    for sg, f in (('+', lambda v: v > ROC_THR), ('−', lambda v: v < -ROC_THR)):
-        m = sum(f(R[s]).astype(int) for s in stations) >= SYNC_MIN_ST
-        for a, b, k in runs(m):
-            out.append((a, b, sg))
-    return sorted(out)
+    lines = ["─" * 70,
+             "EFFEMERIDI DELLA GIORNATA",
+             f"{date_ita} — riferimento {dt:%Y-%m-%d %H:%M} UT",
+             "Posizioni geocentriche in longitudine eclittica — matematica pura (±0.3°)",
+             "─" * 70, "",
+             f"☉ Sole: {sun_val:.2f}° {SIGN_NAMES[int(sun_val / 30) % 12]}",
+             f"☽ Luna: {moon['lon']:.2f}° — {fase_lunare(d_moon)} "
+             f"(elong. {elong:.1f}°, illum. {illum:.0f}%)",
+             ""]
 
-def sec_sync(D, L, reg, arrivals):
-    eu = [s for s in EU if s in D]
-    ext = [s for s in AURORAL + GLOBAL if s in D]
-    L.append(f'\n══ 3. EVENTI SINCRONI (≥{SYNC_MIN_ST} stazioni EU: {", ".join(eu)}) ══')
-    tot = 0
-    for c in 'XYZ':
-        ev = sync_events(D, eu, c, '1min')
-        # raggruppa minuti consecutivi
-        groups = []
-        for t, n in ev:
-            if groups and (t - groups[-1][1]).total_seconds() <= 120:
-                groups[-1][1] = t; groups[-1][2] = max(groups[-1][2], n)
+    lines.append("🪐 POSIZIONI:")
+    for name, p in planets.items():
+        r = ''
+        if p['speed'] is not None:
+            if p['retro']:
+                r = ' ℞'
+            elif p['stationary']:
+                r = ' ℞?'
+        b = ' !' if p['border'] else ''
+        lines.append(f"  {name:14s} {p['lon']:7.2f}°  {p['sign']:12s} "
+                     f"{p['deg']:5.2f}°{r}{b}")
+    lines.append("")
+
+    retro = [name for name, p in planets.items()
+             if p['retro'] and 'Sole' not in name and 'Luna' not in name]
+    if retro:
+        lines.append("℞ RETROGRADI: " + ", ".join(retro))
+        lines.append("")
+
+    sd_hits = []
+    for name, p in planets.items():
+        d = lon_delta(p['lon'], SD_LON)
+        if d <= ASPECT_TIGHT:
+            sd_hits.append(f"  {name} Δ={d:.2f}°{flag_mark(planets, name)}")
+    if sd_hits:
+        lines.append(f"📍 NODO SD 13°E (Δ≤{ASPECT_TIGHT}°):")
+        lines.extend(sd_hits)
+        lines.append("")
+
+    planet_list = [(name, p) for name, p in planets.items() if 'Luna' not in name]
+    conj_lines = []
+    for i in range(len(planet_list)):
+        for j in range(i + 1, len(planet_list)):
+            n1, p1 = planet_list[i]
+            n2, p2 = planet_list[j]
+            d = lon_delta(p1['lon'], p2['lon'])
+            if d <= ASPECT_TIGHT:
+                approx = ' (≈)' if abs(d - ASPECT_TIGHT) < 0.5 else ''
+                conj_lines.append(f"  {n1} ☌ {n2}  Δ={d:.2f}°{approx}{flag_mark(planets, n1, n2)}")
+            elif abs(d - 180) <= ASPECT_TIGHT:
+                approx = ' (≈)' if abs(abs(d - 180) - ASPECT_TIGHT) < 0.5 else ''
+                conj_lines.append(f"  {n1} ☍ {n2}  Δ={abs(d - 180):.2f}°{approx}{flag_mark(planets, n1, n2)}")
+    if conj_lines:
+        lines.append(f"⚡ ASPETTI (Δ≤{ASPECT_TIGHT}°):")
+        lines.extend(conj_lines)
+        lines.append("")
+
+    shower_lines = []
+    try:
+        import sky_catalog as CAT   # catalogo IMO 2026, λ☉ convertita alla data (vedi nota nel file)
+        yfrac = dt.year + (dt.timetuple().tm_yday - 1) / 365.25
+        for sh in CAT.active_showers(sun_val, yfrac):
+            if sh['dist_peak'] is None:
+                shower_lines.append(f"☄️ {sh['name']}  radiante mobile λ={sh['rad_lon_date']:.0f}°  V={sh['v']} km/s  (attivo fino al 20 set)")
             else:
-                groups.append([t, t, n])
-        tot += len(groups)
-        if groups:
-            desc = []
-            for a, b, n in groups:
-                big = max(eu, key=lambda s: abs(D[s][c].diff().loc[a:b].abs().max() or 0))
-                val = D[big][c].diff().loc[a:b]
-                v = val.loc[val.abs().idxmax()]
-                x = ''
-                for e in ext:                      # risposta fuori Europa
-                    dv = D[e][c].diff().loc[a - pd.Timedelta(minutes=3):b + pd.Timedelta(minutes=3)]
-                    if dv.notna().any(): x += f' {e}{dv.loc[dv.abs().idxmax()]:+.1f}'
-                arr = ''
-                for ta, lab in arrivals:           # arrivo di discontinuità dal vento solare
-                    if abs((ta - a).total_seconds()) <= 900: arr = f' ⟵ L1 {lab} (arrivo {hm(ta)})'
-                covered = NOAA_COVER is not None and NOAA_COVER[0] <= a <= NOAA_COVER[1]
-                if not covered: arr = arr or ' (vento solare: fuori copertura)'
-                SYNC_LOG.append({'t': a, 'end': b, 'comp': c, 'n': n, 'st': big, 'val': round(float(v), 2), 'orphan': (int(not arr) if covered else -1)})
-                desc.append(f'{hm(a)}{"–"+hm(b) if b != a else ""}({n}) max {big}{v:+.1f}' + (f' |fuori EU:{x}' if x else '') + arr)
-            L.append(f'  {c} al minuto: ' + ' ; '.join(desc))
-    for c in 'XYZ':
-        ev = sync_events(D, eu, c, 'roc30')
-        if ev:
-            L.append(f'  {c} su 30 min (|Δ|>{ROC_THR}): ' + ' '.join(f'{hm(a)}–{hm(b)}{sg}' for a, b, sg in ev))
-    reg['sync_1min'] = tot
-
-def sec_diurnal(D, L, reg):
-    eu = [s for s in EU if s in D]
-    L.append('\n══ 4. CURVA DIURNA ══')
-    amp = {s: D[s].Y.max() - D[s].Y.min() for s in eu}
-    L.append('  Ampiezza Y: ' + ' '.join(f'{s}{amp[s]:.0f}' for s in eu))
-    ymin = {s: D[s].Y.idxmin() for s in eu}
-    ymax = {s: D[s].Y.idxmax() for s in eu}
-    L.append('  Min Y: ' + ' '.join(f'{s}{hm(ymin[s])}' for s in sorted(eu, key=lambda s: ymin[s])))
-    L.append('  Max Y: ' + ' '.join(f'{s}{hm(ymax[s])}' for s in sorted(eu, key=lambda s: ymax[s])))
-    odd = [s for s in eu if ymax[s].hour >= 14 or ymax[s].hour < 3]
-    if odd: L.append(f'  ⚠ massimo di Y fuori dal mattino: {", ".join(odd)}')
-    # raggruppamenti: stazioni con minimo entro 2 minuti
-    ts = sorted(ymin.items(), key=lambda kv: kv[1]); groups = []
-    for s, t in ts:
-        if groups and (t - groups[-1][-1][1]).total_seconds() <= 120: groups[-1].append((s, t))
-        else: groups.append([(s, t)])
-    big = [g for g in groups if len(g) >= 3]
-    L.append('  Gruppi (≥3 stazioni entro 2 min): ' +
-             ('; '.join(f'{hm(g[0][1])} ' + ','.join(s for s, _ in g) for g in big) if big else 'nessuno'))
-    zmin = {s: D[s].Z.idxmin() for s in eu}
-    med = sorted(zmin.values())[len(zmin) // 2]
-    L.append('  Min Z: ' + ' '.join(f'{s}{hm(zmin[s])}' for s in sorted(eu, key=lambda s: zmin[s])))
-    if 'IZN' in zmin:
-        lead = (zmin['IZN'] - med).total_seconds() / 3600
-        L.append(f'  IZN minimo Z rispetto alla mediana: {lead:+.1f} h')
-        reg['IZN_Zlead_h'] = round(lead, 1)
-    reg['Yamp_min'] = round(min(amp.values()), 1); reg['Yamp_max'] = round(max(amp.values()), 1)
-    reg['Ymin_groups'] = len(big)
-    if big: reg['Ymin_group1'] = hm(big[0][0][1])
-
-def sec_night_evening(D, L, reg, day):
-    eu = [s for s in EU if s in D]
-    L.append('\n══ 5. NOTTE, OSCILLAZIONI, FASCIA 22 UT ══')
-    ns = {s: D[s].between_time('00:00', '03:00').Y.std() for s in eu}
-    L.append('  Agitazione notte (std Y 00–03): ' + ' '.join(f'{s}{v:.1f}' for s, v in ns.items()))
-    ref = 'NGK' if 'NGK' in D else eu[0]
-    y = D[ref].Y.interpolate()
-    hp = (y - y.rolling(21, center=True).mean()).rolling(3, center=True).mean()
-    pw = hp.pow(2).resample('1h').mean()
-    L.append(f'  Potenza oscillazioni {ref} per ora: ' + ' '.join(f'{v:.2f}' for v in pw))
-    L.append(f'  Ora più "vibrante": {pw.idxmax().hour:02d} UT ({pw.max():.2f})')
-    ext, mean = {}, {}
-    for s in eu + [e for e in AURORAL + GLOBAL if e in D]:
-        x = D[s].X
-        a = x.loc[f'{day} {WIN22[0]}':f'{day} {WIN22[1]}'].mean()
-        b = x.loc[f'{day} {WIN22[2]}':f'{day} {WIN22[3]}'] - a
-        if b.notna().any():
-            ext[s] = b.loc[b.abs().idxmax()]; mean[s] = b.mean()
-    em = np.median([ext[s] for s in eu if s in ext])
-    L.append(f'  Fascia 22 UT, picco X (criterio fisso): mediana EU {em:+.1f} → segno {"+" if em > 0 else "−"}')
-    L.append('    per stazione: ' + ' '.join(f'{s}{v:+.1f}' for s, v in ext.items()))
-    split = len({np.sign(ext[s]) for s in eu if s in ext}) > 1
-    if split: L.append('    ⚠ stazioni EU con segno discorde (rete divisa)')
-    reg['night_std_med'] = round(float(np.median(list(ns.values()))), 2)
-    reg['osc_max_hour'] = int(pw.idxmax().hour)
-    reg['X22_ext'] = round(float(em), 1)
-    reg['X22_split'] = int(split)
-
-def sec_trend(D, L, reg):
-    L.append('\n══ 6. MEDIE GIORNALIERE ══')
-    L.append('  Z medio: ' + ' '.join(f'{s}{D[s].Z.mean():.1f}' for s in D))
-    for s in ('THY', 'NGK', 'IZN', 'LON'):
-        if s in D: reg[f'{s}_Zmean'] = round(D[s].Z.mean(), 1)
-
-# ─────────────────────────────────────────────────────────────────────────────
-def load_noaa(folder):
-    def latest(key):
-        recs = []
-        for f in sorted(glob.glob(str(folder / f'NOAA_{key}_*.json'))):
-            try: recs += json.load(open(f))
-            except Exception: pass
-        if not recs: return None
-        seen, out = set(), []
-        for r in recs:                           # unione di più download, senza doppioni
-            k = (r.get('time_tag'), r.get('source'))
-            if k not in seen: seen.add(k); out.append(r)
-        return out
-    w, m, e = latest('wind'), latest('mag'), latest('eph')
-    if not w:
-        return None
-    w = pd.DataFrame(w); w['t'] = pd.to_datetime(w.time_tag)
-    w = w[w.active == True].set_index('t').sort_index()
-    for c in ('proton_speed', 'proton_density'):
-        w[c] = pd.to_numeric(w[c], errors='coerce')
-    w = w[(w.proton_speed > 200) & (w.proton_speed < 1500) & (w.proton_density > 0.1) & (w.proton_density < 100)]
-    w['P'] = 1.6726e-6 * w.proton_density * w.proton_speed ** 2
-    mm = None
-    if m:
-        mm = pd.DataFrame(m); mm['t'] = pd.to_datetime(mm.time_tag)
-        mm = mm[mm.active == True].set_index('t').sort_index()
-        for c in ('bt', 'bz_gsm'): mm[c] = pd.to_numeric(mm[c], errors='coerce')
-    dist = L1_DEFAULT_KM
-    if e:
-        ee = pd.DataFrame(e)
-        xk = [k for k in ee.columns if 'x' in k.lower() and 'gse' in k.lower()]
-        if xk:
-            v = pd.to_numeric(ee[xk[0]], errors='coerce').dropna()
-            if len(v):
-                v = float(v.iloc[-1]); dist = v * 6371 if abs(v) < 1000 else abs(v)
-    return w, mm, dist
-
-def sec_noaa(folder, L, reg, day):
-    L.append('\n══ 7. VENTO SOLARE (NOAA, sorgente attiva, propagato a Terra) ══')
-    r = load_noaa(folder)
-    if r is None:
-        L.append('  file NOAA assenti'); return []
-    w, mm, dist = r
-    src = w.source.mode().iloc[0] if 'source' in w else '?'
-    v = w.proton_speed.resample('1min').mean().interpolate(limit=10)
-    lag = (dist / v).rename('lag')
-    lagmed = float(lag.median())
-    if not np.isfinite(lagmed):
-        L.append(f'  sorgente {src}, distanza {dist/1e6:.2f} Mkm — velocità protoni assente nel file NOAA:')
-        L.append('  propagazione L1→Terra non calcolabile. Buco del dato NOAA, registrato come tale.')
-        reg['L1_disc'] = 0
-        return []
-    def lag_at(t):
-        x = lag.get(t, np.nan)
-        return lagmed if not np.isfinite(x) else float(x)
-    P = w.P.resample('1min').median().interpolate(limit=5).rolling(5, center=True, min_periods=2).median()
-    L.append(f'  sorgente {src}, distanza {dist/1e6:.2f} Mkm, velocità {v.median():.0f} km/s, ritardo tipico {lagmed/60:.0f} min')
-    arrivals = []
-    dP = (P.shift(-5) - P.shift(1)) / P.shift(1)
-    for a, b, k in runs(dP.abs() > 0.25):
-        t = dP.loc[a:b].abs().idxmax(); val = dP[t]
-        # persistenza: livello medio 10 min dopo vs 10 min prima
-        pre, post = P.loc[t - pd.Timedelta(minutes=12):t - pd.Timedelta(minutes=2)].mean(), P.loc[t + pd.Timedelta(minutes=5):t + pd.Timedelta(minutes=15)].mean()
-        if np.isnan(pre) or np.isnan(post) or abs(post / pre - 1) < 0.2:
-            continue
-        ta = t + pd.Timedelta(seconds=lag_at(t))
-        arrivals.append((ta, f'P{post/pre-1:+.0%}'))
-    if mm is not None:
-        bt = mm.bt.resample('1min').mean()
-        d3 = bt.diff(3)
-        for a, b, k in runs(d3.abs() > 2.5):
-            t = d3.loc[a:b].abs().idxmax()
-            ta = t + pd.Timedelta(seconds=lag_at(t))
-            if not any(abs((ta - x).total_seconds()) < 300 for x, _ in arrivals):
-                arrivals.append((ta, f'Bt{d3[t]:+.1f}'))
-        bz = mm.bz_gsm.resample('1min').mean()
-        bzs = bz.rolling(10, min_periods=5).mean()
-        turn = bzs.shift(-15) - bzs
-        for a_, b_, k_ in runs(turn.abs() > 3.0):
-            t = turn.loc[a_:b_].abs().idxmax()
-            pre = bzs.loc[t - pd.Timedelta(minutes=10):t]; post = bzs.loc[t:t + pd.Timedelta(minutes=20)]
-            if len(pre) and len(post) and ((pre.min() < 0 < post.max()) if turn[t] > 0 else (pre.max() > 0 > post.min())):
-                ta = t + pd.Timedelta(seconds=lag_at(t))
-                if not any(abs((ta - x).total_seconds()) < 600 for x, _ in arrivals):
-                    arrivals.append((ta, f'svolta Bz {"→nord" if turn[t] > 0 else "→sud"}'))
-        south = [r for r in runs(bz < -5) if r[2] >= 20]
-        if south:
-            L.append('  Bz < −5 nT per ≥20 min (ora L1): ' + ' '.join(f'{a:%d/%m} {hm(a)}–{hm(b)}' for a, b, _ in south))
-    d0 = pd.Timestamp(day); d1 = d0 + pd.Timedelta(days=1)
-    arrivals = sorted(a for a in arrivals if d0 <= a[0] < d1)
-    L.append(f'  copertura L1 → Terra: {hm(P.index[0]+pd.Timedelta(seconds=lagmed))} del {(P.index[0]+pd.Timedelta(seconds=lagmed)).strftime("%d/%m")} in poi')
-    L.append(f'  Discontinuità a L1 (arrivo stimato a Terra): ' +
-             (' '.join(f'{hm(t)}[{lab}]' for t, lab in arrivals) if arrivals else 'nessuna netta'))
-    L.append('  (pressione su → X su atteso; pressione giù → X giù)')
-    if arrivals:
-        cov = pd.Series(False, index=pd.date_range(d0, d1, freq='1min', inclusive='left'))
-        for t, _ in arrivals: cov.loc[t - pd.Timedelta(minutes=15):t + pd.Timedelta(minutes=15)] = True
-        q = 100 * cov.mean()
-        L.append(f'  {len(arrivals)} variazioni a L1: il {q:.0f}% della giornata sta entro 15 minuti da una di esse'
-                 + (' → oggi L1 NON DISTINGUE: quasi ogni evento ne ha una vicina anche per caso.' if q >= 50 else '.'))
-    reg['L1_disc'] = len(arrivals)
-    global NOAA_COVER
-    NOAA_COVER = (P.index[0] + pd.Timedelta(seconds=lagmed), P.index[-1] + pd.Timedelta(seconds=lagmed))
-    return arrivals
-
-# ─────────────────────────────────────────────────────────────────────────────
-def sec_registry(folder, day, reg, L):
-    rp = folder.parent / 'SKY_REGISTRO.csv'
-    old = pd.read_csv(rp) if rp.exists() else pd.DataFrame()
-    if len(old): old = old[old.day != day]
-    row = pd.DataFrame([{'day': day, **reg}])
-    new = pd.concat([old, row], ignore_index=True).sort_values('day')
-    new.to_csv(rp, index=False)
-    L.append('\n══ 14. CONFRONTO CON I GIORNI PRECEDENTI (SKY_REGISTRO.csv) ══')
-    prev = new[new.day < day].tail(10)
-    if prev.empty:
-        L.append('  registro vuoto: primo giorno'); return
-    if 'X22_ext' in prev:
-        seq = ' '.join(('+' if v > 0 else '−') for v in list(prev.X22_ext) + [reg.get('X22_ext', 0)])
-        L.append(f'  Segno fascia 22 UT (ultimi giorni → oggi): {seq}')
-        alt = all(np.sign(a) != np.sign(b) for a, b in zip(list(prev.X22_ext)[-1:], [reg.get('X22_ext', 0)]))
-        L.append(f'  Alternanza rispetto a ieri: {"SÌ" if alt else "NO"}')
-    for k in ('THY_Zmean', 'Yamp_max', 'night_std_med', 'sync_1min', 'IZN_Zlead_h'):
-        if k in prev and k in reg:
-            vals = list(prev[k].dropna())[-5:]
-            L.append(f'  {k}: ' + ' → '.join(str(v) for v in vals) + f' → OGGI {reg[k]}')
-
-# ─── ANALISI NON CONVENZIONALI (solo numeri, nessuna etichetta causale) ─────────
-
-def sec_regional(D, L, reg):
-    """Scarti dal movimento comune della rete: né locale (1 stazione) né di rete (tutte)."""
-    eu = [s for s in EU if s in D]
-    L.append('\n══ 9. MOVIMENTI REGIONALI (2–4 stazioni insieme, contro il resto della rete) ══')
-    found = 0
-    for c in 'XYZ':
-        d1 = pd.concat([D[s][c].diff().rename(s) for s in eu], axis=1)
-        r = d1.sub(d1.median(axis=1), axis=0)
-        thr = r.abs().median() * 1.4826 * 6
-        big = r.abs().gt(thr.clip(lower=0.8), axis=1)
-        items = []
-        for t in big.index[big.sum(axis=1).between(2, 4)]:
-            sts = [s for s in eu if big.at[t, s]]
-            sg = {np.sign(r.at[t, s]) for s in sts}
-            if len(sg) == 1:
-                items.append(f'{hm(t)} ' + ','.join(sts) + f'{"+" if sg.pop() > 0 else "−"}')
-        found += len(items)
-        if items:
-            L.append(f'  {c}: ' + ' ; '.join(items[:20]) + (' …' if len(items) > 20 else ''))
-    if not found: L.append('  nessuno')
-    reg['regional'] = found
-
-def _km(a, b):
-    la, lo = COORD[a]; lb, lob = COORD[b]
-    x = (lob - lo) * 111.32 * math.cos(math.radians((la + lb) / 2)); y = (lb - la) * 110.57
-    return x, y
-
-def sec_direction(D, L):
-    """Per ogni evento sincrono: ritardi fra stazioni (correlazione, sotto il minuto) → direzione apparente."""
-    eu = [s for s in EU if s in D and s in COORD]
-    L.append('\n══ 10. DIREZIONE APPARENTE DEGLI EVENTI SINCRONI (ritardi fra stazioni) ══')
-    if not SYNC_LOG: L.append('  nessun evento'); return
-    ref = 'THY' if 'THY' in eu else eu[0]
-    out = []
-    # 1° passaggio: ritardo di ogni stazione su ogni evento → ritardo FISSO (mediana) da sottrarre
-    raw = {}
-    for e in SYNC_LOG:
-        a, b, c = e['t'] - pd.Timedelta(minutes=15), e['end'] + pd.Timedelta(minutes=15), e['comp']
-        r0 = D[ref][c].loc[a:b].diff().fillna(0).values
-        for s in eu:
-            v = D[s][c].loc[a:b].diff().fillna(0).values
-            if len(v) != len(r0) or np.std(v) == 0: continue
-            cc = np.correlate(v - v.mean(), r0 - r0.mean(), 'full'); k = int(np.argmax(cc)); m0 = len(r0) - 1
-            frac = 0
-            if 0 < k < len(cc) - 1:
-                y0, y1, y2 = cc[k - 1], cc[k], cc[k + 1]; den = y0 - 2 * y1 + y2
-                frac = 0.5 * (y0 - y2) / den if den != 0 else 0
-            raw.setdefault(s, []).append(k - m0 + frac)
-    FIX = {s: float(np.median(v)) for s, v in raw.items() if len(v) >= 3}
-    L.append('  ritardo fisso per stazione rispetto a ' + ref + ' (mediana sugli eventi, s): ' +
-             ' '.join(f'{s}{v*60:+.0f}' for s, v in FIX.items()))
-    L.append('  (un ritardo fisso non è propagazione: orologio o convenzione del minuto — viene sottratto qui sotto)')
-    for s, v in FIX.items(): REG_LAGS[s] = round(v * 60, 1)
-    for e in SYNC_LOG:
-        a, b, c = e['t'] - pd.Timedelta(minutes=15), e['end'] + pd.Timedelta(minutes=15), e['comp']
-        r0 = D[ref][c].loc[a:b].diff().fillna(0).values
-        xs, ys, lags = [], [], []
-        for s in eu:
-            v = D[s][c].loc[a:b].diff().fillna(0).values
-            if len(v) != len(r0) or np.std(v) == 0: continue
-            cc = np.correlate(v - v.mean(), r0 - r0.mean(), 'full'); k = int(np.argmax(cc)); m0 = len(r0) - 1
-            if 0 < k < len(cc) - 1:
-                y0, y1, y2 = cc[k - 1], cc[k], cc[k + 1]; den = y0 - 2 * y1 + y2
-                frac = 0.5 * (y0 - y2) / den if den != 0 else 0
-            else: frac = 0
-            lag = (k - m0 + frac) - FIX.get(s, 0.0)
-            if abs(lag) > 5: continue
-            x, y = _km(ref, s); xs.append(x); ys.append(y); lags.append(lag)
-        if len(lags) < 5: continue
-        A = np.c_[xs, ys, np.ones(len(xs))]
-        sol, *_ = np.linalg.lstsq(A, np.array(lags), rcond=None)
-        sx, sy = sol[0], sol[1]; smag = math.hypot(sx, sy)
-        rng = max(lags) - min(lags)
-        if rng < 0.3 or smag == 0:
-            out.append(f'{hm(e["t"])}{c}: simultaneo entro ±{rng/2*60:.0f} s (dopo correzione)'); continue
-        if False:
-            out.append(f'{hm(e["t"])}{c}: simultaneo (±{rng/2*60:.0f} s)')
-        else:
-            az = (math.degrees(math.atan2(sx, sy)) + 360) % 360   # direzione verso cui si propaga
-            v = 1 / smag / 60
-            out.append(f'{hm(e["t"])}{c}: verso {az:.0f}°, velocità apparente {v:.0f} km/s (escursione ritardi {rng*60:.0f} s)')
-    L += ['  ' + o for o in out] if out else ['  ritardi non determinabili']
-
-def _gmst_deg(t):
-    jd = t.to_julian_date()
-    return (280.46061837 + 360.98564736629 * (jd - 2451545.0)) % 360
-
-def _alt(ra, dec, lat, lon, t):
-    H = math.radians((_gmst_deg(t) + lon - ra) % 360)
-    d, f = math.radians(dec), math.radians(lat)
-    return math.degrees(math.asin(math.sin(d) * math.sin(f) + math.cos(d) * math.cos(f) * math.cos(H)))
-
-def sec_radiants(folder, D, day, L, reg):
-    """Geometria dei radianti degli sciami attivi (dal RIEPILOGO) su SD e sulle stazioni."""
-    L.append('\n══ 11. GEOMETRIA DEGLI SCIAMI ATTIVI (altezza del radiante) ══')
-    rp = folder / 'RIEPILOGO.txt'
-    active = []
-    try:
-        import sky_catalog as CAT
+                shower_lines.append(f"☄️ {sh['name']}  λ={sh['rad_lon_date']:.0f}°  AR={sh['ra']:.0f}° Dec={sh['dec']:+.0f}°  "
+                                    f"V={sh['v']} km/s  Δpicco={sh['dist_peak']:.1f}°  picco λ☉={sh['peak_date_lon']:.1f}°" + CAT.tag(sh))
+            for name, p in planets.items():
+                d = lon_delta(p['lon'], sh['rad_lon_date'])
+                if d <= ASPECT_TIGHT:
+                    shower_lines.append(f"    → {name} Δ={d:.2f}°{flag_mark(planets, name)}")
+        title = "☄️ SCIAMI ATTIVI (catalogo IAU 2026, λ☉ alla data):"
     except ImportError:
-        CAT = None
-    sunl = None
-    if rp.exists():
-        for line in rp.read_text(encoding='utf-8').splitlines():
-            if line.startswith('☉ Sole:'):
-                try: sunl = float(line.split(':')[1].split('°')[0])
-                except Exception: pass
-            if line.startswith('☄️') and 'SCIAMI' not in line:
-                name = line.replace('☄️', '').strip().split('  ')[0].strip()
-                rd = CAT.radiant_radec(name, sunl) if CAT else RADIANTS.get(name)
-                if CAT and rd and not name.startswith('Antielio'):
-                    for sh in CAT.SHOWERS:
-                        if sh['name'] == name and not sh['drift_known']: DRIFT_EST.add(name)
-                if rd: RADIANTS[name] = rd; active.append(name); ACTIVE_SH[name] = rd
-    if not active: L.append('  nessuno sciame con radiante noto nel RIEPILOGO'); return
-    times = pd.date_range(day, periods=24 * 60, freq='1min')
-    for name in active:
-        ra, dec = RADIANTS[name]
-        alt = pd.Series([_alt(ra, dec, *COORD['SD'], t) for t in times], index=times)
-        up = alt[alt > 0]
-        cul = alt.idxmax()
-        rise = [t for t in alt.index[1:] if alt[t] > 0 >= alt[t - pd.Timedelta(minutes=1)]]
-        sett = [t for t in alt.index[1:] if alt[t] <= 0 < alt[t - pd.Timedelta(minutes=1)]]
-        CULM[name] = cul
-        for e in SYNC_LOG:
-            off = ((e['t'] - cul).total_seconds() / 60 + 720) % 1440 - 720
-            e[f'culm_{name}'] = round(off, 1)
-        L.append(f'  {name}{" (deriva stimata)" if name in DRIFT_EST else ""} (AR {ra:.1f}°, Dec {dec:+.1f}°) su SD: sorge {",".join(hm(t) for t in rise) or "—"}, '
-                 f'culmina {hm(cul)} ({alt.max():.0f}°), tramonta {",".join(hm(t) for t in sett) or "—"} UT')
-        if SYNC_LOG:
-            evs = [f'{hm(e["t"])}:{alt[e["t"].floor("min")]:+.0f}°' for e in SYNC_LOG if e['t'].floor('min') in alt.index]
-            L.append(f'    altezza del radiante su SD agli eventi sincroni: ' + ' '.join(evs))
-            ups = sum(1 for e in SYNC_LOG if alt.get(e['t'].floor('min'), -1) > 0)
-            frac_up = len(up) / len(alt)
-            L.append(f'    eventi con radiante sopra l\'orizzonte: {ups}/{len(SYNC_LOG)} (atteso per caso: {frac_up*len(SYNC_LOG):.1f})')
-            reg[f'rad_up_{name.replace(" ", "")}'] = f'{ups}/{len(SYNC_LOG)}'
+        for sname, shower, dist_peak in active_showers_probable(sun_val, planets):
+            shower_lines.append(f"☄️ {sname}  λ={shower['lambda']:.0f}°  "
+                                f"Δpicco={dist_peak:.1f}°  picco={shower['peak_date']}")
+        title = "☄️ SCIAMI PROBABILI (catalogo interno — sky_catalog.py non trovato):"
+    if shower_lines:
+        lines.append(title)
+        lines.extend(shower_lines)
+        lines.append("")
 
-def _sun_alt(lat, lon, t):
-    jd = t.to_julian_date(); n = jd - 2451545.0
-    Ls = (280.460 + 0.9856474 * n) % 360; g = math.radians(357.528 + 0.9856003 * n)
-    lam = math.radians(Ls + 1.915 * math.sin(g) + 0.020 * math.sin(2 * g)); e = math.radians(23.44)
-    ra = math.degrees(math.atan2(math.cos(e) * math.sin(lam), math.cos(lam))) % 360
-    dec = math.degrees(math.asin(math.sin(e) * math.sin(lam)))
-    return _alt(ra, dec, lat, lon, t)
+    lines.append("ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · "
+                 "(≈) al bordo soglia · (+-) incertezza elevata")
+    return lines
 
-def _spearman(a, b):
-    a, b = pd.Series(a).rank(), pd.Series(b).rank()
-    return float(np.corrcoef(a, b)[0, 1]) if a.std() > 0 and b.std() > 0 else np.nan
+# ─── UTILITY ──────────────────────────────────────────────────────────────────
 
-def sec_radiant_station(D, day, L, reg):
-    """ESPLORATIVO: la stazione che si discosta dal resto della rete è quella con il radiante più alto?
-    Confronto con due 'geometrie di controllo': altezza del Sole e longitudine (geografia fissa)."""
-    eu = [s for s in EU if s in D and s in COORD]
-    L.append('\n══ 15. RADIANTE SOPRA OGNI STAZIONE vs SCARTO DALLA RETE (esplorativo) ══')
-    L.append('  (valori esplorativi, non verifiche: correlazione fra stazioni ora per ora; + = scarta di più dove il radiante è più alto)')
-    if not ACTIVE_SH or len(eu) < 5:
-        L.append('  non calcolabile'); return
-    # scarto dalla rete: oscillazioni 2–30 min di ogni stazione meno la mediana della rete, ora per ora
-    res = {}
-    for s in eu:
-        acc = 0
-        for c in 'XYZ':
-            v = D[s][c].interpolate(limit=5)
-            hp = v - v.rolling(31, center=True, min_periods=10).mean()
-            acc = acc + hp
-        res[s] = acc
-    R = pd.DataFrame(res)
-    R = R.sub(R.median(axis=1), axis=0).abs().resample('1h').mean()
-    hours = R.index
-    geos = {'Sole (controllo)': lambda lat, lon, t: _sun_alt(lat, lon, t),
-            'Longitudine (controllo)': lambda lat, lon, t: lon,
-            'Latitudine (controllo)': lambda lat, lon, t: lat}
-    for name, (ra, dec) in ACTIVE_SH.items():
-        geos[name] = (lambda ra_, dec_: (lambda lat, lon, t: _alt(ra_, dec_, lat, lon, t)))(ra, dec)
-    for gname, f in geos.items():
-        cors, up = [], 0
-        for h in hours:
-            t = h + pd.Timedelta(minutes=30)
-            g = [f(*COORD[s], t) for s in eu]
-            if '(controllo)' not in gname:
-                if max(g) <= 0: continue
-                up += 1
-            r = [R.at[h, s] for s in eu]
-            if np.any(np.isnan(r)): continue
-            c = _spearman(g, r)
-            if not np.isnan(c): cors.append(c)
-        if cors:
-            m = np.mean(cors); pos = sum(c > 0.5 for c in cors)
-            L.append(f'  {gname}: correlazione media {m:+.2f} su {len(cors)} ore' +
-                     (f' (radiante sopra l\'orizzonte in {up} ore)' if up else '') + f'; ore con correlazione > 0.5: {pos}')
-            reg[f'geo_{gname.split(" ")[0]}'] = round(float(m), 2)
+def now_utc():
+    return datetime.datetime.now(datetime.UTC)
 
-def sec_orphans(L, reg):
-    L.append('\n══ 12. EVENTI "ORFANI" (sincroni, senza discontinuità a L1 entro 15 min) ══')
-    orf = [e for e in SYNC_LOG if e['orphan'] == 1]
-    unc = [e for e in SYNC_LOG if e['orphan'] == -1]
-    if unc: L.append(f'  fuori copertura NOAA (non valutabili): {len(unc)} eventi')
-    L.append('  ' + (' '.join(f'{hm(e["t"])}{e["comp"]}({e["n"]}) {e["st"]}{e["val"]:+.1f}' for e in orf) if orf else 'nessuno'))
-    L.append('  (se i file NOAA mancano o non coprono l\'orario, tutti risultano orfani: controllare la sezione 7)')
-    reg['orphans'] = len(orf)
+# ─── INTERMAGNET (identico a sky.py, timeout maggiorato: payload più grandi) ──
 
-def sec_recurrence(folder, day, L):
-    """Confronta gli eventi di oggi con quelli dei giorni precedenti: stesso orario UT, deriva siderale, deriva lunare."""
-    ep = folder.parent / 'SKY_EVENTI.csv'
-    old = pd.read_csv(ep, parse_dates=['t']) if ep.exists() else pd.DataFrame(columns=['day', 't', 'comp', 'n', 'st', 'val', 'orphan'])
-    old = old[old.day != day]
-    today = pd.DataFrame([{'day': day, **{k: v for k, v in e.items() if k != 'end'}} for e in SYNC_LOG])
-    pd.concat([old, today], ignore_index=True).to_csv(ep, index=False)
-    L.append('\n══ 13. RICORRENZE CON I GIORNI PRECEDENTI (SKY_EVENTI.csv, tolleranza ±3 min) ══')
-    if old.empty or today.empty:
-        L.append('  storico insufficiente'); return
-    d0 = pd.Timestamp(day)
-    for label, shift in (('stesso orario UT', 0.0), ('deriva siderale', SIDEREAL_SHIFT_MIN), ('deriva lunare', LUNAR_SHIFT_MIN)):
-        hits = []; tested = 0
-        for _, e in today.iterrows():
-            m_today = e.t.hour * 60 + e.t.minute
-            for _, o in old.iterrows():
-                dd = (d0 - pd.Timestamp(o.day)).days
-                if dd <= 0 or dd > 10: continue
-                tested += 1
-                m_old = (o.t.hour * 60 + o.t.minute + shift * dd) % 1440
-                if abs((m_today - m_old + 720) % 1440 - 720) <= 3 and o.comp == e.comp:
-                    hits.append(f'{hm(e.t)}{e.comp}↔{o.day[5:]} {hm(o.t)}')
-        exp = tested * 7 / 1440 / 3     # prob. di cadere entro ±3 min, stessa componente (≈1/3)
-        L.append(f'  {label}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:12]) if hits else ''))
-    # terzo orologio: stessa distanza dalla culminazione del radiante (radiante che si sposta)
-    for col in [c for c in today.columns if c.startswith('culm_') and c in old.columns]:
-        hits = []; tested = 0
-        for _, e in today.iterrows():
-            for _, o in old.iterrows():
-                dd = (d0 - pd.Timestamp(o.day)).days
-                if dd <= 0 or dd > 10 or pd.isna(o[col]) or pd.isna(e[col]): continue
-                tested += 1
-                if abs(e[col] - o[col]) <= 3 and o.comp == e.comp:
-                    hits.append(f'{hm(e.t)}{e.comp}↔{o.day[5:]} {hm(o.t)} ({e[col]:+.0f} min)')
-        exp = tested * 7 / 1440 / 3
-        L.append(f'  culminazione {col[5:]}: {len(hits)} coincidenze (attese per caso ≈{exp:.1f})' + (': ' + ' '.join(hits[:10]) if hits else ''))
-
-# ─── SINCRONISMI (primi controlli: il cielo) ──────────────────────────────────
-
-SYNC_TOL_MIN = 10       # evento ↔ momento geometrico
-REC_TOL_MIN  = 4        # stessa distanza dal momento geometrico in giorni diversi
-REC_DAYS     = 30       # quanti giorni indietro cercare le ricorrenze
-
-def _geo_moments(day):
-    """sorgere, culminazione, passaggio inferiore, tramonto (UT) visti da SD per Sole, Luna, pianeti, nodo
-    e radianti degli sciami attivi (con la loro deriva)"""
-    import sky_d, sky_catalog as CAT, datetime as _dt
-    d0 = _dt.datetime.fromisoformat(day)
-    planets, sun = sky_d.get_planets(d0 + _dt.timedelta(hours=12))
-    e = math.radians(23.44)
-    def radec(l):
-        l = math.radians(l)
-        return math.degrees(math.atan2(math.sin(l) * math.cos(e), math.cos(l))) % 360, math.degrees(math.asin(math.sin(l) * math.sin(e)))
-    bodies = {n.split(' ', 1)[1]: radec(p['lon']) for n, p in planets.items()}
-    yf = d0.year + (d0.timetuple().tm_yday - 1) / 365.25
-    for sh in CAT.active_showers(sun, yf):
-        rd = CAT.radiant_radec(sh['name'], sun, yf)
-        if rd: bodies['☄ ' + sh['name']] = rd
-    lat, lon = COORD['SD']
-    out = []
-    for name, (ra, dec) in bodies.items():
-        prev = None
-        for m in range(0, 1441):
-            t = pd.Timestamp(d0) + pd.Timedelta(minutes=m)
-            H = (_gmst_deg(t) + lon - ra) % 360
-            a = _alt(ra, dec, lat, lon, t)
-            if prev:
-                pH, pa = prev
-                if pa <= 0 < a: out.append((name, 'sorge', t))
-                if pa > 0 >= a: out.append((name, 'tramonta', t))
-                if pH > 300 and H < 60: out.append((name, 'culmina', t))
-                if pH < 180 <= H: out.append((name, 'passaggio inferiore', t))
-            prev = (H, a)
-    return out
-
-def sec_sincronismi(folder, day, D, L, reg):
-    L.append('\n══ 0. SINCRONISMI — eventi del giorno e momenti del cielo visti da SD (±%d min) ══' % SYNC_TOL_MIN)
-    try:
-        geo = _geo_moments(day)
-    except Exception as ex:
-        L.append(f'  calcolo non riuscito: {ex}'); return
-    # eventi: sincroni + minimo e massimo di Y (mediana rete EU)
-    eu = [s for s in EU if s in D]
-    ev = [(e['t'], f"{e['comp']}({e['n']}) {e['st']}{e['val']:+.1f}") for e in SYNC_LOG]
-    ymed = pd.concat([D[s].Y - D[s].Y.mean() for s in eu], axis=1).median(axis=1)
-    ev += [(ymed.idxmin(), 'minimo Y'), (ymed.idxmax(), 'massimo Y')]
-    rows = []
-    for t, lab in sorted(ev):
-        hits = [(n, k, g) for n, k, g in geo if abs((t - g).total_seconds()) <= SYNC_TOL_MIN * 60]
-        txt = '; '.join(f"{n} {k} {g:%H:%M} ({(t - g).total_seconds() / 60:+.0f})" for n, k, g in hits)
-        L.append(f'  {t:%H:%M} {lab}: ' + (txt if txt else '—'))
-        for n, k, g in hits:
-            rows.append({'day': day, 't': t.strftime('%H:%M'), 'evento': lab, 'corpo': n, 'momento': k,
-                         'g': g.strftime('%H:%M'), 'scarto': round((t - g).total_seconds() / 60, 1)})
-    L.append(f'  (per confronto: in media cadono {len(geo) * 2 * SYNC_TOL_MIN / 1440:.1f} momenti del cielo in una finestra di ±{SYNC_TOL_MIN} min)')
-    # archivio e ricorrenze: stesso corpo, stesso momento, stesso scarto (±REC_TOL) in giorni diversi
-    sp = folder.parent / 'SKY_SINCRONISMI.csv'
-    old = pd.read_csv(sp) if sp.exists() else pd.DataFrame(columns=['day', 't', 'evento', 'corpo', 'momento', 'g', 'scarto'])
-    old = old[old.day != day]
-    allr = pd.concat([old, pd.DataFrame(rows)], ignore_index=True).sort_values(['day', 't'])
-    allr.to_csv(sp, index=False)
-    lim = (pd.Timestamp(day) - pd.Timedelta(days=REC_DAYS)).strftime('%Y-%m-%d')
-    past = allr[(allr.day < day) & (allr.day >= lim)]
-    L.append(f'  RICORRENZE (ultimi {REC_DAYS} giorni: stesso corpo e momento, stesso scarto ±{REC_TOL_MIN} min — l\'orario può slittare con il corpo):')
-    found = 0
-    for r in rows:
-        m = past[(past.corpo == r['corpo']) & (past.momento == r['momento']) & ((past.scarto - r['scarto']).abs() <= REC_TOL_MIN)]
-        if len(m):
-            found += 1
-            serie = ', '.join(f"{a[5:]} {b}" for a, b in zip(m.day, m.t)) + f", OGGI {r['t']}"
-            L.append(f"  ★ {r['corpo']} {r['momento']} (scarto {r['scarto']:+.0f} min): {serie}")
-    if not found: L.append('  nessuna')
-    reg['sincronismi'] = len(rows); reg['ricorrenze_sinc'] = found
-
-# ─── ANATOMIA DEGLI EVENTI (chi parte prima, dove si inverte Y, fin dove arriva) ──
-
-def _y_inversion_lon(dy):
-    """longitudine (°E) dove la variazione di Y cambia segno tra stazioni ordinate per longitudine"""
-    pts = sorted((COORD[s][1], v) for s, v in dy.items() if s in COORD and not np.isnan(v))
-    for (l1, v1), (l2, v2) in zip(pts, pts[1:]):
-        if v1 == 0 or np.sign(v1) != np.sign(v2):
-            return l1 + (l2 - l1) * abs(v1) / (abs(v1) + abs(v2) + 1e-9)
+def fetch_data(obs_code, start_dt, end_dt):
+    obs_id = OBS_ID.get(obs_code)
+    if not obs_id:
+        return None
+    for id_fmt in [obs_id,
+                   obs_id.replace('best-avail', 'adjusted'),
+                   obs_id.replace('best-avail', 'reported')]:
+        url = (f"{BASE}/data?id={id_fmt}"
+               f"&time.min={start_dt.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+               f"&time.max={end_dt.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+               f"&format=json")
+        try:
+            r = requests.get(url, timeout=30)
+            if r.status_code == 200:
+                records = r.json().get('data', [])
+                if records:
+                    return records
+        except Exception:
+            continue
     return None
 
-def sec_anatomia(folder, day, D, L, reg):
-    eu = [s for s in EU if s in D and s in COORD]
-    L.append('\n══ 0b. ANATOMIA DEGLI EVENTI — ordine di partenza est/ovest, inversione di Y, estensione ══')
-    # eventi: sincroni al minuto + escursioni lente (|ΔX| > 12 nT in 40 min sulla mediana EU)
-    medX = pd.concat([D[s].X - D[s].X.iloc[0] for s in eu], axis=1).median(axis=1)
-    slow = (medX - medX.rolling(181, center=True, min_periods=60).median()).diff(40)   # senza la curva diurna
-    evs = [(e['t'], f"{e['comp']}({e['n']})") for e in SYNC_LOG]
-    for a, b, k in runs(slow.abs() > 12):
-        t = slow.loc[a:b].abs().idxmax(); evs.append((t, f'lento ΔX {slow[t]:+.0f}/40min'))
-    evs = sorted({(t.floor('min'), lab) for t, lab in evs})
-    ded = []
-    for t, lab in evs:                       # un solo evento ogni 10 minuti
-        if ded and (t - ded[-1][0]).total_seconds() < 600: continue
-        ded.append((t, lab))
-    evs = ded
-    invs = []; invs5 = []
-    for t, lab in evs:
-        t0 = t - pd.Timedelta(minutes=40)
-        dx = {s: D[s].X.loc[t0:t] - D[s].X.get(t0, np.nan) for s in eu}
-        onset = {}
-        for s, x in dx.items():
-            if x.notna().sum() < 10: continue
-            thr = max(2.0, 0.3 * x.abs().max())
-            hit = x[x.abs() > thr]
-            if len(hit): onset[s] = hit.index[0]
-        dy = {s: (D[s].Y.get(t, np.nan) - D[s].Y.get(t0, np.nan)) for s in eu}
-        inv = _y_inversion_lon(dy)
-        if inv is not None: invs.append(inv)
-        # stessa misura sui soli 5 minuti dell'evento (senza la curva del giorno)
-        ta, tb = t - pd.Timedelta(minutes=1), t + pd.Timedelta(minutes=4)
-        dy5 = {s: (D[s].Y.get(tb, np.nan) - D[s].Y.get(ta, np.nan)) for s in eu}
-        ok5 = [abs(v) for v in dy5.values() if not np.isnan(v)]
-        inv5 = _y_inversion_lon(dy5) if ok5 and max(ok5) >= 0.5 else None
-        if inv5 is not None: invs5.append((t, inv5))
-        order = sorted(onset, key=lambda s: onset[s])
-        east = [s for s in eu if COORD[s][1] > 15]; west = [s for s in eu if COORD[s][1] < 13]
-        de = [onset[s] for s in east if s in onset]; dw = [onset[s] for s in west if s in onset]
-        lead = (pd.Series(dw).median() - pd.Series(de).median()).total_seconds() / 60 if de and dw else np.nan
-        ext = []
-        for e in AURORAL + GLOBAL:
-            if e in D:
-                v = D[e].X.loc[t0:t]
-                if v.notna().any(): ext.append(f'{e}{v.iloc[-1] - v.iloc[0]:+.0f}')
-        L.append(f"  {t:%H:%M} {lab}: parte prima {order[0] if order else '—'}"
-                 + (f"; est in anticipo di {lead:+.0f} min sull'ovest" if not np.isnan(lead) else '')
-                 + (f"; inversione di Y a {inv:.1f}°E" if inv is not None else '; Y senza inversione')
-                 + (f" (sui 5 min: {inv5:.1f}°E)" if inv5 is not None else ' (sui 5 min: nessuna)')
-                 + (f" | fuori EU (ΔX 40 min): {' '.join(ext)}" if ext else ''))
-    if invs:
-        L.append(f"  Inversioni di Y oggi: mediana {np.median(invs):.1f}°E (SD = 13.0°E) su {len(invs)} eventi")
-        reg['Yinv_lon_med'] = round(float(np.median(invs)), 1)
-    near = [(t, v) for t, v in invs5 if 11 <= v <= 15]
-    L.append(f"  Inversioni di Y sui 5 minuti dell'evento: {len(invs5)}, di cui a 11–15°E (SD = 13.0°E): {len(near)}"
-             + (' — ' + ' '.join(f'{hm(t)}@{v:.0f}°E' for t, v in near) if near else '')
-             + ('   ◀ due o più sulla longitudine di SD' if len(near) >= 2 else ''))
-
-# ─── SOLE, NODI, PERCORSI (D2 + D7 nella stessa tabella) ──────────────────────
-
-def _latest(folder, key):
-    f = sorted(glob.glob(str(folder / f'SUN_{key}_*')))
-    if not f: return None
-    txt = open(f[-1], encoding='utf-8', errors='ignore').read()
-    if f[-1].endswith('.json'):
-        try: return json.loads(txt)
-        except Exception: return None
-    return txt
-
-def _cls_rank(c):
-    try: return {'A': 0, 'B': 1, 'C': 2, 'M': 3, 'X': 4}[c[0].upper()] + float(c[1:] or 0) / 10
-    except Exception: return -1
-
-def planets_on_nodes(day, tol=2.0):
-    """pianeti (e Luna) entro tol° dal radiante eclittico di uno sciame attivo"""
-    try:
-        import sky_d, sky_catalog as CAT, datetime as _dt
-        dt = _dt.datetime.fromisoformat(day) + _dt.timedelta(hours=12)
-        planets, sun = sky_d.get_planets(dt)
-        yf = dt.year + (dt.timetuple().tm_yday - 1) / 365.25
-        out = []
-        for sh in CAT.active_showers(sun, yf):
-            for n, p in planets.items():
-                if 'Sole' in n: continue
-                d = abs((p['lon'] - sh['rad_lon_date'] + 180) % 360 - 180)
-                if d <= tol: out.append(f"{n.split(' ', 1)[1]}@{sh['name']} {d:.1f}°")
-        return out
-    except Exception as e:
-        return [f'(calcolo non riuscito: {e})']
-
-def sec_sun(folder, day, L, reg):
-    L.append('\n══ 16. SOLE, NODI E PERCORSI (D2 + D7) ══')
-    nodes = planets_on_nodes(day)
-    L.append('  Pianeti/Luna sul nodo di uno sciame attivo (≤2°): ' + ('; '.join(nodes) if nodes else 'nessuno'))
-    fl = []
-    for x in (_latest(folder, 'flares') or []):
-        c = x.get('max_class') or x.get('current_class') or ''
-        t = x.get('max_time') or x.get('begin_time')
-        if c and t: fl.append((pd.Timestamp(t).tz_localize(None) if pd.Timestamp(t).tzinfo else pd.Timestamp(t), c))
-    for x in (_latest(folder, 'dflr') or []):
-        c, t = x.get('classType') or '', x.get('peakTime') or x.get('beginTime')
-        if c and t:
-            tt = pd.Timestamp(t.replace('Z', '')); 
-            if not any(abs((tt - a).total_seconds()) < 900 and b[0] == c[0] for a, b in fl): fl.append((tt, c))
-    cmes = []
-    for c in (_latest(folder, 'dcme') or []):
-        sp = [a.get('speed') for a in c.get('analyses', []) if a.get('speed')]
-        if c.get('startTime'): cmes.append((pd.Timestamp(c['startTime'].replace('Z', '')), max(sp) if sp else None))
-    hss = [pd.Timestamp(h['eventTime'].replace('Z', '')) for h in (_latest(folder, 'dhss') or []) if h.get('eventTime')]
-    d0 = pd.Timestamp(day); d1 = d0 + pd.Timedelta(days=1)
-    fday = [(t, c) for t, c in fl if d0 <= t < d1]
-    mx = [(t, c) for t, c in fday if c[:1].upper() in 'MX']
-    cday = [(t, v) for t, v in cmes if d0 <= t < d1]
-    hday = [t for t in hss if d0 <= t < d1]
-    newest = max([t for t, _ in fl] + [t for t, _ in cmes] + hss) if (fl or cmes or hss) else None
-    if newest is None:
-        L.append('  dati solari assenti (file SUN_* non presenti)')
-    else:
-        if newest < d0 - pd.Timedelta(days=2): L.append(f'  ⚠ dati solari non aggiornati (ultimo evento {newest:%d/%m})')
-        L.append(f'  Brillamenti del giorno: {len(fday)} (M/X: {len(mx)})' +
-                 (' — ' + ' '.join(f'{c}@{t:%H:%M}' for t, c in sorted(mx)) if mx else ''))
-        if fday: L.append(f'  Classe massima: {max((c for _, c in fday), key=_cls_rank)}')
-        L.append(f'  CME del giorno: {len(cday)}' + (' — ' + ' '.join(f'{t:%H:%M}' + (f'({v:.0f} km/s)' if v else '') for t, v in cday) if cday else ''))
-        L.append(f'  Arrivo di flusso veloce (buco coronale) a Terra: ' + (' '.join(f'{t:%H:%M}' for t in hday) if hday else 'no'))
-    idx = _latest(folder, 'indices') or ''
-    ssn = f107 = None
-    for line in idx.splitlines():
-        parts = line.split()
-        if len(parts) > 4 and parts[:3] == [f'{d0.year}', f'{d0.month:02d}', f'{d0.day:02d}']:
-            try: f107, ssn = float(parts[3]), float(parts[4])
-            except Exception: pass
-    if f107 is not None: L.append(f'  Flusso radio F10.7: {f107:.0f} — macchie solari: {ssn:.0f}')
-    # archivio giornaliero del Sole (per guardare indietro 1–4 giorni)
-    sp = folder.parent / 'SKY_SOLE.csv'
-    old = pd.read_csv(sp) if sp.exists() else pd.DataFrame(columns=['day'])
-    old = old[old.day != day]
-    rowd = {'day': day, 'MX': len(mx), 'cme': len(cday), 'hss': len(hday), 'nodi': len(nodes), 'nodi_elenco': ' | '.join(nodes)}
-    allrows = pd.concat([old, pd.DataFrame([rowd])], ignore_index=True).sort_values('day')
-    allrows.to_csv(sp, index=False)
-    # percorsi
-    prev = allrows[(allrows.day < day) & (allrows.day >= (d0 - pd.Timedelta(days=4)).strftime('%Y-%m-%d'))]
-    chain = prev[((prev.MX > 0) | (prev.cme > 0)) & (prev.nodi > 0)]
-    cnt = {'diretto': 0, 'attraverso il Sole': 0, 'standard': 0, 'non valutabile': 0}
-    lines = []
-    for e in SYNC_LOG:
-        if e['orphan'] == -1: k = 'non valutabile'
-        elif e['orphan'] == 1: k = 'diretto'
-        else: k = 'attraverso il Sole' if len(chain) else 'standard'
-        cnt[k] += 1; lines.append(f"{hm(e['t'])}{e['comp']}:{k}")
-    L.append('  Percorsi degli eventi sincroni: ' + ', '.join(f'{k} {v}' for k, v in cnt.items()))
-    if len(chain): L.append('  (nei 4 giorni prima: eruzioni in giorni con pianeta sul nodo → ' + ', '.join(chain.day.str[5:]) + ')')
-    L.append('  "diretto" = nessuna variazione a L1 vicina; "attraverso il Sole" = variazione a L1 vicina + eruzione 1–4 giorni prima in giorno con nodo; "standard" = variazione a L1 vicina senza quel legame. Vicina non vuol dire causa: è un confronto, come i radianti.')
-    reg.update({'sun_MX': len(mx), 'sun_cme': len(cday), 'sun_hss': len(hday), 'sun_f107': f107, 'sun_ssn': ssn,
-                'nodi': len(nodes), 'nodi_elenco': ' | '.join(nodes),
-                'p_diretto': cnt['diretto'], 'p_sole': cnt['attraverso il Sole'], 'p_standard': cnt['standard']})
-
-# ─────────────────────────────────────────────────────────────────────────────
-
-# ─── SERIE RICORRENTI DAI DATI (il marker di passaggio) ───────────────────────
-# Regola (28–29/9/2026): un evento che torna per più giorni più o meno alla stessa ora, spostandosi
-# con regolarità, segnala il passaggio di uno sciame; l'ampiezza indica la densità del filamento.
-# Si cercano PRIMA le serie nei dati (entrata in scena, presenza, uscita di scena), POI si confronta
-# la serie con i momenti del cielo (radianti, Sole, Luna, pianeti) che hanno la stessa ora e lo stesso spostamento.
-
-SERIE_MIN_DAYS = 3      # giorni minimi per chiamarla serie
-SERIE_TOL = 4           # minuti di tolleranza per giorno
-SERIE_GAP = 1           # giorni mancanti ammessi dentro una serie
-SERIE_DRIFTS = [x / 2 for x in range(-12, 13)]   # spostamento giornaliero provato: −6…+6 min/giorno
-
-def _day_events(D):
-    """eventi europei della giornata: minuto d'inizio, componente, ampiezza = PICCO del gruppo
-    (mediana delle stazioni / base, massimo sui minuti consecutivi dell'evento — regola 1/10/2026)"""
-    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
-    out = []
-    for c in 'XY':
-        R = pd.DataFrame({s: (lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
-                          for s in eu if c in D[s]})
-        if R.empty: continue
-        med = R.median(axis=1); n = (R >= 3).sum(axis=1)
-        hit = med[(med >= 4) & (n >= min(5, len(eu)))]; last = None
-        for t, v in hit.items():
-            if last is None or (t - last).total_seconds() > 180:
-                out.append({'m': t.hour * 60 + t.minute, 'comp': c, 'amp': round(float(v), 1)})
-            else:
-                out[-1]['amp'] = max(out[-1]['amp'], round(float(v), 1))
-            last = t
-    return out
-
-def _twilight(day, h=-12.0):
-    """ora UT in cui il Sole scende a h gradi la sera e sale a h gradi la mattina, visto da SD"""
-    import sky_d, datetime as _dt
-    d0 = _dt.datetime.fromisoformat(day); lat, lon = COORD['SD']; res = {}
-    prev = None
-    for m in range(0, 1441, 1):
-        t = pd.Timestamp(d0) + pd.Timedelta(minutes=m)
-        _, sun = sky_d.get_planets(t.to_pydatetime()) if m % 30 == 0 or prev is None else (None, sun_l)
-        sun_l = sun
-        e = math.radians(23.44); l = math.radians(sun_l)
-        ra = math.degrees(math.atan2(math.sin(l) * math.cos(e), math.cos(l))) % 360
-        dec = math.degrees(math.asin(math.sin(l) * math.sin(e)))
-        a = _alt(ra, dec, lat, lon, t)
-        if prev is not None:
-            if prev > h >= a: res['Sole −12° sera'] = t
-            if prev < h <= a: res['Sole −12° mattino'] = t
-        prev = a
-    return res
-
-def _moments_min(day, cache_dir=None):
-    """momenti del cielo (minuti UT) visti da SD per il giorno; archivio SKY_MOMENTI.csv per non ricalcolare"""
-    cf = (cache_dir / 'SKY_MOMENTI.csv') if cache_dir else None
-    if cf and cf.exists():
-        c = pd.read_csv(cf)
-        c = c[c.day == day]
-        if not c.empty:
-            return {(r.nome, r.momento if isinstance(r.momento, str) else ''): int(r.m) for r in c.itertuples()}
-    out = {}
-    for name, kind, t in _geo_moments(day):
-        out[(name, kind)] = t.hour * 60 + t.minute
-    for k, t in _twilight(day).items():
-        out[(k, '')] = t.hour * 60 + t.minute
-    if cf:
-        old = pd.read_csv(cf) if cf.exists() else pd.DataFrame(columns=['day', 'nome', 'momento', 'm'])
-        new = pd.DataFrame([{'day': day, 'nome': k[0], 'momento': k[1], 'm': v} for k, v in out.items()])
-        pd.concat([old[old.day != day], new], ignore_index=True).to_csv(cf, index=False)
-    return out
-
-NT_KEEP = 0.8            # una serie è "al suo posto in nT" se oggi vale almeno 0.8 volte il suo ultimo giorno
-NT_EMERGE = 2.5          # ed "emerge" se supera di 2.5 volte il fondo dell'ora attorno
-def _nt_archive(base, day, D):
-    """nT/min reali, mediana Europa, minuto per minuto (archivio SKY_NT.csv, ultimi 20 giorni).
-    Serve nei giorni agitati: il rapporto si schiaccia, i nT no (regola 5/10/2026: giorno agitato NON vuol dire non valutabile)."""
-    eu = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
-    if not eu: return pd.DataFrame(columns=['day', 'm', 'nt'])
-    nt = pd.concat([D[st][['X', 'Y']].diff().abs().max(axis=1) for st in eu], axis=1).median(axis=1)
-    new = pd.DataFrame({'day': day, 'm': nt.index.hour * 60 + nt.index.minute, 'nt': nt.round(2).values}).dropna()
-    f = base / 'SKY_NT.csv'
-    old = pd.read_csv(f) if f.exists() else pd.DataFrame(columns=['day', 'm', 'nt'])
-    allv = pd.concat([old[old.day != day], new], ignore_index=True)
-    keep = sorted(allv.day.unique())[-20:]
-    allv = allv[allv.day.isin(keep)]; allv.to_csv(f, index=False)
-    return allv
-
-def sec_serie(folder, day, D, L, _nt_rows=None):
-    L0 = len(L)
-    L.append('\n══ 0c. SERIE RICORRENTI DAI DATI — entrata in scena, presenza, uscita (marker di passaggio) ══')
-    base = folder.parent
-    arch = base / 'SKY_SERIE_EVENTI.csv'
-    old = pd.read_csv(arch) if arch.exists() else pd.DataFrame(columns=['day', 'm', 'comp', 'amp'])
-    old = old[old.day != day]
-    today = pd.DataFrame([{'day': day, **e} for e in _day_events(D)])
-    if _nt_rows:                                   # serie ritrovate in nT (vedi più sotto): contano come presenti oggi
-        today = pd.concat([today, pd.DataFrame([{'day': day, 'm': r['m'], 'comp': r['comp'], 'amp': 4.0} for r in _nt_rows])], ignore_index=True)
-    allv = pd.concat([old, today], ignore_index=True); allv.to_csv(arch, index=False)
-    NT = _nt_archive(base, day, D)
-    ntd = {x: g.set_index('m').nt for x, g in NT.groupby('day')}
-    meds = [float(v.median()) for x, v in sorted(ntd.items()) if x < day][-5:]
-    bg0 = float(ntd[day].median()) if day in ntd else np.nan
-    agit = bg0 / np.median(meds) if meds and np.median(meds) > 0 else np.nan
-    d0 = pd.Timestamp(day)
-    allv['k'] = [(d0 - pd.Timestamp(x)).days for x in allv.day]      # 0 = oggi, 1 = ieri …
-    allv = allv[(allv.k >= 0) & (allv.k <= REC_DAYS)]
-    byk = {k: g for k, g in allv.groupby('k')}
-    if 0 not in byk: L.append('  nessun evento oggi'); return
-    def chain(m0, drift, start_k=0):
-        hits, k, miss = [], start_k, 0          # (k, minuto, ampiezza)
-        while k <= REC_DAYS:
-            g = byk.get(k); exp = m0 - drift * (k - start_k)
-            if g is not None:
-                dm = ((g.m - exp + 720) % 1440 - 720).abs()
-                if (dm <= SERIE_TOL).any():
-                    j = dm.idxmin(); hits.append((k, int(g.loc[j, 'm']), float(g.loc[j, 'amp']))); miss = 0; k += 1; continue
-            miss += 1
-            if miss > SERIE_GAP: break
-            k += 1
-        return hits
-    def spread(h, m0, dr):
-        return sum(abs(((m - (m0 - dr * k)) + 720) % 1440 - 720) for k, m, a in h)
-    found = []
-    for _, e in byk[0].iterrows():
-        best = None
-        for dr in SERIE_DRIFTS:
-            h = chain(e.m, dr)
-            if len(h) >= SERIE_MIN_DAYS:
-                key = (len(h), -spread(h, e.m, dr))
-                if best is None or key > best[0]: best = (key, dr, h)
-        if best: found.append((int(e.m), e.comp, best[1], best[2]))
-    found.sort(key=lambda x: (-len(x[3]), x[0])); kept = []
-    for f in found:
-        if all(abs((f[0] - g[0] + 720) % 1440 - 720) > 8 for g in kept): kept.append(f)
-    # confronto con il cielo: il momento deve cadere entro ±5 min dall'evento IN OGNI giorno della serie
-    moms = {}
-    def mom(k):
-        if k not in moms: moms[k] = _moments_min((d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d'), base)
-        return moms[k]
-    def sky_match(h):
-        res = []
-        m_today = next(m for k, m, a in h if k == min(kk for kk, _, _ in h))
-        for key, t0 in mom(0).items():
-            if abs(((m_today - t0) + 720) % 1440 - 720) > 10: continue
-            offs = []
-            for k, m, a in h:
-                mk = mom(k).get(key)
-                if mk is None: break
-                g = byk.get(k)
-                oo = ((g.m - mk) + 720) % 1440 - 720 if g is not None else pd.Series(dtype=float)
-                oo = oo[oo.abs() <= 5]
-                if oo.empty: break
-                offs.append(int(oo.iloc[oo.abs().argmin()]))
-            else:
-                res.append(f"{key[0]} {key[1]}".strip() + f" (scarti {' '.join(f'{o:+d}' for o in reversed(offs))})")
-        return res
-    if not kept:
-        L.append(f'  nessuna serie di almeno {SERIE_MIN_DAYS} giorni che arrivi a oggi')
-    for m, comp, dr, h in sorted(kept, key=lambda x: x[0]):
-        entry = (d0 - pd.Timedelta(days=max(k for k, _, _ in h))).strftime('%d/%m')
-        amps = [a for _, _, a in h]; prof = ' '.join(f'{a:.0f}' for a in reversed(amps))
-        mx = max(amps); kmx = h[amps.index(mx)][0]
-        sm = sky_match(h)
-        L.append(f"  {m // 60:02d}:{m % 60:02d} {comp}: {len(h)} giorni dal {entry}, spostamento {(-dr) + 0.0:+.1f} min/g, "
-                 f"ampiezze {prof} (max {mx:.0f} il {(d0 - pd.Timedelta(days=kmx)).strftime('%d/%m')})"
-                 + (f" | cielo: {'; '.join(sm)}" if sm else " | cielo: nessun momento che la segua tutti i giorni"))
-    # pausa e uscita di scena (regola 1/10/2026): dentro una serie è ammesso SERIE_GAP giorno mancante,
-    # quindi il primo giorno di assenza è solo "in pausa"; l'uscita scatta dopo SERIE_GAP+1 giorni consecutivi di assenza.
-    def _absent(k, exp):
-        g = byk.get(k)
-        return g is None or not (((g.m - exp + 720) % 1440 - 720).abs() <= SERIE_TOL).any()
-    def _series_ending(start_k):
-        res, seen = [], []
-        if start_k not in byk: return res
-        for _, e in byk[start_k].iterrows():
-            # tutte le derive che danno una serie di ≥4 giorni: è assente solo se NESSUNA la ritrova dopo
-            cands = [(dr, chain(e.m, dr, start_k=start_k)) for dr in SERIE_DRIFTS]
-            cands = [(dr, h) for dr, h in cands if len(h) >= 4]
-            if not cands: continue
-            if all(all(_absent(k, e.m + dr * (start_k - k)) for k in range(start_k - 1, -1, -1)) for dr, _ in cands) \
-                    and all(abs((int(e.m) - s + 720) % 1440 - 720) > 8 for s in seen):
-                dr, h = max(cands, key=lambda x: len(x[1]))
-                res.append((int(e.m), len(h), dr)); seen.append(int(e.m))
-        return sorted(res)
-    eu7 = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
-    def _cov(m):
-        t = pd.Timestamp(day) + pd.Timedelta(minutes=m % 1440)
-        return sum(1 for st in eu7 if t in D[st].index and pd.notna(D[st].X.get(t)))
-    def _nt_at(dd, mm, tol):
-        v = ntd.get(dd)
-        if v is None: return None, None
-        w = v[abs(v.index - mm) <= tol]                  # niente giro di mezzanotte: resto dentro la giornata
-        return (float(w.max()), int(w.idxmax())) if len(w) else (None, None)
-    def _nt_check(m, dr, start_k):
-        """la serie è al suo posto in nT oggi? confronto con il suo ultimo giorno presente; emerge dal fondo dell'ora?"""
-        exp = int(round(m + dr * start_k))
-        if exp < 0 or exp > 1439: return None
-        v0, t0 = _nt_at(day, exp, SERIE_TOL)
-        vr, _ = _nt_at((d0 - pd.Timedelta(days=start_k)).strftime('%Y-%m-%d'), int(m), 2)
-        if v0 is None or vr is None or vr <= 0: return None
-        v = ntd[day]; around = v[(abs(v.index - exp) <= 60) & (abs(v.index - exp) > SERIE_TOL)]
-        fondo = float(around.median()) if len(around) else np.nan
-        return {'m': t0, 'nt': v0, 'ref': vr, 'fondo': fondo, 'ok': v0 >= NT_KEEP * vr, 'emerge': bool(fondo > 0 and v0 >= NT_EMERGE * fondo)}
-    if _nt_rows is None:                                    # primo passaggio: cerco in nT le serie che il rapporto dà per assenti
-        rows = []
-        for start_k in (1, SERIE_GAP + 1):
-            for m, n, dr in _series_ending(start_k)[:12]:
-                c = _nt_check(m, dr, start_k)
-                if c and c['ok'] and all(abs((c['m'] - r['m'] + 720) % 1440 - 720) > 6 for r in rows):
-                    rows.append({'m': c['m'], 'comp': 'nT' if c['emerge'] else 'fondo', 'serie': int(m), 'n': n, 'k': start_k, **{x: c[x] for x in ('nt', 'ref', 'fondo', 'emerge')}})
-        if rows:
-            del L[L0:]
-            return sec_serie(folder, day, D, L, _nt_rows=rows)
-    if pd.notna(agit) and agit >= 1.5:
-        L.append(f"  Fondo di oggi {bg0:.2f} nT/min, {agit:.1f} volte quello dei 5 giorni prima: il rapporto si schiaccia, le serie vanno lette in nT.")
-    for r in (_nt_rows or []):
-        L.append(f"  ● al suo posto in nT: serie delle {r['serie'] // 60:02d}:{r['serie'] % 60:02d} ({r['n']} giorni) — oggi {r['nt']:.1f} nT/min alle {r['m'] // 60:02d}:{r['m'] % 60:02d}"
-                 f" (ultimo giorno {r['ref']:.1f}; fondo dell'ora {r['fondo']:.1f}) — " + ('EMERGE dal fondo' if r['emerge'] else 'dentro il fondo: presente, non distinta'))
-    for m, n, dr in _series_ending(1)[:8]:                  # attiva fino a ieri, assente oggi → pausa
-        cov = _cov(int(round(m + dr)))
-        if cov < 5:
-            L.append(f"  … serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — oggi NON VALUTABILE (solo {cov} stazioni con dati)")
-        else:
-            L.append(f"  ⏸ in pausa oggi: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni fino a ieri) — 1° giorno di assenza")
-    for m, n, dr in _series_ending(SERIE_GAP + 1)[:8]:     # attiva fino a 2 giorni fa, assente ieri e oggi → uscita
-        L.append(f"  ✖ uscita di scena: serie delle {m // 60:02d}:{m % 60:02d} ({n} giorni) — assente da {SERIE_GAP + 1} giorni consecutivi")
-    # marker per sciame: ampiezza ai quattro momenti di ogni radiante attivo (archivio SKY_MARKER.csv)
-    rows = []
-    for (name, kind), t0 in mom(0).items():
-        if not name.startswith('☄'): continue
-        a = today[((today.m - t0 + 720) % 1440 - 720).abs() <= 6].amp.max() if not today.empty else np.nan
-        rows.append({'day': day, 'sciame': name[2:], 'momento': kind, 'ora': f'{t0 // 60:02d}:{t0 % 60:02d}',
-                     'ampiezza': 0.0 if pd.isna(a) else a})
-    mk = base / 'SKY_MARKER.csv'
-    mo = pd.read_csv(mk) if mk.exists() else pd.DataFrame(columns=['day', 'sciame', 'momento', 'ora', 'ampiezza'])
-    mo = mo[mo.day != day]; pd.concat([mo, pd.DataFrame(rows)], ignore_index=True).to_csv(mk, index=False)
-
-# ─── RICORRENZE A PIÙ SCALE + SCIAMI IN ARRIVO (regola 3/10/2026) ─────────────
-# Sempre due letture: le ricorrenze puntuali (±4 min, sezione 0c) E i movimenti più larghi.
-# Scala media: eventi ≥5× entro ±10 min; scala larga: i blocchi forti (≥7×) entro ±25 min, con spostamento libero.
-# Sciami in arrivo: per ogni sciame entro 12° dal picco, ampiezza ai quattro momenti negli ultimi giorni (±12 min).
-SCALE = [('media', 10, 5.0, 3, 9, [x / 2 for x in range(-12, 13)]),
-         ('larga', 25, 7.0, 3, 12, list(range(-45, 46, 3)))]   # nome, tolleranza min, ampiezza minima, giorni minimi, su quanti giorni, spostamenti provati
-
-def sec_scale(folder, day, D, L):
-    base = folder.parent
-    arch = base / 'SKY_SERIE_EVENTI.csv'
-    if not arch.exists(): return
-    ev = pd.read_csv(arch); d0 = pd.Timestamp(day)
-    ev['k'] = [(d0 - pd.Timestamp(x)).days for x in ev.day]
-    ev = ev[(ev.k >= 0) & (ev.k <= 12)]
-    # profilo largo della giornata: massimo per mezz'ora (archivio SKY_PROFILO.csv), per vedere i movimenti lenti dei blocchi
-    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
-    R = pd.concat([pd.concat([(lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
-                              for c in 'XY' if c in D[s]], axis=1).max(axis=1).rename(s) for s in eu], axis=1)
-    med = R.median(axis=1)
-    prof = med.groupby((med.index.hour * 60 + med.index.minute) // 30).max()
-    pf = base / 'SKY_PROFILO.csv'
-    po = pd.read_csv(pf) if pf.exists() else pd.DataFrame(columns=['day', 'bin', 'max'])
-    po = pd.concat([po[po.day != day], pd.DataFrame({'day': day, 'bin': prof.index, 'max': prof.round(1).values})], ignore_index=True)
-    po.to_csv(pf, index=False)
-    L.append('\n══ 0d. RICORRENZE A PIÙ SCALE — puntuali (0c, ±4 min) e movimenti più larghi ══')
-    hm_ = lambda m: f'{int(m) // 60 % 24:02d}:{int(m) % 60:02d}'
-    for name, tol, amin, dmin, span, drifts in SCALE:
-        e = ev[(ev.amp >= amin) & (ev.k <= span)]
-        byk = {k: g for k, g in e.groupby('k')}
-        def tracks(k0):
-            """tracce ancorate agli eventi del giorno k0 (0 = oggi), cercate all'indietro e in avanti fino a oggi"""
-            found = []
-            if k0 not in byk: return found
-            for _, x in byk[k0].iterrows():
-                best = None
-                for dr in drifts:
-                    hits = []
-                    for k in range(0, span + 1):
-                        g = byk.get(k)
-                        if g is None: continue
-                        dm = ((g.m - (x.m - dr * (k - k0)) + 720) % 1440 - 720).abs()
-                        if (dm <= tol).any():
-                            j = dm.idxmin(); hits.append((k, int(g.loc[j, 'm']), float(g.loc[j, 'amp'])))
-                    if len(hits) >= dmin:
-                        sp = sum(abs(((m - (x.m - dr * (k - k0))) + 720) % 1440 - 720) for k, m, a in hits)
-                        key = (len(hits), -sp, -abs(dr))
-                        if best is None or key > best[0]: best = (key, dr, hits)
-                if best: found.append((int(x.m), best[1], best[2]))
-            found.sort(key=lambda f: (-len(f[2]), f[0])); kept = []
-            for f in found:
-                if all(abs((f[0] - g[0] + 720) % 1440 - 720) > 2 * tol for g in kept): kept.append(f)
-            return kept
-        def line(pref, hits, dr):
-            trac = ' → '.join(f"{(d0 - pd.Timedelta(days=k)).strftime('%d/%m')} {hm_(mm)} ({a:.0f}×)" for k, mm, a in sorted(hits, reverse=True))
-            first = (d0 - pd.Timedelta(days=max(k for k, _, _ in hits))).strftime('%d/%m')
-            return f'  {pref} scala {name} (±{tol} min): entrata {first}, {len(hits)} giorni, spostamento {(-dr) + 0.0:+.1f} min/g | {trac}'
-        today = tracks(0)
-        if not today: L.append(f'  scala {name} (±{tol} min, eventi ≥{amin:.0f}×): nessun movimento che arrivi a oggi su almeno {dmin} giorni')
-        for m, dr, hits in sorted(today): L.append(line('●', hits, dr))
-        # uscite: tracce di almeno 4 giorni che arrivavano a 2 giorni fa e mancano ieri e oggi (durata e poi scomparsa = non è caso)
-        for m, dr, hits in sorted(tracks(2)):
-            ks = [k for k, _, _ in hits]
-            if len(hits) >= 4 and min(ks) == 2:
-                L.append(line('✖ uscita (assente da 2 giorni)', hits, dr))
-        for m, dr, hits in sorted(tracks(1)):
-            ks = [k for k, _, _ in hits]
-            if len(hits) >= 4 and min(ks) == 1:
-                L.append(line('⏸ in pausa oggi', hits, dr))
-    # il profilo a mezz'ore: le fasce orarie più forti di oggi e nei giorni prima (movimento dei blocchi)
-    L.append('  Fasce di mezz\'ora più forti, giorno per giorno (ora UT e massimo):')
-    for dd in sorted(po.day.unique())[-6:]:
-        g = po[po.day == dd].sort_values('max', ascending=False).head(4).sort_values('bin')
-        L.append(f"    {dd[5:]}: " + '  '.join(f"{int(b) // 2:02d}:{'30' if int(b) % 2 else '00'} {v:.0f}×" for b, v in zip(g.bin, g['max'])))
-    # sciami in arrivo o appena passati: ampiezza ai quattro momenti, ultimi 7 giorni, tolleranza ±12 min
-    try:
-        import sky_d, sky_catalog as CAT, datetime as _dt
-        dd0 = _dt.datetime.fromisoformat(day); _, sun = sky_d.get_planets(dd0 + _dt.timedelta(hours=12))
-        yf = dd0.year + (dd0.timetuple().tm_yday - 1) / 365.25
-        near = {sh['name']: sh['dist_peak'] for sh in CAT.active_showers(sun, yf) if abs(sh.get('dist_peak', 99)) <= 12}
-    except Exception:
-        near = {}
-    if near:
-        L.append('\n══ 0e. SCIAMI ENTRO 12° DAL PICCO — ampiezza ai loro momenti, ultimi 7 giorni (±12 min; "·" = sotto 4×) ══')
-        allev = pd.read_csv(arch)
-        days = [(d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d') for k in range(6, -1, -1)]
-        L.append('  ' + ' ' * 44 + '  '.join(x[8:] + '/' + x[5:7] for x in days))
-        for nm, dist in sorted(near.items(), key=lambda kv: abs(kv[1])):
-            for kind in ['culmina', 'passaggio inferiore', 'sorge', 'tramonta']:
-                cells, n_ok = [], 0
-                for x in days:
-                    mk = _moments_min(x, base).get(('☄ ' + nm, kind)); g = allev[allev.day == x]
-                    if mk is None or g.empty: cells.append('  –  '); continue
-                    w = g[((g.m - mk + 720) % 1440 - 720).abs() <= 12]
-                    if w.empty: cells.append('  ·  ')
-                    else: cells.append(f'{w.amp.max():4.0f}×'); n_ok += 1
-                if n_ok >= 2:
-                    mk0 = _moments_min(day, base).get(('☄ ' + nm, kind))
-                    lab = f"{nm} {kind} ({hm_(mk0) if mk0 is not None else '—'})"
-                    flag = '  ◀ in crescita' if n_ok >= 3 and cells[-1].strip() not in ('·', '–') else ''
-                    L.append(f"  {lab[:44]:44s}" + '  '.join(cells) + f'  | Δpicco {dist:.1f}°' + flag)
-
-# ── 0f. firma degli eventi, stop di stazione, ricorrenze aperte (regole 3-4/10/2026) ──
-FIRMA_MIN = 5.0          # eventi elencati con la firma: picco ≥ 5×
-NORD_FERMO = 10.0        # ABK sotto questa soglia (nT/min) = "nord fermo"
-RIC_MIN_AMP = 5.0        # 0h: ampiezza minima per contare un giorno come presente
-RIC_MIN_DAYS = 4         # 0h: giorni presenti su 8 per entrare in tabella
-
-def sec_firma(folder, day, D, L):
-    base = folder.parent
-    hm_ = lambda m: f'{int(m) // 60 % 24:02d}:{int(m) % 60:02d}'
-    loc = lambda m: hm_(m + 120)
-    eu = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if s in D]
-    if len(eu) < 3: return
-    show = [s for s in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL', 'IZN', 'ABK'] if s in D]
-    nt = pd.DataFrame({s: D[s][['X', 'Y']].diff().abs().max(axis=1) for s in show})
-    R = pd.concat([pd.concat([(lambda x: x / x.rolling(181, center=True, min_periods=60).median())(D[s][c].diff().abs())
-                              for c in 'XY'], axis=1).max(axis=1).rename(s) for s in eu], axis=1)
-    med = R.median(axis=1); nst = (R >= 3).sum(axis=1)
-    hit = med[(med >= 4) & (nst >= min(5, len(eu)))]
-    # segnale proprio del corridoio: mediana sui riferimenti di (stazione − riferimento), variazione in 5 minuti
-    ref = [s for s in ['BFO', 'NGK', 'BEL', 'CLF'] if s in D]; cor = [s for s in ['LON', 'THY', 'WIC'] if s in D]
-    own, ownx = {}, {}
-    for s in cor:
-        for c in 'XY':
-            if not ref: continue
-            o = pd.concat([(D[s][c] - D[r][c]).diff(5) for r in ref], axis=1).median(axis=1).abs()
-            own[s + c] = o; ownx[s + c] = o / o.rolling(181, center=True, min_periods=60).median().clip(lower=0.1)
-    # eventi: gruppi di minuti a meno di 4 minuti l'uno dall'altro
-    groups, cur = [], None
-    for t in hit.index:
-        if cur and (t - cur[1]).total_seconds() <= 240: cur[1] = t
-        else:
-            cur = [t, t]; groups.append(cur)
-    L.append(f'\n══ 0f. FIRMA DEGLI EVENTI (picco ≥ {FIRMA_MIN:.0f}×) — nT/min per stazione, nord, segnale proprio del corridoio ══')
-    L.append('  ora UT (loc)        picco   ' + ' '.join(f'{s:>4s}' for s in show) + '   nord     corridoio (proprio)')
-    n_all = len(groups); n_show = 0; sync_times = []
-    for a, b in groups:
-        pk = float(med.loc[a:b].max()); sync_times.append((a, b, pk))
-        if pk < FIRMA_MIN: continue
-        n_show += 1
-        w0, w1 = a - pd.Timedelta(minutes=1), b + pd.Timedelta(minutes=1)
-        vals = nt.loc[w0:w1].max()
-        abk = vals.get('ABK', np.nan)
-        nord = '   –   ' if pd.isna(abk) else ('fermo  ' if abk < NORD_FERMO else 'acceso ')
-        pro = []
-        for k in own:
-            x = float(ownx[k].loc[w0:w1 + pd.Timedelta(minutes=4)].max()); v = float(own[k].loc[w0:w1 + pd.Timedelta(minutes=4)].max())
-            if x > 8 and v > 1.5: pro.append(f'{k[:3]} {k[3]} {x:.0f}× {v:.1f}nT')
-        ma, mb = a.hour * 60 + a.minute, b.hour * 60 + b.minute
-        top = [s for s in vals.drop(labels=['ABK'], errors='ignore').sort_values(ascending=False).index[:2]]
-        L.append(f"  {hm_(ma)}–{hm_(mb)} ({loc(ma)})  {pk:5.1f}×  " + ' '.join(f'{vals[s]:4.1f}' if pd.notna(vals[s]) else '   –' for s in show)
-                 + f'   {nord}  ' + ('; '.join(pro) if pro else '·') + f"   [max: {', '.join(top)}]")
-    L.append(f'  eventi della giornata: {n_all}, di cui {n_show} con picco ≥ {FIRMA_MIN:.0f}×. I valori sono nT/min (ampiezza reale), non rapporti.')
-
-    # stop di stazione: buchi di almeno 2 minuti dentro la giornata
-    L.append('\n══ 0g. STOP DI STAZIONE — cosa c\'è attorno (lo stop è un dato) ══')
-    any_stop = False
-    for s in show + [x for x in ['DUR'] if x in D]:
-        miss = D[s]['X'].isna()
-        if miss.all(): continue
-        for a, b, n in runs(miss):
-            if n < 2: continue
-            ma = a.hour * 60 + a.minute
-            abit = (s == 'DUR' and ma >= 17 * 60 + 55 and b == D[s].index[-1])
-            fine = 'fino a fine file' if b == D[s].index[-1] else hm(b)
-            prima = [(a - e).total_seconds() / 60 for st_, e, pk in sync_times if e < a]
-            dopo = [(st_ - a).total_seconds() / 60 for st_, e, pk in sync_times if st_ >= a]
-            pk_p = [pk for st_, e, pk in sync_times if e < a]; pk_d = [pk for st_, e, pk in sync_times if st_ >= a]
-            txt = f"  {s}: {hm(a)}–{fine} UT ({loc(ma)} loc), {n} min"
-            if abit: L.append(txt + ' — chiusura abituale di DUR'); continue
-            any_stop = True
-            if prima: txt += f" | evento sincrono {min(prima):.0f} min prima ({pk_p[int(np.argmin(prima))]:.1f}×)"
-            if dopo: txt += f" | {min(dopo):.0f} min dopo ({pk_d[int(np.argmin(dopo))]:.1f}×)"
-            L.append(txt)
-            # ultimi 3 minuti prima dello stop: la stazione rispetto alla mediana delle altre
-            oth = [x for x in eu if x != s]
-            for c in 'XY':
-                ds = D[s][c].diff().loc[a - pd.Timedelta(minutes=3):a - pd.Timedelta(minutes=1)]
-                do = pd.concat([D[x][c].diff() for x in oth], axis=1).median(axis=1).reindex(ds.index)
-                if ds.notna().any():
-                    contr = ((np.sign(ds) != np.sign(do)) & (ds.abs() >= 0.2)).sum()
-                    L.append(f"      {c} negli ultimi 3 min: {s} " + ' '.join(f'{v:+.1f}' for v in ds) + ' | altre ' + ' '.join(f'{v:+.1f}' for v in do)
-                             + (f'   ◀ {contr} min in verso contrario' if contr else ''))
-    if not any_stop: L.append('  nessuno stop dentro la giornata.')
-
-    # ricorrenze aperte: una riga ciascuna, ultimi 8 giorni, ±12 minuti
-    arch = base / 'SKY_SERIE_EVENTI.csv'
-    if not arch.exists(): return
-    allev = pd.read_csv(arch); d0 = pd.Timestamp(day)
-    days = [(d0 - pd.Timedelta(days=k)).strftime('%Y-%m-%d') for k in range(7, -1, -1)]
-    L.append('\n══ 0h. RICORRENZE AI MOMENTI DEL CIELO — ampiezza ogni giorno (±12 min; "·" = sotto 4×; "–" = giorno non in archivio) ══')
-    L.append('  ' + ' ' * 52 + ' '.join(x[8:] + '/' + x[5:7] for x in days) + '   andamento')
-    def cell(x, mk):
-        g = allev[allev.day == x]
-        if g.empty: return None
-        w = g[((g.m - mk + 720) % 1440 - 720).abs() <= 12]
-        return 0.0 if w.empty else float(w.amp.max())
-    def trend(v):
-        ok = [x for x in v if x is not None]
-        if len(ok) < 5: return 'pochi giorni'
-        a, b = np.mean(ok[-3:]), np.mean(ok[:-3][-3:])
-        vuoti = 0
-        for x in reversed(ok):
-            if x >= 4: break
-            vuoti += 1
-        if vuoti >= 2: return f'assente da {vuoti} giorni'
-        if vuoti == 1: return 'in pausa oggi'
-        if a >= b * 1.4 and a - b >= 1.5: return '▲ cresce'
-        if a <= b * 0.7 and b - a >= 1.5: return '▼ cala'
-        return '= stabile'
-    # righe costruite dai dati: ogni momento del cielo di oggi (qualsiasi radiante o corpo attivo) seguito
-    # giorno per giorno con il SUO orario; entra in tabella se è presente in almeno RIC_MIN_DAYS giorni su 8
-    today = _moments_min(day, base); rows = {}
-    for (nm, kind), mk0 in today.items():
-        vals = []
-        for x in days:
-            mk = _moments_min(x, base).get((nm, kind))
-            vals.append(None if mk is None else cell(x, mk))
-        pres = sum(1 for v in vals if v is not None and v >= RIC_MIN_AMP)
-        if pres < RIC_MIN_DAYS: continue
-        key = tuple(vals)                       # stessi eventi = stessa riga (più nomi sulla stessa riga)
-        rows.setdefault(key, []).append((mk0, f"{nm.replace('☄ ', '')} {kind}".strip()))
-    nmom = len(today)
-    for key, names in sorted(rows.items(), key=lambda kv: min(n[0] for n in kv[1])):
-        names.sort(); mk0 = names[0][0]
-        lab = hm_(mk0) + ' ' + ' / '.join(n[1] for n in names[:2]) + (f' +{len(names) - 2}' if len(names) > 2 else '')
-        cells = ['  –  ' if v is None else ('  ·  ' if v < 4 else f'{v:4.1f}×') for v in key]
+def parse_records(records):
+    times, X, Y, Z, F = [], [], [], [], []
+    FILL = 99999.0
+    for rec in records:
         try:
-            ntf = pd.read_csv(base / 'SKY_NT.csv'); v = ntf[ntf.day == day].set_index('m').nt
-            w = v[((v.index - mk0 + 720) % 1440 - 720).__abs__() <= 12]; ntxt = f' | oggi {w.max():.1f} nT/min' if len(w) else ''
+            times.append(rec[0])
+            xyz = rec[1]
+            x, y, z = float(xyz[0]), float(xyz[1]), float(xyz[2])
+            f = float(rec[2])
+            X.append(np.nan if abs(x) >= FILL else x)
+            Y.append(np.nan if abs(y) >= FILL else y)
+            Z.append(np.nan if abs(z) >= FILL else z)
+            F.append(np.nan if abs(f) >= FILL else f)
         except Exception:
-            ntxt = ''
-        L.append(f"  {lab[:52]:52s}" + ' '.join(cells) + '   ' + trend(list(key)) + ntxt)
-    if not rows: L.append('  nessun momento del cielo presente in almeno %d giorni su 8.' % RIC_MIN_DAYS)
-    L.append(f'  (righe scelte dai dati fra {nmom} momenti del cielo di oggi: presenti ≥{RIC_MIN_AMP:.0f}× in almeno {RIC_MIN_DAYS} giorni su 8.'
-             ' Le serie senza un momento del cielo sono in 0c e 0d.)')
-    # blocco diurno: evento più forte fra le 09 e le 18 UT, giorno per giorno (per vedere lo spostamento)
-    cells = []
-    for x in days:
-        g = allev[(allev.day == x) & (allev.m >= 540) & (allev.m < 1020)]
-        cells.append('  –  ' if allev[allev.day == x].empty else ('  ·  ' if g.empty else f"{hm_(g.loc[g.amp.idxmax(), 'm'])}"))
-    L.append(f"  {'evento diurno più forte (09–17 UT): ora':52s}" + ' '.join(cells))
-    cells = []
-    for x in days:
-        g = allev[(allev.day == x) & (allev.m >= 540) & (allev.m < 1020)]
-        cells.append('  –  ' if allev[allev.day == x].empty else ('  ·  ' if g.empty else f'{g.amp.max():4.1f}×'))
-    L.append(f"  {'                                    : ampiezza':52s}" + ' '.join(cells))
+            continue
+    return times, np.array(X), np.array(Y), np.array(Z), np.array(F)
 
+def fetch_day(obs_code, start, end):
+    """Scarica l'intero intervallo a blocchi di CHUNK_HOURS, deduplicando i timestamp."""
+    merged = {}
+    cur = start
+    while cur < end:
+        chunk_end = min(cur + datetime.timedelta(hours=CHUNK_HOURS), end)
+        records = fetch_data(obs_code, cur, chunk_end)
+        if records:
+            for rec in records:
+                try:
+                    merged[rec[0]] = rec      # dedup per timestamp
+                except Exception:
+                    pass
+        if chunk_end >= end:
+            break
+        cur = chunk_end
+        time.sleep(PAUSE_S)
+    return [merged[ts] for ts in sorted(merged.keys())]
 
-# ── 0i. stazioni contro il coro (regola 5/10/2026): una stazione che va al contrario di un'Europa concorde ──
-def sec_contro(folder, day, D, L):
-    coro = [st for st in ['WIC', 'LON', 'THY', 'CLF', 'BFO', 'NGK', 'BEL'] if st in D]
-    if len(coro) < 5: return
-    L.append('\n══ 0i. STAZIONI CONTRO IL CORO — minuti in cui una stazione va al contrario di un\'Europa concorde (≥1 nT/min da entrambe le parti) ══')
-    out = []
-    for st in coro + [x for x in ['IZN', 'DUR'] if x in D]:
-        contr, base_n = None, None
-        for c in 'XY':
-            a = D[st][c].diff(); oth = [x for x in coro if x != st]
-            dd = pd.concat([D[x][c].diff() for x in oth], axis=1); m = dd.median(axis=1)
-            agree = np.sign(dd).eq(np.sign(m), axis=0).mean(axis=1)
-            ok = (m.abs() >= 1.0) & (agree >= 0.85) & a.notna()
-            k = ok & (np.sign(a) != np.sign(m)) & (a.abs() >= 1.0)
-            contr = k if contr is None else (contr | k); base_n = ok if base_n is None else (base_n | ok)
-        out.append((st, int(contr.sum()), int(base_n.sum()), [hm(t) for t in contr[contr].index]))
-    tot = max(n for _, _, n, _ in out)
-    L.append(f'  minuti con Europa concorde oggi: {tot}')
-    for st, n, b, tt in sorted(out, key=lambda x: -x[1]):
-        if n == 0: continue
-        L.append(f"  {st}: {n} minuti contrari" + (f" — {' '.join(tt[:30])}" + (' …' if len(tt) > 30 else '')))
-    if all(n == 0 for _, n, _, _ in out): L.append('  nessuna stazione contraria.')
-    else: L.append('  le altre stazioni: 0.')
+# ─── GIORNATA DA ESTRARRE ─────────────────────────────────────────────────────
 
+def day_bounds(date_arg=None):
+    """(start, end, label) — da argomento da riga di comando oppure 'ieri'."""
+    if date_arg:
+        try:
+            d = datetime.datetime.strptime(date_arg, '%Y-%m-%d').date()
+        except ValueError:
+            sys.exit(f"Data non valida: '{date_arg}' — usa AAAA-MM-GG (es. 2026-09-15)")
+    else:
+        if USE_LOCAL_DAY:
+            local = now_utc() + LOCAL_UTC_OFFSET
+            d = (local - datetime.timedelta(days=1)).date()
+        else:
+            d = (now_utc() - datetime.timedelta(days=1)).date()
+
+    if USE_LOCAL_DAY:
+        start = datetime.datetime(d.year, d.month, d.day) - LOCAL_UTC_OFFSET
+    else:
+        start = datetime.datetime(d.year, d.month, d.day)
+
+    end = start + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
+    return start, end, d.isoformat()
+
+# ─── FORMATTAZIONE / STATISTICHE ──────────────────────────────────────────────
+
+def fmt_val(v):
+    """nT con 2 decimali; fill/NaN → campo vuoto (import pulito in fogli di calcolo)."""
+    try:
+        if v is None or np.isnan(v):
+            return ''
+    except TypeError:
+        return ''
+    return f"{v:.2f}"
+
+def z_stats(Z):
+    Zv = Z[~np.isnan(Z)]
+    if len(Zv) == 0:
+        return None
+    return float(np.mean(Zv)), float(np.min(Zv)), float(np.max(Zv))
+
+def comp_stats(arr):
+    v = arr[~np.isnan(arr)]
+    if len(v) == 0:
+        return None
+    return float(np.min(v)), float(np.max(v))
+
+# ─── OUTPUT ───────────────────────────────────────────────────────────────────
+
+def write_station_file(path, used, label, day_label, times, X, Y, Z, F, n, expected):
+    """File per singola stazione: 1 minuto, X Y Z F. Prima riga compatibile
+    con sky_stats.py (header 'COD — nome')."""
+    L = []
+    L.append("═" * 70)
+    L.append(f"{used.upper()} — {label}")
+    L.append(f"Giornata: {day_label} — INTERMAGNET GIN, cadenza 1 minuto, componenti X Y Z F (nT)")
+    L.append(f"Record: {n}/{expected}  (blocchi da {CHUNK_HOURS}h, id {used}/best-avail)")
+    st = z_stats(Z)
+    if st:
+        L.append(f"Z (nT):  mean={st[0]:.1f}  min={st[1]:.1f}  max={st[2]:.1f}")
+    L.append("Valori mancanti (fill 99999) → campo vuoto")
+    L.append("═" * 70)
+    L.append(f"{'TIME (UT)':<27s}{'X':>12s}{'Y':>12s}{'Z':>12s}{'F':>12s}")
+    for ts, x, y, z, f in zip(times, X, Y, Z, F):
+        L.append(f"{ts:<27s}{fmt_val(x):>12s}{fmt_val(y):>12s}"
+                 f"{fmt_val(z):>12s}{fmt_val(f):>12s}")
+    path.write_text('\n'.join(L) + '\n', encoding='utf-8')
+
+def write_station_nodata(path, code, name, day_label):
+    L = ["═" * 70,
+         f"{code} — {name}",
+         f"Giornata: {day_label}",
+         "NESSUN DATO DISPONIBILE per questa giornata",
+         "═" * 70]
+    path.write_text('\n'.join(L) + '\n', encoding='utf-8')
+
+def build_cross(stations, start, end, step, day_label):
+    """Matrice unica: righe = tempo (passo 'step'), colonne = stazione_componente.
+    Valori = scarto dalla mediana del giorno (nT). Le stazioni diventano
+    direttamente confrontabili (baseline rimosse) e il file resta abbastanza
+    piccolo da essere letto intero da un'AI."""
+    cols, series, medians = [], {}, {}
+    for st in stations:
+        if not st.get('used'):
+            continue
+        code = st['used'].upper()
+        for comp in CROSS_COMPS:
+            m, vals = {}, []
+            for ts, v in zip(st['times'], st[comp]):
+                if np.isnan(v):
+                    continue
+                m[ts[:16]] = v          # chiave 'YYYY-MM-DDTHH:MM' (robusta a Z/secondi)
+                vals.append(v)
+            if not vals:
+                continue
+            cols.append((code, comp))
+            series[(code, comp)] = m
+            medians[(code, comp)] = float(np.median(vals))
+
+    L = [f"SKY INCROCIO — {day_label} — passo {step} min — orario UT",
+         "Valori: scarto dalla mediana del giorno, per stazione/componente (nT, 1 decimale).",
+         "Cella vuota = dato mancante in quel minuto. F e risoluzione 1 min: nei file stazione.",
+         "time," + ",".join(f"{c}_{comp}" for c, comp in cols)]
+
+    t = start
+    while t <= end:
+        key = t.strftime('%Y-%m-%dT%H:%M')
+        row = [t.strftime('%H:%M')]
+        for c, comp in cols:
+            v = series[(c, comp)].get(key)
+            row.append('' if v is None else f"{v - medians[(c, comp)]:+.1f}")
+        L.append(','.join(row))
+        t += datetime.timedelta(minutes=step)
+    return L
+
+def build_riepilogo(stations, day_label, expected, tz_note, eph_lines=None):
+    """Documento unico: effemeridi complete + statistiche stazioni."""
+    L = ["═" * 70,
+         "SKY — RIEPILOGO GIORNATA",
+         f"Giornata: {day_label} ({tz_note}) — estrazione {now_utc():%Y-%m-%d %H:%M} UT",
+         f"Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi {expected} record/stazione",
+         "═" * 70]
+
+    # Sezione effemeridi (completa)
+    if eph_lines:
+        L.append("")
+        L.extend(eph_lines)
+        L.append("")
+
+    # Sezione dati stazioni
+    L.append("─" * 70)
+    L.append("DATI STAZIONI")
+    L.append("─" * 70)
+    for st in stations:
+        code = (st.get('used') or st['obs']).upper()
+        L.append("")
+        L.append(f"{code} — {st['label']}")
+        if not st.get('used'):
+            L.append("  NESSUN DATO DISPONIBILE per questa giornata")
+            continue
+        L.append(f"  record {st['n']}/{expected} ({st['n']/expected*100:.0f}%)"
+                 f" — id {st['used']}/best-avail")
+        for comp in ['X', 'Y', 'Z', 'F']:
+            cs = comp_stats(st[comp])
+            if cs is None:
+                L.append(f"  {comp}: non pubblicata")
+            else:
+                extra = ''
+                if comp == 'Z':
+                    zs = z_stats(st[comp])
+                    extra = f"  mean={zs[0]:.1f}"
+                L.append(f"  {comp}: {cs[0]:.1f} … {cs[1]:.1f}  (Δ{cs[1]-cs[0]:.1f}){extra}")
+    L.append("")
+    L.append("In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)")
+    return L
+
+# ─── FILE UNICO + NOAA ────────────────────────────────────────────────────────
+
+def write_all_csv(path, stations, start, expected):
+    import math as _m
+    idx = {}
+    cols = []
+    for st in stations:
+        if not st.get('used'):
+            continue
+        code = st['used'].upper()
+        cols.append(code)
+        idx[code] = {t[:16]: (st['X'][i], st['Y'][i], st['Z'][i], st['F'][i])
+                     for i, t in enumerate(st['times'])}
+    has_dur = 'DUR' in idx
+    head = ['time_UT'] + [f'{c}_{k}' for c in cols for k in 'XYZF']
+    if has_dur:
+        head += ['DURg_X', 'DURg_Y']
+    th = _m.radians(DUR_ROT_DEG)
+    lines = ['# SKY file unico — nT, 1 min, UT — vuoto = dato mancante',
+             f'# DURg_X/DURg_Y = DUR ruotata di {DUR_ROT_DEG}° nel sistema geografico',
+             ','.join(head)]
+    for k in range(expected):
+        t = (start + datetime.timedelta(minutes=k)).strftime('%Y-%m-%dT%H:%M')
+        row = [t]
+        for c in cols:
+            v = idx[c].get(t)
+            row += [fmt_val(x) for x in v] if v else ['', '', '', '']
+        if has_dur:
+            v = idx['DUR'].get(t)
+            if v and not (np.isnan(v[0]) or np.isnan(v[1])):
+                xg = v[0]*_m.cos(th) - v[1]*_m.sin(th)
+                yg = v[0]*_m.sin(th) + v[1]*_m.cos(th)
+                row += [f'{xg:.2f}', f'{yg:.2f}']
+            else:
+                row += ['', '']
+        lines.append(','.join(row))
+    path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+def save_noaa(out_dir):
+    stamp = now_utc().strftime('%Y%m%dT%H%MZ')
+    for key, url in NOAA_RTSW.items():
+        try:
+            r = requests.get(url, timeout=30, headers={'User-Agent': 'Mozilla/5.0'})
+            if r.status_code == 200:
+                (out_dir / f'NOAA_{key}_{stamp}.json').write_bytes(r.content)
+                print(f"  NOAA {key}: salvato")
+            else:
+                print(f"  NOAA {key}: HTTP {r.status_code}")
+        except Exception as e:
+            print(f"  NOAA {key}: errore ({e})")
+
+# ─── MAIN ─────────────────────────────────────────────────────────────────────
 
 def main():
-    if len(sys.argv) < 2:
-        sys.exit('Uso: python3 sky_scan.py <cartella SKY_AAAA-MM-GG>')
-    folder = pathlib.Path(sys.argv[1]).expanduser()
-    day, D = load_all(folder)
-    L = [f'SKY SCAN — {day} — stazioni: {", ".join(D)}',
-         'Report automatico: solo numeri e segnalazioni, nessuna attribuzione di causa.']
-    reg = {}
-    rp = folder / 'RIEPILOGO.txt'
-    if rp.exists():
-        for line in rp.read_text(encoding='utf-8').splitlines():
-            l = line.strip()
-            if 'Saturno Δ=' in l and 'NODO' not in l: reg['Saturno_nodo'] = l.split('Δ=')[1].split('°')[0]
-            if l.startswith('☽ Luna') and 'illum.' in l: reg['Luna_illum'] = l.split('illum.')[1].split('%')[0].strip()
-    sec_integrity(D, L, reg)
-    sec_jumps(D, L, reg)
-    Lnoaa = []
-    arrivals = sec_noaa(folder, Lnoaa, reg, day)
-    sec_sync(D, L, reg, arrivals)
-    sec_diurnal(D, L, reg)
-    sec_night_evening(D, L, reg, day)
-    sec_trend(D, L, reg)
-    L += Lnoaa
-    sec_regional(D, L, reg)
-    sec_direction(D, L)
-    sec_radiants(folder, D, day, L, reg)
-    reg.update({f'lag_{k}': v for k, v in REG_LAGS.items()})
-    sec_radiant_station(D, day, L, reg)
-    sec_orphans(L, reg)
-    sec_recurrence(folder, day, L)
-    Ls = []; sec_serie(folder, day, D, Ls); sec_scale(folder, day, D, Ls); sec_firma(folder, day, D, Ls); sec_contro(folder, day, D, Ls); sec_sincronismi(folder, day, D, Ls, reg); sec_anatomia(folder, day, D, Ls, reg); L[2:2] = Ls   # in cima al report
-    sec_sun(folder, day, L, reg)
-    sec_registry(folder, day, reg, L)
-    out = folder / f'SCAN_{day}.txt'
-    out.write_text('\n'.join(L) + '\n', encoding='utf-8')
-    print('\n'.join(L))
-    print(f'\n→ salvato: {out}')
+    args = sys.argv[1:]
+    date_arg = args[0] if len(args) >= 1 else None
+    try:
+        step = int(args[1]) if len(args) >= 2 else CROSS_STEP_DEFAULT
+    except ValueError:
+        sys.exit(f"Passo non valido: '{args[1]}' — usa i minuti (es. 5 o 10)")
+    step = max(1, step)
 
-if __name__ == '__main__':
+    start, end, day_label = day_bounds(date_arg)
+    expected = int((end - start).total_seconds() // 60) + 1   # ~1440
+
+    out_root = OUT_ROOT if OUT_ROOT.exists() else pathlib.Path.home()
+    out_dir = out_root / f"SKY_{day_label}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    tz_note = 'ora locale CEST' if USE_LOCAL_DAY else 'UTC'
+    print("=" * 60)
+    print(f"  SKY-DUMP — Giornata {day_label} ({tz_note})")
+    print(f"  Intervallo: {start:%Y-%m-%d %H:%M} → {end:%Y-%m-%d %H:%M} UT")
+    print(f"  Stazioni: {', '.join(s.upper() for s in OBSERVATORIES)}")
+    print(f"  Attesi {expected} record/minuto per stazione")
+    print(f"  INCROCIO: passo {step} min")
+    print("=" * 60)
+
+    stations, incomplete = [], []
+
+    for obs, name in OBSERVATORIES.items():
+        print(f"  {obs.upper()}...", end=' ', flush=True)
+
+        records = fetch_day(obs, start, end)
+        used, label = obs, name
+        if not records and obs in ALIASES:
+            alt_code, alt_name = ALIASES[obs]
+            records = fetch_day(alt_code, start, end)
+            if records:
+                used, label = alt_code, alt_name
+
+        if not records:
+            print("NESSUN DATO")
+            if WRITE_STATION_FILES:
+                write_station_nodata(out_dir / f"{obs.upper()}.txt", obs.upper(), name, day_label)
+            stations.append({'obs': obs, 'used': None, 'label': name, 'n': 0})
+            continue
+
+        times, X, Y, Z, F = parse_records(records)
+        n = len(times)
+        print(f"{n}/{expected} record ({n/expected*100:.0f}%) — servita come {used.upper()}")
+        if n < expected:
+            incomplete.append(f"{obs.upper()} ({n}/{expected})")
+
+        if WRITE_STATION_FILES:
+            write_station_file(out_dir / f"{used.upper()}.txt",
+                               used, label, day_label, times, X, Y, Z, F, n, expected)
+        stations.append({'obs': obs, 'used': used, 'label': label, 'n': n,
+                         'times': times, 'X': X, 'Y': Y, 'Z': Z, 'F': F})
+
+    # ── Effemeridi della giornata (matematica pura, calcolo istantaneo) ──
+    eph_lines = None
+    if INCLUDE_EPHEMERIDES:
+        eph_dt = start + datetime.timedelta(hours=EPHEMERIDES_REF_HOUR)
+        eph_lines = build_ephemeridi(eph_dt)
+
+    cross_name = f"INCROCIO_{step}min.txt"
+    (out_dir / cross_name).write_text(
+        '\n'.join(build_cross(stations, start, end, step, day_label)) + '\n',
+        encoding='utf-8')
+    (out_dir / "RIEPILOGO.txt").write_text(
+        '\n'.join(build_riepilogo(stations, day_label, expected, tz_note, eph_lines)) + '\n',
+        encoding='utf-8')
+
+    if WRITE_ALL_CSV:
+        write_all_csv(out_dir / f"TUTTE_{day_label}.csv", stations, start, expected)
+        print(f"  TUTTE_{day_label}.csv — file unico con tutte le stazioni")
+    if (now_utc().date() - datetime.date.fromisoformat(day_label)).days <= 1:
+        save_noaa(out_dir)
+    else:
+        print("  NOAA: saltato (i file coprono solo le ultime 24h)")
+
+    files = ', '.join((s.get('used') or s['obs']).upper() + '.txt' for s in stations)
+    print("\n" + "=" * 60)
+    print(f"  Cartella: {out_dir}")
+    print(f"  Per stazione (1 min): {files}")
+    print(f"  {cross_name}  ← da incollare INTERO all'AI per gli incroci")
+    print(f"  RIEPILOGO.txt — documento unico: effemeridi complete + dati stazioni")
+    if incomplete:
+        print(f"  ⚠️ Dati incompleti su: {', '.join(incomplete)}")
+        print("    (il GIN pubblica con ~3h di ritardo: rilancia più tardi per completare)")
+    print(f"  Apri la cartella:  open \"{out_dir}\"")
+    print("=" * 60)
+
+if __name__ == "__main__":
     main()

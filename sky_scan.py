@@ -301,8 +301,17 @@ def sec_noaa(folder, L, reg, day):
     src = w.source.mode().iloc[0] if 'source' in w else '?'
     v = w.proton_speed.resample('1min').mean().interpolate(limit=10)
     lag = (dist / v).rename('lag')
+    lagmed = float(lag.median())
+    if not np.isfinite(lagmed):
+        L.append(f'  sorgente {src}, distanza {dist/1e6:.2f} Mkm — velocità protoni assente nel file NOAA:')
+        L.append('  propagazione L1→Terra non calcolabile. Buco del dato NOAA, registrato come tale.')
+        reg['L1_disc'] = 0
+        return []
+    def lag_at(t):
+        x = lag.get(t, np.nan)
+        return lagmed if not np.isfinite(x) else float(x)
     P = w.P.resample('1min').median().interpolate(limit=5).rolling(5, center=True, min_periods=2).median()
-    L.append(f'  sorgente {src}, distanza {dist/1e6:.2f} Mkm, velocità {v.median():.0f} km/s, ritardo tipico {lag.median()/60:.0f} min')
+    L.append(f'  sorgente {src}, distanza {dist/1e6:.2f} Mkm, velocità {v.median():.0f} km/s, ritardo tipico {lagmed/60:.0f} min')
     arrivals = []
     dP = (P.shift(-5) - P.shift(1)) / P.shift(1)
     for a, b, k in runs(dP.abs() > 0.25):
@@ -311,14 +320,14 @@ def sec_noaa(folder, L, reg, day):
         pre, post = P.loc[t - pd.Timedelta(minutes=12):t - pd.Timedelta(minutes=2)].mean(), P.loc[t + pd.Timedelta(minutes=5):t + pd.Timedelta(minutes=15)].mean()
         if np.isnan(pre) or np.isnan(post) or abs(post / pre - 1) < 0.2:
             continue
-        ta = t + pd.Timedelta(seconds=float(lag.get(t, lag.median())))
+        ta = t + pd.Timedelta(seconds=lag_at(t))
         arrivals.append((ta, f'P{post/pre-1:+.0%}'))
     if mm is not None:
         bt = mm.bt.resample('1min').mean()
         d3 = bt.diff(3)
         for a, b, k in runs(d3.abs() > 2.5):
             t = d3.loc[a:b].abs().idxmax()
-            ta = t + pd.Timedelta(seconds=float(lag.get(t, lag.median())))
+            ta = t + pd.Timedelta(seconds=lag_at(t))
             if not any(abs((ta - x).total_seconds()) < 300 for x, _ in arrivals):
                 arrivals.append((ta, f'Bt{d3[t]:+.1f}'))
         bz = mm.bz_gsm.resample('1min').mean()
@@ -328,7 +337,7 @@ def sec_noaa(folder, L, reg, day):
             t = turn.loc[a_:b_].abs().idxmax()
             pre = bzs.loc[t - pd.Timedelta(minutes=10):t]; post = bzs.loc[t:t + pd.Timedelta(minutes=20)]
             if len(pre) and len(post) and ((pre.min() < 0 < post.max()) if turn[t] > 0 else (pre.max() > 0 > post.min())):
-                ta = t + pd.Timedelta(seconds=float(lag.get(t, lag.median())))
+                ta = t + pd.Timedelta(seconds=lag_at(t))
                 if not any(abs((ta - x).total_seconds()) < 600 for x, _ in arrivals):
                     arrivals.append((ta, f'svolta Bz {"→nord" if turn[t] > 0 else "→sud"}'))
         south = [r for r in runs(bz < -5) if r[2] >= 20]
@@ -336,7 +345,7 @@ def sec_noaa(folder, L, reg, day):
             L.append('  Bz < −5 nT per ≥20 min (ora L1): ' + ' '.join(f'{a:%d/%m} {hm(a)}–{hm(b)}' for a, b, _ in south))
     d0 = pd.Timestamp(day); d1 = d0 + pd.Timedelta(days=1)
     arrivals = sorted(a for a in arrivals if d0 <= a[0] < d1)
-    L.append(f'  copertura L1 → Terra: {hm(P.index[0]+pd.Timedelta(seconds=float(lag.median())))} del {(P.index[0]+pd.Timedelta(seconds=float(lag.median()))).strftime("%d/%m")} in poi')
+    L.append(f'  copertura L1 → Terra: {hm(P.index[0]+pd.Timedelta(seconds=lagmed))} del {(P.index[0]+pd.Timedelta(seconds=lagmed)).strftime("%d/%m")} in poi')
     L.append(f'  Discontinuità a L1 (arrivo stimato a Terra): ' +
              (' '.join(f'{hm(t)}[{lab}]' for t, lab in arrivals) if arrivals else 'nessuna netta'))
     L.append('  (pressione su → X su atteso; pressione giù → X giù)')
@@ -348,7 +357,7 @@ def sec_noaa(folder, L, reg, day):
                  + (' → oggi L1 NON DISTINGUE: quasi ogni evento ne ha una vicina anche per caso.' if q >= 50 else '.'))
     reg['L1_disc'] = len(arrivals)
     global NOAA_COVER
-    NOAA_COVER = (P.index[0] + pd.Timedelta(seconds=float(lag.median())), P.index[-1] + pd.Timedelta(seconds=float(lag.median())))
+    NOAA_COVER = (P.index[0] + pd.Timedelta(seconds=lagmed), P.index[-1] + pd.Timedelta(seconds=lagmed))
     return arrivals
 
 # ─────────────────────────────────────────────────────────────────────────────
