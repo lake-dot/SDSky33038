@@ -1,0 +1,167 @@
+══════════════════════════════════════════════════════════════════════
+SKY — RIEPILOGO GIORNATA
+Giornata: 2026-10-20 (UTC) — estrazione 2026-10-21 17:24 UT
+Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
+══════════════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────────────
+EFFEMERIDI DELLA GIORNATA
+martedì 20 ottobre 2026 — riferimento 2026-10-20 12:00 UT
+Posizioni geocentriche in longitudine eclittica — matematica pura (±0.3°)
+──────────────────────────────────────────────────────────────────────
+
+☉ Sole: 207.11° Bilancia
+☽ Luna: 317.30° — primo quarto (elong. 110.2°, illum. 67%)
+
+🪐 POSIZIONI:
+  ☉ Sole          207.11°  Bilancia     27.11°
+  ☽ Luna          317.30°  Acquario     17.30°
+  ☿ Mercurio      230.11°  Scorpione    20.11°
+  ♀ Venere        212.94°  Scorpione     2.94° ℞
+  ♂ Marte         132.63°  Leone        12.63°
+  ♃ Giove         142.80°  Leone        22.80°
+  ♄ Saturno        10.15°  Ariete       10.15° ℞
+  ♅ Urano          65.06°  Gemelli       5.06° ℞
+  ♆ Nettuno         2.33°  Ariete        2.33° ℞
+  ☊ Nodo Nord     327.76°  Acquario     27.76°
+
+℞ RETROGRADI: ♀ Venere, ♄ Saturno, ♅ Urano, ♆ Nettuno
+
+☄️ SCIAMI ATTIVI (catalogo IAU 2026, λ☉ alla data):
+☄️ Southern Taurids  λ=41°  AR=40° Dec=+11°  V=27.8 km/s  Δpicco=0.3°  picco λ☉=207.4°  (1 soluz. discordanti separate)
+☄️ tau-Cancrids  λ=131°  AR=137° Dec=+30°  V=67.2 km/s  Δpicco=0.4°  picco λ☉=206.7°
+    → ♂ Marte Δ=1.97°
+☄️ epsilon-Geminids  λ=100°  AR=101° Dec=+28°  V=69.4 km/s  Δpicco=1.5°  picco λ☉=205.6°
+☄️ xi-Draconids  λ=117°  AR=161° Dec=+76°  V=35.8 km/s  Δpicco=2.0°  picco λ☉=205.1°
+☄️ Leonis Minorids  λ=147°  AR=160° Dec=+37°  V=61.8 km/s  Δpicco=2.3°  picco λ☉=209.4°
+☄️ Orionids  λ=96°  AR=96° Dec=+16°  V=66.3 km/s  Δpicco=2.8°  picco λ☉=209.9°
+☄️ October Ursae Majorids  λ=122°  AR=145° Dec=+64°  V=55.5 km/s  Δpicco=4.3°  picco λ☉=202.8°
+☄️ lambda-Ursae Majorids  λ=139°  AR=158° Dec=+49°  V=60.7 km/s  Δpicco=7.7°  picco λ☉=214.8°  (fuori finestra -4°)
+☄️ October Draconids  λ=249°  AR=263° Dec=+56°  V=19.7 km/s  Δpicco=11.3°  picco λ☉=195.8°  (fuori finestra +9°; radiante fermo al bordo della finestra misurata)
+☄️ October Camelopardalids  λ=115°  AR=169° Dec=+79°  V=45.9 km/s  Δpicco=14.2°  picco λ☉=192.9°  (fuori finestra +7°; radiante fermo al bordo della finestra misurata)
+☄️ chi-Taurids  λ=67°  AR=64° Dec=+26°  V=41.1 km/s  Δpicco=15.3°  picco λ☉=222.4°
+    → ♅ Urano Δ=1.73°
+☄️ kappa-Ursae Majorids  λ=132°  AR=146° Dec=+45°  V=65.2 km/s  Δpicco=17.0°  picco λ☉=224.1°  (fuori finestra -6°; radiante fermo al bordo della finestra misurata)
+    → ♂ Marte Δ=0.41°
+☄️ rho-Puppids  λ=136°  AR=125° Dec=-25°  V=57.5 km/s  Δpicco=18.6°  picco λ☉=225.7°  (fuori finestra -3°)
+☄️ Northern Taurids  λ=60°  AR=57° Dec=+22°  V=28.1 km/s  Δpicco=20.6°  picco λ☉=227.7°
+☄️ Daytime Sextantids  λ=157°  AR=154° Dec=-1°  V=31.84 km/s  Δpicco=20.6°  picco λ☉=186.5°  (fuori finestra +9°; radiante fermo al bordo della finestra misurata)
+☄️ omicron-Eridanids  λ=54°  AR=56° Dec=-2°  V=27.8 km/s  Δpicco=21.4°  picco λ☉=228.5°
+☄️ Andromedids  λ=33°  AR=22° Dec=+32°  V=17.2 km/s  Δpicco=23.6°  picco λ☉=230.7°  (fuori finestra -3°)
+☄️ Daytime kappa-Leonids  λ=158°  AR=162° Dec=+15°  V=43.59 km/s  Δpicco=23.7°  picco λ☉=183.4°  (fuori finestra +7°; radiante fermo al bordo della finestra misurata)
+☄️ Leonids  λ=149°  AR=154° Dec=+21°  V=70.26 km/s  Δpicco=29.6°  picco λ☉=236.7°  (fuori finestra -6°; radiante fermo al bordo della finestra misurata)
+☄️ Northern iota-Aquariids  λ=10°  AR=8° Dec=+8°  V=28.6 km/s  Δpicco=31.9°  picco λ☉=175.2°  (1 soluz. discordanti separate)
+    → ♄ Saturno Δ=0.07°
+☄️ September epsilon-Perseids  λ=58°  AR=49° Dec=+39°  V=64.3 km/s  Δpicco=38.7°  picco λ☉=168.4°
+☄️ nu-Eridanids  λ=66°  AR=67° Dec=+1°  V=66.1 km/s  Δpicco=39.8°  picco λ☉=167.3°
+    → ♅ Urano Δ=0.72°
+☄️ sigma-Hydrids  λ=128°  AR=126° Dec=+2°  V=58.9 km/s  Δpicco=49.9°  picco λ☉=257.0°
+
+ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · (≈) al bordo soglia · (+-) incertezza elevata
+
+──────────────────────────────────────────────────────────────────────
+DATI STAZIONI
+──────────────────────────────────────────────────────────────────────
+
+WIC — Conrad, Austria (220km)
+  record 1440/1440 (100%) — id wic/best-avail
+  X: 20962.5 … 21028.2  (Δ65.7)
+  Y: 1875.0 … 1972.5  (Δ97.5)
+  Z: 44267.4 … 44302.5  (Δ35.1)  mean=44288.4
+  F: 49034.4 … 49069.1  (Δ34.8)
+
+LON — Lonjsko Polje, Croatia (290km)
+  record 1440/1440 (100%) — id lon/best-avail
+  X: 22341.1 … 22416.6  (Δ75.5)
+  Y: 1951.9 … 2043.1  (Δ91.2)
+  Z: 42810.0 … 42847.2  (Δ37.2)  mean=42833.7
+  F: non pubblicata
+
+THY — Tihany, Hungary (370km)
+  record 1440/1440 (100%) — id thy/best-avail
+  X: 21469.0 … 21534.1  (Δ65.0)
+  Y: 2008.6 … 2104.8  (Δ96.1)
+  Z: 43837.1 … 43873.4  (Δ36.3)  mean=43859.7
+  F: non pubblicata
+
+CLF — Chambon-la-Forêt, France (~830km)
+  record 1440/1440 (100%) — id clf/best-avail
+  X: 21260.9 … 21323.4  (Δ62.5)
+  Y: 707.1 … 800.4  (Δ93.3)
+  Z: 43289.5 … 43331.6  (Δ42.1)  mean=43317.0
+  F: 48249.4 … 48288.0  (Δ38.6)
+
+BFO — Black Forest, Germania (~430km)
+  record 1440/1440 (100%) — id bfo/best-avail
+  X: 20970.1 … 21033.5  (Δ63.3)
+  Y: 1267.6 … 1363.3  (Δ95.7)
+  Z: 43817.2 … 43859.1  (Δ41.9)  mean=43843.9
+  F: 48614.5 … 48648.5  (Δ34.0)
+
+NGK — Niemegk, Germania (~660km)
+  record 1440/1440 (100%) — id ngk/best-avail
+  X: 18804.4 … 18870.3  (Δ66.0)
+  Y: 1592.8 … 1701.4  (Δ108.6)
+  Z: 46130.8 … 46169.2  (Δ38.4)  mean=46149.8
+  F: 49858.3 … 49886.4  (Δ28.2)
+
+BEL — Belsk, Polonia (~850km)
+  record 1440/1440 (100%) — id bel/best-avail
+  X: 18830.3 … 18897.9  (Δ67.6)
+  Y: 2364.5 … 2467.1  (Δ102.5)
+  Z: 47127.1 … 47171.9  (Δ44.8)  mean=47150.0
+  F: 50818.3 … 50859.6  (Δ41.2)
+
+IZN — Iznik, Turchia (~1500km)
+  record 1440/1440 (100%) — id izn/best-avail
+  X: 24971.0 … 25146.7  (Δ175.7)
+  Y: 2440.4 … 2670.3  (Δ229.9)
+  Z: 40601.2 … 40891.2  (Δ290.0)  mean=40879.4
+  F: 47728.1 … 48059.4  (Δ331.3)
+
+DUR — Duronia, Italia (~520km)
+  record 1080/1440 (75%) — id dur/best-avail
+  X: 24828.2 … 24903.6  (Δ75.4)
+  Y: -1.8 … 57.9  (Δ59.7)
+  Z: 39889.2 … 39923.9  (Δ34.7)  mean=39909.8
+  F: 47057.0 … 47090.5  (Δ33.5)
+
+ABK — Abisko, Svezia (aurorale ~68°N)
+  record 1440/1440 (100%) — id abk/best-avail
+  X: 10657.6 … 11429.0  (Δ771.4)
+  Y: 2040.2 … 2434.7  (Δ394.5)
+  Z: 52351.0 … 52730.0  (Δ379.0)  mean=52494.3
+  F: 53589.9 … 53869.5  (Δ279.6)
+
+TRO — Tromsø, Norvegia (aurorale ~70°N)
+  NESSUN DATO DISPONIBILE per questa giornata
+
+KAK — Kakioka, Giappone
+  record 1440/1440 (100%) — id kak/best-avail
+  X: 29836.6 … 29876.9  (Δ40.3)
+  Y: -4221.9 … -4164.0  (Δ57.9)
+  Z: 36007.6 … 36034.4  (Δ26.8)  mean=36025.3
+  F: 46955.7 … 46993.9  (Δ38.2)
+
+FRD — Fredericksburg, USA
+  record 1440/1440 (100%) — id frd/best-avail
+  X: 21722.0 … 21796.4  (Δ74.4)
+  Y: 2.5 … 73.3  (Δ70.8)
+  Z: 45040.4 … 45065.6  (Δ25.2)  mean=45053.6
+  F: 50004.7 … 50048.2  (Δ43.6)
+
+OTT — Ottawa, Canada
+  record 720/1440 (50%) — id ott/best-avail
+  X: 18349.4 … 18372.1  (Δ22.7)
+  Y: -4214.6 … -4196.2  (Δ18.4)
+  Z: 49963.8 … 49974.4  (Δ10.6)  mean=49969.5
+  F: 53394.9 … 53406.7  (Δ11.8)
+
+BRD — Brandon, Canada
+  record 720/1440 (50%) — id brd/best-avail
+  X: 15450.0 … 15474.3  (Δ24.3)
+  Y: 1254.8 … 1276.0  (Δ21.2)
+  Z: 53740.8 … 53754.5  (Δ13.7)  mean=53749.5
+  F: 55946.0 … 55963.1  (Δ17.1)
+
+In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)
