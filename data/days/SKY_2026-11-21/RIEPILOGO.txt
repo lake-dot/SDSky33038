@@ -1,0 +1,173 @@
+══════════════════════════════════════════════════════════════════════
+SKY — RIEPILOGO GIORNATA
+Giornata: 2026-11-21 (UTC) — estrazione 2026-11-22 12:47 UT
+Fonte: INTERMAGNET GIN — cadenza 1 minuto — attesi 1440 record/stazione
+══════════════════════════════════════════════════════════════════════
+
+──────────────────────────────────────────────────────────────────────
+EFFEMERIDI DELLA GIORNATA
+sabato 21 novembre 2026 — riferimento 2026-11-21 12:00 UT
+Posizioni geocentriche in longitudine eclittica — matematica pura (±0.3°)
+──────────────────────────────────────────────────────────────────────
+
+☉ Sole: 239.18° Scorpione
+☽ Luna: 16.98° — gibbosa crescente (elong. 137.8°, illum. 87%)
+
+🪐 POSIZIONI:
+  ☉ Sole          239.18°  Scorpione    29.18°
+  ☽ Luna           16.98°  Ariete       16.98°
+  ☿ Mercurio      219.71°  Scorpione     9.71°
+  ♀ Venere        203.94°  Bilancia     23.94°
+  ♂ Marte         148.16°  Leone        28.16°
+  ♃ Giove         146.31°  Leone        26.31°
+  ♄ Saturno         8.34°  Ariete        8.34° ℞
+  ♅ Urano          63.85°  Gemelli       3.85° ℞
+  ♆ Nettuno         1.73°  Ariete        1.73° ℞?
+  ☊ Nodo Nord     326.42°  Acquario     26.42°
+
+℞ RETROGRADI: ♄ Saturno, ♅ Urano
+
+⚡ ASPETTI (Δ≤2.0°):
+  ♂ Marte ☌ ♃ Giove  Δ=1.85° (≈)
+  ♂ Marte ☍ ☊ Nodo Nord  Δ=1.74° (≈)
+  ♃ Giove ☍ ☊ Nodo Nord  Δ=0.11°
+
+☄️ SCIAMI ATTIVI (catalogo IAU 2026, λ☉ alla data):
+☄️ alpha-Monocerotids  λ=120°  AR=117° Dec=+1°  V=62.1 km/s  Δpicco=0.8°  picco λ☉=240.0°
+☄️ November theta-Aurigids  λ=90°  AR=89° Dec=+35°  V=32.5 km/s  Δpicco=1.8°  picco λ☉=237.4°
+☄️ Leonids  λ=149°  AR=154° Dec=+21°  V=70.26 km/s  Δpicco=2.5°  picco λ☉=236.7°
+    → ♂ Marte Δ=0.73°
+☄️ alpha-Canis Majorids  λ=101°  AR=98° Dec=-19°  V=43.3 km/s  Δpicco=3.9°  picco λ☉=243.1°
+☄️ November Orionids  λ=91°  AR=91° Dec=+15°  V=42.7 km/s  Δpicco=8.2°  picco λ☉=247.4°
+☄️ Andromedids  λ=33°  AR=22° Dec=+32°  V=17.2 km/s  Δpicco=8.5°  picco λ☉=230.7°
+☄️ Southern chi-Orionids  λ=79°  AR=78° Dec=+18°  V=24.6 km/s  Δpicco=10.5°  picco λ☉=249.7°
+☄️ omicron-Eridanids  λ=54°  AR=56° Dec=-2°  V=27.8 km/s  Δpicco=10.7°  picco λ☉=228.5°
+☄️ Northern Taurids  λ=60°  AR=57° Dec=+22°  V=28.1 km/s  Δpicco=11.5°  picco λ☉=227.7°
+☄️ December kappa-Draconids  λ=136°  AR=187° Dec=+70°  V=43.5 km/s  Δpicco=12.4°  picco λ☉=251.6°  (fuori finestra -1°)
+☄️ December phi-Cassiopeiids  λ=45°  AR=20° Dec=+57°  V=16.4 km/s  Δpicco=13.2°  picco λ☉=252.4°  (fuori finestra -7°; radiante fermo al bordo della finestra misurata)
+☄️ rho-Puppids  λ=136°  AR=125° Dec=-25°  V=57.5 km/s  Δpicco=13.5°  picco λ☉=225.7°
+☄️ psi-Ursae Majorids  λ=152°  AR=170° Dec=+43°  V=61.7 km/s  Δpicco=13.9°  picco λ☉=253.1°  (fuori finestra -1°)
+☄️ kappa-Ursae Majorids  λ=132°  AR=146° Dec=+45°  V=65.2 km/s  Δpicco=15.1°  picco λ☉=224.1°  (fuori finestra +0°)
+☄️ chi-Taurids  λ=67°  AR=64° Dec=+26°  V=41.1 km/s  Δpicco=16.8°  picco λ☉=222.4°
+☄️ December alpha-Draconids  λ=169°  AR=210° Dec=+58°  V=41.2 km/s  Δpicco=17.2°  picco λ☉=256.4°
+☄️ sigma-Hydrids  λ=128°  AR=126° Dec=+2°  V=58.9 km/s  Δpicco=17.8°  picco λ☉=257.0°
+☄️ December rho-Virginids  λ=183°  AR=189° Dec=+13°  V=68.3 km/s  Δpicco=18.3°  picco λ☉=257.5°  (fuori finestra -3°)
+☄️ December Monocerotids  λ=101°  AR=101° Dec=+8°  V=41.4 km/s  Δpicco=19.8°  picco λ☉=259.0°  (fuori finestra -3°)
+☄️ eta-Hydrids  λ=138°  AR=136° Dec=+2°  V=62.4 km/s  Δpicco=21.8°  picco λ☉=261.0°  (fuori finestra -1°)
+☄️ Geminids  λ=110°  AR=113° Dec=+32°  V=34.5 km/s  Δpicco=22.8°  picco λ☉=262.0°
+☄️ December chi-Virginids  λ=195°  AR=191° Dec=-10°  V=68.5 km/s  Δpicco=24.0°  picco λ☉=263.2°  (fuori finestra -6°; radiante fermo al bordo della finestra misurata)
+☄️ Orionids  λ=96°  AR=96° Dec=+16°  V=66.3 km/s  Δpicco=29.3°  picco λ☉=209.9°
+☄️ Southern Taurids  λ=41°  AR=40° Dec=+11°  V=27.8 km/s  Δpicco=31.8°  picco λ☉=207.4°  (1 soluz. discordanti separate)
+☄️ Comae Berenicids  λ=154°  AR=164° Dec=+29°  V=63.2 km/s  Δpicco=32.5°  picco λ☉=271.7°  (fuori finestra -5°; 1 soluz. discordanti separate; radiante fermo al bordo della finestra misurata)
+☄️ xi-Draconids  λ=117°  AR=161° Dec=+76°  V=35.8 km/s  Δpicco=34.1°  picco λ☉=205.1°  (fuori finestra +9°; radiante fermo al bordo della finestra misurata)
+☄️ December sigma-Virginids  λ=208°  AR=211° Dec=+4°  V=66.2 km/s  Δpicco=36.3°  picco λ☉=275.5°  (fuori finestra -3°)
+☄️ Quadrantids  λ=200°  AR=230° Dec=+50°  V=40.7 km/s  Δpicco=44.3°  picco λ☉=283.5°
+☄️ Northern iota-Aquariids  λ=10°  AR=8° Dec=+8°  V=28.6 km/s  Δpicco=64.0°  picco λ☉=175.2°  (1 soluz. discordanti separate)
+    → ♄ Saturno Δ=1.88°
+☄️ nu-Eridanids  λ=66°  AR=67° Dec=+1°  V=66.1 km/s  Δpicco=71.9°  picco λ☉=167.3°  (fuori finestra +5°)
+    → ♅ Urano Δ=1.93°
+
+ℹ️ ℞ retrogrado · ℞? stazionario · ! bordo segno · (≈) al bordo soglia · (+-) incertezza elevata
+
+──────────────────────────────────────────────────────────────────────
+DATI STAZIONI
+──────────────────────────────────────────────────────────────────────
+
+WIC — Conrad, Austria (220km)
+  record 1440/1440 (100%) — id wic/best-avail
+  X: 20997.6 … 21029.2  (Δ31.5)
+  Y: 1892.0 … 1935.8  (Δ43.8)
+  Z: 44288.2 … 44298.9  (Δ10.6)  mean=44295.3
+  F: 49052.4 … 49069.8  (Δ17.4)
+
+LON — Lonjsko Polje, Croatia (290km)
+  NESSUN DATO DISPONIBILE per questa giornata
+
+THY — Tihany, Hungary (370km)
+  record 1440/1440 (100%) — id thy/best-avail
+  X: 21504.4 … 21535.5  (Δ31.1)
+  Y: 2026.0 … 2069.3  (Δ43.2)
+  Z: 43858.1 … 43870.6  (Δ12.6)  mean=43866.5
+  F: non pubblicata
+
+CLF — Chambon-la-Forêt, France (~830km)
+  record 1440/1440 (100%) — id clf/best-avail
+  X: 21289.5 … 21323.7  (Δ34.2)
+  Y: 718.5 … 762.4  (Δ43.9)
+  Z: 43314.4 … 43328.3  (Δ13.9)  mean=43324.5
+  F: 48270.6 … 48293.2  (Δ22.6)
+
+BFO — Black Forest, Germania (~430km)
+  record 1440/1440 (100%) — id bfo/best-avail
+  X: 21000.7 … 21034.5  (Δ33.7)
+  Y: 1282.4 … 1325.3  (Δ42.9)
+  Z: 43841.5 … 43855.4  (Δ14.0)  mean=43850.9
+  F: 48631.1 … 48650.5  (Δ19.4)
+
+NGK — Niemegk, Germania (~660km)
+  record 1440/1440 (100%) — id ngk/best-avail
+  X: 18835.0 … 18874.0  (Δ38.9)
+  Y: 1607.4 … 1657.7  (Δ50.4)
+  Z: 46148.3 … 46160.5  (Δ12.2)  mean=46155.2
+  F: 49870.7 … 49887.1  (Δ16.3)
+
+BEL — Belsk, Polonia (~850km)
+  record 1440/1440 (100%) — id bel/best-avail
+  X: 18860.8 … 18899.1  (Δ38.3)
+  Y: 2377.0 … 2425.7  (Δ48.7)
+  Z: 47144.9 … 47161.6  (Δ16.7)  mean=47155.1
+  F: 50835.0 … 50859.0  (Δ24.0)
+
+IZN — Iznik, Turchia (~1500km)
+  record 1440/1440 (100%) — id izn/best-avail
+  X: 25096.0 … 25121.8  (Δ25.8)
+  Y: 2611.4 … 2646.7  (Δ35.4)
+  Z: 40878.1 … 40891.4  (Δ13.3)  mean=40888.5
+  F: 48043.4 … 48061.4  (Δ18.0)
+
+DUR — Duronia, Italia (~520km)
+  record 1080/1440 (75%) — id dur/best-avail
+  X: 24865.7 … 24892.6  (Δ26.9)
+  Y: 17.9 … 52.5  (Δ34.7)
+  Z: 39910.8 … 39925.0  (Δ14.2)  mean=39919.9
+  F: 47072.9 … 47093.4  (Δ20.5)
+
+ABK — Abisko, Svezia (aurorale ~68°N)
+  record 1440/1440 (100%) — id abk/best-avail
+  X: 10980.7 … 11197.2  (Δ216.5)
+  Y: 2108.3 … 2218.7  (Δ110.4)
+  Z: 52362.9 … 52573.1  (Δ210.2)  mean=52490.8
+  F: 53555.6 … 53796.0  (Δ240.4)
+
+TRO — Tromsø, Norvegia (aurorale ~70°N)
+  NESSUN DATO DISPONIBILE per questa giornata
+
+KAK — Kakioka, Giappone
+  record 1440/1440 (100%) — id kak/best-avail
+  X: 29841.5 … 29873.1  (Δ31.7)
+  Y: -4203.0 … -4190.6  (Δ12.4)
+  Z: 36016.6 … 36039.0  (Δ22.4)  mean=36028.6
+  F: 46967.6 … 46990.7  (Δ23.1)
+
+FRD — Fredericksburg, USA
+  record 1440/1440 (100%) — id frd/best-avail
+  X: 21745.7 … 21781.5  (Δ35.8)
+  Y: 11.0 … 50.2  (Δ39.2)
+  Z: 45031.7 … 45047.0  (Δ15.4)  mean=45042.0
+  F: 50008.6 … 50033.3  (Δ24.7)
+
+OTT — Ottawa, Canada
+  record 720/1440 (50%) — id ott/best-avail
+  X: 18343.6 … 18360.5  (Δ16.9)
+  Y: -4213.0 … -4192.0  (Δ21.0)
+  Z: 49956.4 … 49965.2  (Δ8.8)  mean=49960.5
+  F: 53385.9 … 53394.9  (Δ8.9)
+
+BRD — Brandon, Canada
+  record 720/1440 (50%) — id brd/best-avail
+  X: 15443.9 … 15461.5  (Δ17.6)
+  Y: 1247.6 … 1275.4  (Δ27.8)
+  Z: 53728.4 … 53745.4  (Δ17.0)  mean=53738.2
+  F: 55932.2 … 55949.9  (Δ17.8)
+
+In questa cartella: un TXT per stazione (1 min) + INCROCIO (timeline comune)
